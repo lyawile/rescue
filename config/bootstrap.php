@@ -197,7 +197,7 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
-
+Plugin::load('Migrations');
 Plugin::load('AdminLTE', ['bootstrap' => true, 'routes' => true]);
 
 Configure::write('Theme', [
