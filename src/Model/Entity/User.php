@@ -9,8 +9,16 @@ use Cake\ORM\Entity;
  * User Entity
  *
  * @property int $id
+ * @property string $first_name
+ * @property string $other_name
+ * @property string $surname
  * @property string $username
  * @property string $password
+ * @property string $email
+ * @property string $mobile
+ * @property int $groups_id
+ *
+ * @property \App\Model\Entity\Group $group
  */
 class User extends Entity
 {
@@ -25,8 +33,15 @@ class User extends Entity
      * @var array
      */
     protected $_accessible = [
+        'first_name' => true,
+        'other_name' => true,
+        'surname' => true,
         'username' => true,
-        'password' => true
+        'password' => true,
+        'email' => true,
+        'mobile' => true,
+        'groups_id' => true,
+        'group' => true
     ];
 
     /**

@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
+ * @property \App\Model\Table\GroupsTable|\Cake\ORM\Association\BelongsTo $Groups
+ *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -34,6 +36,11 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Groups', [
+            'foreignKey' => 'groups_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -49,17 +56,44 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
+            ->scalar('first_name')
+            ->maxLength('first_name', 45)
+            ->requirePresence('first_name', 'create')
+            ->notEmpty('first_name');
+
+        $validator
+            ->scalar('other_name')
+            ->maxLength('other_name', 45)
+            ->allowEmpty('other_name');
+
+        $validator
+            ->scalar('surname')
+            ->maxLength('surname', 45)
+            ->requirePresence('surname', 'create')
+            ->notEmpty('surname');
+
+        $validator
             ->scalar('username')
-            ->maxLength('username', 255)
+            ->maxLength('username', 45)
             ->requirePresence('username', 'create')
-            ->notEmpty('username')
-            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->notEmpty('username');
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255)
+            ->maxLength('password', 256)
             ->requirePresence('password', 'create')
             ->notEmpty('password');
+
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmpty('email');
+
+        $validator
+            ->scalar('mobile')
+            ->maxLength('mobile', 45)
+            ->requirePresence('mobile', 'create')
+            ->notEmpty('mobile');
 
         return $validator;
     }
@@ -74,6 +108,8 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username']));
+        $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->existsIn(['groups_id'], 'Groups'));
 
         return $rules;
     }
