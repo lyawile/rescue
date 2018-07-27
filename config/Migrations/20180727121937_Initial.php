@@ -140,9 +140,9 @@ class Initial extends AbstractMigration
                 'limit' => 128,
                 'null' => true,
             ])
-            ->addColumn('has_reminder', 'tinyinteger', [
+            ->addColumn('has_reminder', 'integer', [
                 'default' => '0',
-                'limit' => 4,
+                'limit' => 1,
                 'null' => false,
             ])
             ->addColumn('control_number', 'string', [
@@ -282,9 +282,9 @@ class Initial extends AbstractMigration
                 'limit' => 32,
                 'null' => true,
             ])
-            ->addColumn('is_repeater', 'tinyinteger', [
+            ->addColumn('is_repeater', 'integer', [
                 'default' => '0',
-                'limit' => 4,
+                'limit' => 1,
                 'null' => false,
             ])
             ->addColumn('exam_types_id', 'integer', [
@@ -588,9 +588,9 @@ class Initial extends AbstractMigration
                 'limit' => 32,
                 'null' => true,
             ])
-            ->addColumn('is_repeater', 'tinyinteger', [
+            ->addColumn('is_repeater', 'integer', [
                 'default' => '0',
-                'limit' => 4,
+                'limit' => 1,
                 'null' => false,
             ])
             ->addColumn('exam_types_id', 'integer', [
@@ -926,9 +926,9 @@ class Initial extends AbstractMigration
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('is_consumed', 'tinyinteger', [
+            ->addColumn('is_consumed', 'integer', [
                 'default' => '0',
-                'limit' => 4,
+                'limit' => 1,
                 'null' => false,
             ])
             ->addIndex(
@@ -997,7 +997,7 @@ class Initial extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('option', 'smallinteger', [
+            ->addColumn('options', 'integer', [
                 'default' => null,
                 'limit' => 6,
                 'null' => false,
@@ -1007,9 +1007,9 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => true,
             ])
-            ->addColumn('isacknowleged', 'tinyinteger', [
+            ->addColumn('is_acknowleged', 'integer', [
                 'default' => '0',
-                'limit' => 4,
+                'limit' => 1,
                 'null' => true,
             ])
             ->create();
@@ -1043,10 +1043,10 @@ class Initial extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('has_redirect', 'tinyinteger', [
+            ->addColumn('has_redirect', 'integer', [
                 'comment' => '0- only displays message, 1 - redirects to link',
                 'default' => '0',
-                'limit' => 4,
+                'limit' => 1,
                 'null' => false,
             ])
             ->addColumn('collections_id', 'integer', [
