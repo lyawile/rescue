@@ -502,7 +502,7 @@ CREATE TABLE `districts` (
   PRIMARY KEY (`id`),
   KEY `fk_districts_regions_idx` (`regions_id`),
   CONSTRAINT `fk_districts_regions` FOREIGN KEY (`regions_id`) REFERENCES `regions` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=256 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -776,6 +776,34 @@ INSERT INTO `regions` VALUES (1,1,'ARUSHA',NULL),(2,2,'DAR ES SALAAM',NULL),(3,3
 UNLOCK TABLES;
 
 --
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `services` (
+  `id` int(11) NOT NULL,
+  `link` varchar(256) CHARACTER SET utf8 DEFAULT NULL,
+  `message` text CHARACTER SET utf8 NOT NULL,
+  `has_redirect` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0- only displays message, 1 - redirects to link',
+  `collections_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK1_idx` (`collections_id`),
+  CONSTRAINT `FK1` FOREIGN KEY (`collections_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin5;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `services`
+--
+
+LOCK TABLES `services` WRITE;
+/*!40000 ALTER TABLE `services` DISABLE KEYS */;
+/*!40000 ALTER TABLE `services` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `subjects`
 --
 
@@ -845,4 +873,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-26 13:01:19
+-- Dump completed on 2018-07-27  9:26:37
