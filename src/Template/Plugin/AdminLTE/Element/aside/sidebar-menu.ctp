@@ -29,6 +29,29 @@ if (file_exists($file)) {
                 <i class="fa fa-users"></i> <span><?= __('Users') ?></span>
             </a>
         </li>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-graduation-cap"></i> <span><?= __('Candidates') ?></span>
+                <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Candidates']); ?>"><i class="fa"></i><?= __('Registered') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'DisqualifiedCandidates']); ?>"><i class="fa"></i><?= __('Disqualified') ?></a></li>
+            </ul>
+        </li>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-gear"></i> <span><?= __('Settings') ?></span>
+                <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="<?php echo $this->Url->build('/'); ?>"><i class="fa"></i> <?= __('General') ?></a></li>
+            </ul>
+        </li>
         <li>
             <a href="<?php echo $this->Url->build('/pages/widgets'); ?>">
                 <i class="fa fa-th"></i> <span>Widgets</span>
