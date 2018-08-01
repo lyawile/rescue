@@ -18,8 +18,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate $date_of_birth
  * @property string $guardian_phone
  * @property int $is_repeater
- * @property int $exam_types_id
- * @property int $centres_id
+ * @property int $exam_type_id
+ * @property int $centre_id
  *
  * @property \App\Model\Entity\ExamType $exam_type
  * @property \App\Model\Entity\Centre $centre
@@ -48,8 +48,8 @@ class DisqualifiedCandidate extends Entity
         'date_of_birth' => true,
         'guardian_phone' => true,
         'is_repeater' => true,
-        'exam_types_id' => true,
-        'centres_id' => true,
+        'exam_type_id' => true,
+        'centre_id' => true,
         'exam_type' => true,
         'centre' => true
     ];

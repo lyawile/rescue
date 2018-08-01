@@ -32,13 +32,13 @@ DROP TABLE IF EXISTS `bill_item_candidates`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bill_item_candidates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `candidates_id` int(11) NOT NULL,
-  `bill_items_id` int(11) NOT NULL,
+  `candidate_id` int(11) NOT NULL,
+  `bill_item_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_bill_item_candidates_candidates1_idx` (`candidates_id`),
-  KEY `fk_bill_item_candidates_bill_items1_idx` (`bill_items_id`),
-  CONSTRAINT `fk_bill_item_candidates_bill_items1` FOREIGN KEY (`bill_items_id`) REFERENCES `bill_items` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_bill_item_candidates_candidates1` FOREIGN KEY (`candidates_id`) REFERENCES `candidates` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_bill_item_candidates_candidates1_idx` (`candidate_id`),
+  KEY `fk_bill_item_candidates_bill_items1_idx` (`bill_item_id`),
+  CONSTRAINT `fk_bill_item_candidates_bill_items1` FOREIGN KEY (`bill_item_id`) REFERENCES `bill_items` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_bill_item_candidates_candidates1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,13 +66,13 @@ CREATE TABLE `bill_items` (
   `misc_amount` decimal(12,2) NOT NULL,
   `quantity` decimal(12,2) NOT NULL,
   `unit` varchar(45) NOT NULL,
-  `collections_id` int(11) NOT NULL,
-  `bills_id` int(11) NOT NULL,
+  `collection_id` int(11) NOT NULL,
+  `bill_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_bill_items_collections1_idx` (`collections_id`),
-  KEY `fk_bill_items_bills1_idx` (`bills_id`),
-  CONSTRAINT `fk_bill_items_bills1` FOREIGN KEY (`bills_id`) REFERENCES `bills` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_bill_items_collections1` FOREIGN KEY (`collections_id`) REFERENCES `collections` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_bill_items_collections1_idx` (`collection_id`),
+  KEY `fk_bill_items_bills1_idx` (`bill_id`),
+  CONSTRAINT `fk_bill_items_bills1` FOREIGN KEY (`bill_id`) REFERENCES `bills` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_bill_items_collections1` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,13 +128,13 @@ DROP TABLE IF EXISTS `candidate_disabilities`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `candidate_disabilities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `candidates_id` int(11) NOT NULL,
-  `disabilities_id` int(11) NOT NULL,
+  `candidate_id` int(11) NOT NULL,
+  `disabilitie_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_candidate_disabilities_candidates1_idx` (`candidates_id`),
-  KEY `fk_candidate_disabilities_disabilities1_idx` (`disabilities_id`),
-  CONSTRAINT `fk_candidate_disabilities_candidates1` FOREIGN KEY (`candidates_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_candidate_disabilities_disabilities1` FOREIGN KEY (`disabilities_id`) REFERENCES `disabilities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_candidate_disabilities_candidates1_idx` (`candidate_id`),
+  KEY `fk_candidate_disabilities_disabilities1_idx` (`disabilitie_id`),
+  CONSTRAINT `fk_candidate_disabilities_candidates1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_candidate_disabilities_disabilities1` FOREIGN KEY (`disabilitie_id`) REFERENCES `disabilities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -160,10 +160,10 @@ CREATE TABLE `candidate_qualifications` (
   `candidate_number` varchar(8) NOT NULL,
   `exam_year` int(11) NOT NULL,
   `experience` int(11) DEFAULT NULL,
-  `candidates_id` int(11) NOT NULL,
+  `candidate_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_qualifications_candidates1_idx` (`candidates_id`),
-  CONSTRAINT `fk_qualifications_candidates1` FOREIGN KEY (`candidates_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_qualifications_candidates1_idx` (`candidate_id`),
+  CONSTRAINT `fk_qualifications_candidates1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -185,13 +185,13 @@ DROP TABLE IF EXISTS `candidate_subjects`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `candidate_subjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `candidates_id` int(11) NOT NULL,
-  `subjects_id` int(11) NOT NULL,
+  `candidate_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_candidate_subjects_candidates1_idx` (`candidates_id`),
-  KEY `fk_candidate_subjects_subjects1_idx` (`subjects_id`),
-  CONSTRAINT `fk_candidate_subjects_candidates1` FOREIGN KEY (`candidates_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_candidate_subjects_subjects1` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`id`) ON UPDATE CASCADE
+  KEY `fk_candidate_subjects_candidates1_idx` (`candidate_id`),
+  KEY `fk_candidate_subjects_subjects1_idx` (`subject_id`),
+  CONSTRAINT `fk_candidate_subjects_candidates1` FOREIGN KEY (`candidate_id`) REFERENCES `candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_candidate_subjects_subjects1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -224,13 +224,13 @@ CREATE TABLE `candidates` (
   `date_of_birth` date DEFAULT NULL,
   `guardian_phone` varchar(32) DEFAULT NULL,
   `is_repeater` tinyint(4) NOT NULL DEFAULT '0',
-  `exam_types_id` int(11) NOT NULL,
-  `centres_id` int(11) NOT NULL,
+  `exam_type_id` int(11) NOT NULL,
+  `centre_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_candidates_exam_types1_idx` (`exam_types_id`),
-  KEY `fk_candidates_centres1_idx` (`centres_id`),
-  CONSTRAINT `fk_candidates_centres1` FOREIGN KEY (`centres_id`) REFERENCES `centres` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_candidates_exam_types1` FOREIGN KEY (`exam_types_id`) REFERENCES `exam_types` (`id`) ON UPDATE CASCADE
+  KEY `fk_candidates_exam_types1_idx` (`exam_type_id`),
+  KEY `fk_candidates_centres1_idx` (`centre_id`),
+  CONSTRAINT `fk_candidates_centres1` FOREIGN KEY (`centre_id`) REFERENCES `centres` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_candidates_exam_types1` FOREIGN KEY (`exam_type_id`) REFERENCES `exam_types` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,10 +262,10 @@ CREATE TABLE `centres` (
   `contact_two` varchar(64) DEFAULT NULL,
   `district_distance` decimal(12,2) DEFAULT NULL,
   `centre_type` varchar(45) DEFAULT NULL,
-  `districts_id` int(11) NOT NULL,
+  `district_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_schools_districts1_idx` (`districts_id`),
-  CONSTRAINT `fk_schools_districts1` FOREIGN KEY (`districts_id`) REFERENCES `districts` (`id`) ON UPDATE CASCADE
+  KEY `fk_schools_districts1_idx` (`district_id`),
+  CONSTRAINT `fk_schools_districts1` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12287 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -318,13 +318,13 @@ CREATE TABLE `collections` (
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
   `ammount` decimal(12,2) NOT NULL,
-  `exam_types_id` int(11) NOT NULL,
-  `collection_categories_id` int(11) NOT NULL,
+  `exam_type_id` int(11) NOT NULL,
+  `collection_categorie_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_collections_exam_types1_idx` (`exam_types_id`),
-  KEY `fk_collections_collection_categories1_idx` (`collection_categories_id`),
-  CONSTRAINT `fk_collections_collection_categories1` FOREIGN KEY (`collection_categories_id`) REFERENCES `collection_categories` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_collections_exam_types1` FOREIGN KEY (`exam_types_id`) REFERENCES `exam_types` (`id`) ON UPDATE CASCADE
+  KEY `fk_collections_exam_types1_idx` (`exam_type_id`),
+  KEY `fk_collections_collection_categories1_idx` (`collection_categorie_id`),
+  CONSTRAINT `fk_collections_collection_categories1` FOREIGN KEY (`collection_categorie_id`) REFERENCES `collection_categories` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_collections_exam_types1` FOREIGN KEY (`exam_type_id`) REFERENCES `exam_types` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -371,13 +371,13 @@ DROP TABLE IF EXISTS `disability_disqualified_candidates`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `disability_disqualified_candidates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `disabilities_id` int(11) NOT NULL,
-  `disqualified_candidates_id` int(11) NOT NULL,
+  `disabilitie_id` int(11) NOT NULL,
+  `disqualified_candidate_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_disabilities_disqualified_candidates_disabilities1_idx` (`disabilities_id`),
-  KEY `fk_disability_disqualified_candidates_disqualified_candidat_idx` (`disqualified_candidates_id`),
-  CONSTRAINT `fk_disabilities_disqualified_candidates_disabilities1` FOREIGN KEY (`disabilities_id`) REFERENCES `disabilities` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_disability_disqualified_candidates_disqualified_candidates1` FOREIGN KEY (`disqualified_candidates_id`) REFERENCES `disqualified_candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_disabilities_disqualified_candidates_disabilities1_idx` (`disabilitie_id`),
+  KEY `fk_disability_disqualified_candidates_disqualified_candidat_idx` (`disqualified_candidate_id`),
+  CONSTRAINT `fk_disabilities_disqualified_candidates_disabilities1` FOREIGN KEY (`disabilitie_id`) REFERENCES `disabilities` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_disability_disqualified_candidates_disqualified_candidates1` FOREIGN KEY (`disqualified_candidate_id`) REFERENCES `disqualified_candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -403,10 +403,10 @@ CREATE TABLE `disqualified_candidate_qualifications` (
   `candidate_number` varchar(8) NOT NULL,
   `exam_year` int(11) NOT NULL,
   `experience` int(11) DEFAULT NULL,
-  `disqualified_candidates_id` int(11) NOT NULL,
+  `disqualified_candidate_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_disqualified_candidate_qualifications_disqualified_candi_idx` (`disqualified_candidates_id`),
-  CONSTRAINT `fk_disqualified_candidate_qualifications_disqualified_candida1` FOREIGN KEY (`disqualified_candidates_id`) REFERENCES `disqualified_candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_disqualified_candidate_qualifications_disqualified_candi_idx` (`disqualified_candidate_id`),
+  CONSTRAINT `fk_disqualified_candidate_qualifications_disqualified_candida1` FOREIGN KEY (`disqualified_candidate_id`) REFERENCES `disqualified_candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -428,13 +428,13 @@ DROP TABLE IF EXISTS `disqualified_candidate_subjects`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `disqualified_candidate_subjects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `subjects_id` int(11) NOT NULL,
-  `disqualified_candidates_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `disqualified_candidate_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_candidate_subjects_subjects1_idx` (`subjects_id`),
-  KEY `fk_disqualified_candidate_subjects_disqualified_candidates1_idx` (`disqualified_candidates_id`),
-  CONSTRAINT `fk_candidate_subjects_subjects10` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_disqualified_candidate_subjects_disqualified_candidates1` FOREIGN KEY (`disqualified_candidates_id`) REFERENCES `disqualified_candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_candidate_subjects_subjects1_idx` (`subject_id`),
+  KEY `fk_disqualified_candidate_subjects_disqualified_candidates1_idx` (`disqualified_candidate_id`),
+  CONSTRAINT `fk_candidate_subjects_subjects10` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_disqualified_candidate_subjects_disqualified_candidates1` FOREIGN KEY (`disqualified_candidate_id`) REFERENCES `disqualified_candidates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -467,13 +467,13 @@ CREATE TABLE `disqualified_candidates` (
   `date_of_birth` date DEFAULT NULL,
   `guardian_phone` varchar(32) DEFAULT NULL,
   `is_repeater` tinyint(4) NOT NULL DEFAULT '0',
-  `exam_types_id` int(11) NOT NULL,
-  `centres_id` int(11) NOT NULL,
+  `exam_type_id` int(11) NOT NULL,
+  `centre_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_disqualified_candidates_exam_types1_idx` (`exam_types_id`),
-  KEY `fk_disqualified_candidates_centres1_idx` (`centres_id`),
-  CONSTRAINT `fk_disqualified_candidates_centres1` FOREIGN KEY (`centres_id`) REFERENCES `centres` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_disqualified_candidates_exam_types1` FOREIGN KEY (`exam_types_id`) REFERENCES `exam_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_disqualified_candidates_exam_types1_idx` (`exam_type_id`),
+  KEY `fk_disqualified_candidates_centres1_idx` (`centre_id`),
+  CONSTRAINT `fk_disqualified_candidates_centres1` FOREIGN KEY (`centre_id`) REFERENCES `centres` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_disqualified_candidates_exam_types1` FOREIGN KEY (`exam_type_id`) REFERENCES `exam_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -498,10 +498,10 @@ CREATE TABLE `districts` (
   `number` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `detail` varchar(45) DEFAULT NULL,
-  `regions_id` int(11) NOT NULL,
+  `region_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_districts_regions_idx` (`regions_id`),
-  CONSTRAINT `fk_districts_regions` FOREIGN KEY (`regions_id`) REFERENCES `regions` (`id`) ON UPDATE CASCADE
+  KEY `fk_districts_region_idx` (`region_id`),
+  CONSTRAINT `fk_districts_regions` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -551,22 +551,22 @@ DROP TABLE IF EXISTS `group_district_region_school_users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_district_region_school_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `districts_id` int(11) NOT NULL,
-  `regions_id` int(11) NOT NULL,
-  `groups_id` int(11) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  `centres_id` int(11) NOT NULL,
+  `district_id` int(11) NOT NULL,
+  `region_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `centre_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_group_district_region_school_users_districts1_idx` (`districts_id`),
-  KEY `fk_group_district_region_school_users_regions1_idx` (`regions_id`),
-  KEY `fk_group_district_region_school_users_groups1_idx` (`groups_id`),
-  KEY `fk_group_district_region_school_users_users1_idx` (`users_id`),
-  KEY `fk_group_district_region_school_users_centres1_idx` (`centres_id`),
-  CONSTRAINT `fk_group_district_region_school_users_centres1` FOREIGN KEY (`centres_id`) REFERENCES `centres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_group_district_region_school_users_districts1` FOREIGN KEY (`districts_id`) REFERENCES `districts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_group_district_region_school_users_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_group_district_region_school_users_regions1` FOREIGN KEY (`regions_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_group_district_region_school_users_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_group_district_region_school_users_districts1_idx` (`district_id`),
+  KEY `fk_group_district_region_school_users_regions1_idx` (`region_id`),
+  KEY `fk_group_district_region_school_users_groups1_idx` (`group_id`),
+  KEY `fk_group_district_region_school_users_users1_idx` (`user_id`),
+  KEY `fk_group_district_region_school_users_centres1_idx` (`centre_id`),
+  CONSTRAINT `fk_group_district_region_school_users_centres1` FOREIGN KEY (`centre_id`) REFERENCES `centres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_group_district_region_school_users_districts1` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_group_district_region_school_users_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_group_district_region_school_users_regions1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_group_district_region_school_users_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -611,8 +611,8 @@ DROP TABLE IF EXISTS `payment_reconciliations`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_reconciliations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `payments_id` int(11) NOT NULL,
-  `recoinciliations_id` int(11) NOT NULL,
+  `payment_id` int(11) NOT NULL,
+  `recoinciliation_id` int(11) NOT NULL,
   `transaction_idx` varchar(256) NOT NULL,
   `payment_reconciliationscol` varchar(256) NOT NULL,
   `bill_idx` varchar(256) NOT NULL,
@@ -631,10 +631,10 @@ CREATE TABLE `payment_reconciliations` (
   `payer_email` varchar(256) NOT NULL,
   `remarks` varchar(256) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_table1_recoinciliations1_idx` (`recoinciliations_id`),
-  KEY `fk_table1_payments1` (`payments_id`),
-  CONSTRAINT `fk_table1_payments1` FOREIGN KEY (`payments_id`) REFERENCES `payments` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `fk_table1_recoinciliations1` FOREIGN KEY (`recoinciliations_id`) REFERENCES `reconciliations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_table1_recoinciliations1_idx` (`recoinciliation_id`),
+  KEY `fk_table1_payments1` (`payment_id`),
+  CONSTRAINT `fk_table1_payments1` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `fk_table1_recoinciliations1` FOREIGN KEY (`recoinciliation_id`) REFERENCES `reconciliations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -672,11 +672,11 @@ CREATE TABLE `payments` (
   `provider_receipt` varchar(256) NOT NULL,
   `provider_name` varchar(256) NOT NULL,
   `credited_account` varchar(256) NOT NULL,
-  `bills_id` int(11) NOT NULL,
+  `bill_id` int(11) NOT NULL,
   `is_consumed` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `fk_payments_bills1_idx` (`bills_id`),
-  CONSTRAINT `fk_payments_bills1` FOREIGN KEY (`bills_id`) REFERENCES `bills` (`id`) ON UPDATE CASCADE
+  KEY `fk_payments_bills1_idx` (`bill_id`),
+  CONSTRAINT `fk_payments_bills1` FOREIGN KEY (`bill_id`) REFERENCES `bills` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -703,13 +703,13 @@ CREATE TABLE `practicals` (
   `group_B` int(11) DEFAULT NULL,
   `group_C` int(11) DEFAULT NULL,
   `total` int(11) DEFAULT NULL,
-  `subjects_id` int(11) NOT NULL,
-  `centres_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `centre_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_practical_subjects1_idx` (`subjects_id`),
-  KEY `fk_practicals_centres1_idx` (`centres_id`),
-  CONSTRAINT `fk_practical_subjects1` FOREIGN KEY (`subjects_id`) REFERENCES `subjects` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_practicals_centres1` FOREIGN KEY (`centres_id`) REFERENCES `centres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_practical_subjects1_idx` (`subject_id`),
+  KEY `fk_practicals_centres1_idx` (`centre_id`),
+  CONSTRAINT `fk_practical_subjects1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_practicals_centres1` FOREIGN KEY (`centre_id`) REFERENCES `centres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -787,10 +787,10 @@ CREATE TABLE `services` (
   `link` varchar(256) CHARACTER SET utf8 DEFAULT NULL,
   `message` text CHARACTER SET utf8 NOT NULL,
   `has_redirect` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0- only displays message, 1 - redirects to link',
-  `collections_id` int(11) DEFAULT NULL,
+  `collection_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK1_idx` (`collections_id`),
-  CONSTRAINT `FK1` FOREIGN KEY (`collections_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK1_idx` (`collection_id`),
+  CONSTRAINT `FK1` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin5;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -815,10 +815,10 @@ CREATE TABLE `subjects` (
   `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `short_name` varchar(45) NOT NULL,
-  `exam_types_id` int(11) NOT NULL,
+  `exam_type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_subjects_exam_types1_idx` (`exam_types_id`),
-  CONSTRAINT `fk_subjects_exam_types1` FOREIGN KEY (`exam_types_id`) REFERENCES `exam_types` (`id`) ON UPDATE CASCADE
+  KEY `fk_subjects_exam_types1_idx` (`exam_type_id`),
+  CONSTRAINT `fk_subjects_exam_types1` FOREIGN KEY (`exam_type_id`) REFERENCES `exam_types` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=357 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -848,10 +848,10 @@ CREATE TABLE `users` (
   `password` varchar(256) NOT NULL,
   `email` varchar(128) NOT NULL,
   `mobile` varchar(45) NOT NULL,
-  `groups_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_users_groups1_idx` (`groups_id`),
-  CONSTRAINT `fk_users_groups1` FOREIGN KEY (`groups_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE
+  KEY `fk_users_groups1_idx` (`group_id`),
+  CONSTRAINT `fk_users_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

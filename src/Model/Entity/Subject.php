@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  * @property string $code
  * @property string $name
  * @property string $short_name
- * @property int $exam_types_id
+ * @property int $exam_type_id
  *
  * @property \App\Model\Entity\ExamType $exam_type
  */
@@ -30,7 +30,7 @@ class Subject extends Entity
         'code' => true,
         'name' => true,
         'short_name' => true,
-        'exam_types_id' => true,
+        'exam_type_id' => true,
         'exam_type' => true
     ];
 }

@@ -38,7 +38,7 @@
                                                     <th scope="col"><?= $this->Paginator->sort('password') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('email') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('mobile') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('groups_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('group_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
@@ -61,10 +61,10 @@
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $user->id], ['class' => 'btn btn-xs fa fa-eye']) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $user->id], ['class' => 'btn btn-xs fa fa-pencil-square-o']) ?>
+                            <?= $this->Html->link('', ['action' => 'view', $user->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Html->link('', ['action' => 'edit', $user->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $user->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red']) ?>
+                            __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

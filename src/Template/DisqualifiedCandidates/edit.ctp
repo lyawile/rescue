@@ -38,8 +38,8 @@
                         echo $this->Form->control('date_of_birth', ['empty' => true]);
                         echo $this->Form->control('guardian_phone');
                         echo $this->Form->control('is_repeater');
-                    echo $this->Form->control('exam_types_id', ['options' => $examTypes]);
-                    echo $this->Form->control('centres_id', ['options' => $centres]);
+                    echo $this->Form->control('exam_type_id', ['options' => $examTypes]);
+                    echo $this->Form->control('centre_id', ['options' => $centres]);
                 ?>
             </fieldset>
         </div>

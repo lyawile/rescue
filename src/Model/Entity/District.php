@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  * @property int $number
  * @property string $name
  * @property string $detail
- * @property int $regions_id
+ * @property int $region_id
  *
  * @property \App\Model\Entity\Region $region
  */
@@ -30,7 +30,7 @@ class District extends Entity
         'number' => true,
         'name' => true,
         'detail' => true,
-        'regions_id' => true,
+        'region_id' => true,
         'region' => true
     ];
 }

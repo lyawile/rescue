@@ -19,16 +19,29 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build('/'); ?>"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                <li><a href="<?php echo $this->Url->build('/pages/home2'); ?>"><i class="fa fa-circle-o"></i> Dashboard
-                        v2</a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'registration']); ?>"><i
+                            class="fa fa-circle-o"></i><?= __('Registration') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'finance']); ?>"><i
+                            class="fa fa-circle-o"></i><?= __('Finance') ?></a></li>
             </ul>
         </li>
-        <li>
-            <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'index']) ?>">
-                <i class="fa fa-users"></i> <span><?= __('Users') ?></span>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-graduation-cap"></i> <span><?= __('Users') ?></span>
+                <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
             </a>
+            <ul class="treeview-menu">
+                <li><a href="<?php echo $this->Url->build(['controller' => 'users']); ?>"><i
+                            class="fa"></i><?= __('Users') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Groups']); ?>"><i
+                            class="fa"></i><?= __('Groups') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Permissions']); ?>"><i
+                            class="fa"></i><?= __('Permissions') ?></a></li>
+            </ul>
         </li>
+
         <li class="treeview">
             <a href="#">
                 <i class="fa fa-graduation-cap"></i> <span><?= __('Candidates') ?></span>
@@ -37,8 +50,10 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Candidates']); ?>"><i class="fa"></i><?= __('Registered') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'DisqualifiedCandidates']); ?>"><i class="fa"></i><?= __('Disqualified') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Candidates']); ?>"><i
+                            class="fa"></i><?= __('Registered') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'DisqualifiedCandidates']); ?>"><i
+                            class="fa"></i><?= __('Disqualified') ?></a></li>
             </ul>
         </li>
         <li class="treeview">

@@ -30,7 +30,7 @@
                                     echo $this->Form->control('code');
                         echo $this->Form->control('name');
                         echo $this->Form->control('short_name');
-                    echo $this->Form->control('exam_types_id', ['options' => $examTypes]);
+                    echo $this->Form->control('exam_type_id', ['options' => $examTypes]);
                 ?>
             </fieldset>
         </div>

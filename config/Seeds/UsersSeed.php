@@ -20,15 +20,15 @@ class UsersSeed extends AbstractSeed
     {
         $data = [
             [
-                'id' => '2',
+                'id' => '1',
                 'first_name' => 'Administrator',
                 'other_name' => 'eService',
                 'surname' => 'NECTA',
                 'username' => 'admin',
-                'password' => '$2y$10$kuflZuGTJqrgiZmIi2hAWeUuWqju.aLwugzLCBIA.eIZO5LGv1MV6',
+                'password' => '$2y$10$ZnhGAGfKtOOlAzD/4dRPC.5cjb165D0Ym00/CbFVH.eJTarFF4vta',
                 'email' => 'eservice@necta.go.tz',
                 'mobile' => '0715879614',
-                'groups_id' => '1',
+                'group_id' => '1',
             ],
         ];
 

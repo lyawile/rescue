@@ -38,7 +38,7 @@ class DistrictsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Regions', [
-            'foreignKey' => 'regions_id',
+            'foreignKey' => 'region_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -83,7 +83,7 @@ class DistrictsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['regions_id'], 'Regions'));
+        $rules->add($rules->existsIn(['region_id'], 'Regions'));
 
         return $rules;
     }
