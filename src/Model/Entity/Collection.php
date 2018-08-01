@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $start_date
  * @property \Cake\I18n\FrozenTime $end_date
  * @property float $ammount
- * @property int $exam_types_id
- * @property int $collection_categories_id
+ * @property int $exam_type_id
+ * @property int $collection_categorie_id
  *
  * @property \App\Model\Entity\ExamType $exam_type
  * @property \App\Model\Entity\CollectionCategory $collection_category
@@ -36,8 +36,8 @@ class Collection extends Entity
         'start_date' => true,
         'end_date' => true,
         'ammount' => true,
-        'exam_types_id' => true,
-        'collection_categories_id' => true,
+        'exam_type_id' => true,
+        'collection_categorie_id' => true,
         'exam_type' => true,
         'collection_category' => true
     ];

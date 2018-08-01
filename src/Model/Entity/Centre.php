@@ -17,7 +17,7 @@ use Cake\ORM\Entity;
  * @property string $contact_two
  * @property float $district_distance
  * @property string $centre_type
- * @property int $districts_id
+ * @property int $district_id
  *
  * @property \App\Model\Entity\District $district
  */
@@ -44,7 +44,7 @@ class Centre extends Entity
         'contact_two' => true,
         'district_distance' => true,
         'centre_type' => true,
-        'districts_id' => true,
+        'district_id' => true,
         'district' => true
     ];
 }

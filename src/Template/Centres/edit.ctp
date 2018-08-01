@@ -37,7 +37,7 @@
                         echo $this->Form->control('contact_two');
                         echo $this->Form->control('district_distance');
                         echo $this->Form->control('centre_type');
-                    echo $this->Form->control('districts_id', ['options' => $districts]);
+                    echo $this->Form->control('district_id', ['options' => $districts]);
                 ?>
             </fieldset>
         </div>

@@ -31,7 +31,7 @@
                                     echo $this->Form->control('number');
                         echo $this->Form->control('name');
                         echo $this->Form->control('detail');
-                    echo $this->Form->control('regions_id', ['options' => $regions]);
+                    echo $this->Form->control('region_id', ['options' => $regions]);
                 ?>
                     </fieldset>
                 </div>

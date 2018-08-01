@@ -25,14 +25,14 @@
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
-                        <tr>
-                            <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('number') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('detail') ?></th>
-                            <th scope="col"><?= $this->Paginator->sort('regions_id') ?></th>
-                            <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
-                        </tr>
+                    <tr>
+                                                    <th scope="col"><?= $this->Paginator->sort('id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('number') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('detail') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('region_id') ?></th>
+                                                <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
+                    </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($districts as $district): ?>

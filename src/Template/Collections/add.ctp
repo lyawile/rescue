@@ -32,8 +32,8 @@
                         echo $this->Form->control('start_date');
                         echo $this->Form->control('end_date');
                         echo $this->Form->control('ammount');
-                    echo $this->Form->control('exam_types_id', ['options' => $examTypes]);
-                    echo $this->Form->control('collection_categories_id', ['options' => $collectionCategories]);
+                    echo $this->Form->control('exam_type_id', ['options' => $examTypes]);
+                    echo $this->Form->control('collection_categorie_id', ['options' => $collectionCategories]);
                 ?>
             </fieldset>
         </div>

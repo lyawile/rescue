@@ -39,11 +39,11 @@ class CollectionsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('ExamTypes', [
-            'foreignKey' => 'exam_types_id',
+            'foreignKey' => 'exam_type_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('CollectionCategories', [
-            'foreignKey' => 'collection_categories_id',
+            'foreignKey' => 'collection_categorie_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -98,8 +98,8 @@ class CollectionsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['exam_types_id'], 'ExamTypes'));
-        $rules->add($rules->existsIn(['collection_categories_id'], 'CollectionCategories'));
+        $rules->add($rules->existsIn(['exam_type_id'], 'ExamTypes'));
+        $rules->add($rules->existsIn(['collection_categorie_id'], 'CollectionCategories'));
 
         return $rules;
     }

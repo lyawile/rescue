@@ -37,8 +37,8 @@
                                                     <th scope="col"><?= $this->Paginator->sort('date_of_birth') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('guardian_phone') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('is_repeater') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('exam_types_id') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('centres_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('exam_type_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
