@@ -11,6 +11,8 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ExamTypesTable|\Cake\ORM\Association\BelongsTo $ExamTypes
  * @property \App\Model\Table\CollectionCategoriesTable|\Cake\ORM\Association\BelongsTo $CollectionCategories
+ * @property |\Cake\ORM\Association\HasMany $BillItems
+ * @property |\Cake\ORM\Association\HasMany $Services
  *
  * @method \App\Model\Entity\Collection get($primaryKey, $options = [])
  * @method \App\Model\Entity\Collection newEntity($data = null, array $options = [])
@@ -45,6 +47,12 @@ class CollectionsTable extends Table
         $this->belongsTo('CollectionCategories', [
             'foreignKey' => 'collection_categorie_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('BillItems', [
+            'foreignKey' => 'collection_id'
+        ]);
+        $this->hasMany('Services', [
+            'foreignKey' => 'collection_id'
         ]);
     }
 
