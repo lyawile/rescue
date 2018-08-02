@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
 
 /**
  * Bills Controller
@@ -12,14 +10,16 @@ use Cake\ORM\TableRegistry;
  *
  * @method \App\Model\Entity\Bill[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class BillsController extends AppController {
+class BillsController extends AppController
+{
 
     /**
      * Index method
      *
      * @return \Cake\Http\Response|void
      */
-    public function index() {
+    public function index()
+    {
         $bills = $this->paginate($this->Bills);
 
         $this->set(compact('bills'));
@@ -32,7 +32,8 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null) {
+    public function view($id = null)
+    {
         $bill = $this->Bills->get($id, [
             'contain' => []
         ]);
@@ -45,14 +46,10 @@ class BillsController extends AppController {
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add() {
+    public function add()
+    {
         $bill = $this->Bills->newEntity();
-        $services = TableRegistry::get('Collections');
-        $services = $services->find('all')->select(['id', 'name']);
         if ($this->request->is('post')) {
-            $bill->expire_date = date('Y-m-dd'); // will be changed later after consensus with team mates.
-            var_dump($this->request->getData());
-            exit();
             $bill = $this->Bills->patchEntity($bill, $this->request->getData());
             if ($this->Bills->save($bill)) {
                 $this->Flash->success(__('The bill has been saved.'));
@@ -61,7 +58,7 @@ class BillsController extends AppController {
             }
             $this->Flash->error(__('The bill could not be saved. Please, try again.'));
         }
-        $this->set(compact('services'));
+        $this->set(compact('bill'));
     }
 
     /**
@@ -71,7 +68,8 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null) {
+    public function edit($id = null)
+    {
         $bill = $this->Bills->get($id, [
             'contain' => []
         ]);
@@ -94,7 +92,8 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $this->request->allowMethod(['post', 'delete']);
         $bill = $this->Bills->get($id);
         if ($this->Bills->delete($bill)) {
@@ -105,5 +104,4 @@ class BillsController extends AppController {
 
         return $this->redirect(['action' => 'index']);
     }
-
 }

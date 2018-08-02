@@ -56,27 +56,27 @@ class BillsTable extends Table
         $validator
             ->decimal('amount')
             ->requirePresence('amount', 'create')
-            ->notEmpty('amount');
+            ->allowEmpty('amount');
 
         $validator
             ->decimal('equivalent_amount')
             ->requirePresence('equivalent_amount', 'create')
-            ->notEmpty('equivalent_amount');
+            ->allowEmpty('equivalent_amount');
 
         $validator
             ->decimal('misc_amount')
             ->requirePresence('misc_amount', 'create')
-            ->notEmpty('misc_amount');
+            ->allowEmpty('misc_amount');
 
         $validator
             ->dateTime('expire_date')
             ->requirePresence('expire_date', 'create')
-            ->notEmpty('expire_date');
+            ->allowEmpty('expire_date');
 
         $validator
             ->dateTime('generated_date')
             ->requirePresence('generated_date', 'create')
-            ->notEmpty('generated_date');
+            ->allowEmpty('generated_date');
 
         $validator
             ->integer('payer_idx')
@@ -85,7 +85,7 @@ class BillsTable extends Table
         $validator
             ->scalar('payer_name')
             ->maxLength('payer_name', 256)
-            ->allowEmpty('payer_name');
+            ->notEmpty('payer_name');
 
         $validator
             ->scalar('payer_mobile')
@@ -93,14 +93,14 @@ class BillsTable extends Table
             ->requirePresence('payer_mobile', 'create')
             ->notEmpty('payer_mobile');
 
-        $validator
-            ->scalar('payer_email')
-            ->maxLength('payer_email', 128)
-            ->allowEmpty('payer_email');
+//        $validator
+//            ->scalar('payer_email')
+//            ->maxLength('payer_email', 128)
+//            ->allowEmpty('payer_email');
 
-        $validator
-            ->requirePresence('has_reminder', 'create')
-            ->notEmpty('has_reminder');
+//        $validator
+//            ->requirePresence('has_reminder', 'create')
+//            ->notEmpty('has_reminder');
 
         $validator
             ->scalar('control_number')
