@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use App\Controller\AppController;
 
 /**
  * Bills Controller
@@ -34,7 +34,7 @@ class BillsController extends AppController {
      */
     public function view($id = null) {
         $bill = $this->Bills->get($id, [
-            'contain' => []
+            'contain' => ['BillItems', 'Payments']
         ]);
 
         $this->set('bill', $bill);
@@ -46,14 +46,23 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
+        $services = TableRegistry::getTableLocator()->get('collections');
+        $services = $services->find()->select(['id', 'name', 'ammount']);
         $bill = $this->Bills->newEntity();
-        $services = TableRegistry::get('Collections');
-        $services = $services->find('all')->select(['id', 'name']);
+        $bill_item = $this->loadModel('BillItems');
+        $bill_item = $bill_item->newEntity();
         if ($this->request->is('post')) {
-            $bill->expire_date = date('Y-m-dd'); // will be changed later after consensus with team mates.
-            var_dump($this->request->getData());
-            exit();
             $bill = $this->Bills->patchEntity($bill, $this->request->getData());
+
+            $bill->reference = 4512222;
+            $bill->amount = 45000;
+            $bill->equivalent_amount = 45000;
+            $bill->misc_amount = 45000;
+            $bill->expire_date = '2018-12-01';
+            $bill->generated_date = date("Y-m-d");
+            $bill->has_reminder = 0;
+//            var_dump($this->request->getData());
+//            exit();
             if ($this->Bills->save($bill)) {
                 $this->Flash->success(__('The bill has been saved.'));
 

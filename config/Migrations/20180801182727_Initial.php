@@ -6,6 +6,139 @@ class Initial extends AbstractMigration
     public function up()
     {
 
+        $this->table('acos')
+            ->addColumn('parent_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('model', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('foreign_key', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('alias', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('lft', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('rght', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addIndex(
+                [
+                    'lft',
+                    'rght',
+                ]
+            )
+            ->addIndex(
+                [
+                    'alias',
+                ]
+            )
+            ->create();
+
+        $this->table('aros')
+            ->addColumn('parent_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('model', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('foreign_key', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('alias', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('lft', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('rght', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addIndex(
+                [
+                    'lft',
+                    'rght',
+                ]
+            )
+            ->addIndex(
+                [
+                    'alias',
+                ]
+            )
+            ->create();
+
+        $this->table('aros_acos')
+            ->addColumn('aro_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => false,
+            ])
+            ->addColumn('aco_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => false,
+            ])
+            ->addColumn('_create', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addColumn('_read', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addColumn('_update', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addColumn('_delete', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addIndex(
+                [
+                    'aro_id',
+                    'aco_id',
+                ],
+                ['unique' => true]
+            )
+            ->addIndex(
+                [
+                    'aco_id',
+                ]
+            )
+            ->create();
+
         $this->table('bill_item_candidates')
             ->addColumn('candidate_id', 'integer', [
                 'default' => null,
@@ -1660,6 +1793,9 @@ class Initial extends AbstractMigration
                 'group_id'
             )->save();
 
+        $this->table('acos')->drop()->save();
+        $this->table('aros')->drop()->save();
+        $this->table('aros_acos')->drop()->save();
         $this->table('bill_item_candidates')->drop()->save();
         $this->table('bill_items')->drop()->save();
         $this->table('bills')->drop()->save();
