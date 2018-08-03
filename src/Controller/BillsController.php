@@ -70,8 +70,6 @@ class BillsController extends AppController {
             $bill->expire_date = '2018-12-01'; // assumed
             $bill->generated_date = date("Y-m-d");
             $bill->has_reminder = 0;
-//            var_dump($this->request->getData());
-//            exit();
             if ($t = $this->Bills->save($bill)) {
                 $bill_item_var = $billItem->patchEntity($bill_item, $postedData);
                 $bill_item_var->bill_id = $t->id; // last inserted id
@@ -80,7 +78,8 @@ class BillsController extends AppController {
                 $bill_item_var->misc_amount = $bill->amount;
                 $bill_item_var->equivalent_amount = $bill->equivalent_amount;
                 $bill_item_var->unit = "Each";
-                $billItem->save($bill_item_var, $postedData);
+                $bill_item_var->collection_id = $collectionId;
+                $billItem->save($bill_item_var) ;
                 $this->Flash->success(__('The bill has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }

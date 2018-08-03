@@ -70,9 +70,9 @@ class BillItemsTable extends Table
             ->allowEmpty('detail');
 
         $validator
-            ->decimal('ammount')
-            ->requirePresence('ammount', 'create')
-            ->notEmpty('ammount');
+            ->decimal('amount')
+            ->requirePresence('amount', 'create')
+            ->notEmpty('amount');
 
         $validator
             ->decimal('equivalent_amount')

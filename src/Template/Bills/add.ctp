@@ -6,7 +6,7 @@
 //echo $test;
 ?>
 <pre>
-    <?php echo @var_dump($dddd); ?>
+    <?php // echo @var_dump($dddd); ?>
 </pre>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
