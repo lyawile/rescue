@@ -168,7 +168,7 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => true,
             ])
-            ->addColumn('ammount', 'decimal', [
+            ->addColumn('amount', 'decimal', [
                 'default' => null,
                 'null' => false,
                 'precision' => 12,
@@ -545,7 +545,7 @@ class Initial extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('ammount', 'decimal', [
+            ->addColumn('amount', 'decimal', [
                 'default' => null,
                 'null' => false,
                 'precision' => 12,
