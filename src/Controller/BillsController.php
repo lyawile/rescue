@@ -47,25 +47,41 @@ class BillsController extends AppController {
      */
     public function add() {
         $services = TableRegistry::getTableLocator()->get('collections');
-        $services = $services->find()->select(['id', 'name', 'ammount']);
+        $services = $services->find('list');
+//        $services = $services->find('list')->select(['id', 'name', 'amount']);
         $bill = $this->Bills->newEntity();
-        $bill_item = $this->loadModel('BillItems');
-        $bill_item = $bill_item->newEntity();
+        $billItem = $this->loadModel('BillItems');
+        $collections = $this->loadModel('Collections');
+        $bill_item = $billItem->newEntity();
         if ($this->request->is('post')) {
-            $bill = $this->Bills->patchEntity($bill, $this->request->getData());
-
-            $bill->reference = 4512222;
-            $bill->amount = 45000;
-            $bill->equivalent_amount = 45000;
-            $bill->misc_amount = 45000;
-            $bill->expire_date = '2018-12-01';
+            // get collection id to determine the service cost 
+            $postedData = $this->request->getData();
+            $collectionId = $postedData['collection_id'];
+            // get the service amount
+            $collectionsData = $collections->find()->where(["id" => $collectionId]);
+            foreach ($collectionsData as $d) {
+                $amount = $d->amount;
+            }
+            $bill = $this->Bills->patchEntity($bill, $postedData);
+            $bill->reference = 'NECTA'.date("Y").date("mdhis", time()); // assumed reference number, will be changed later on consensus
+            $bill->amount = $amount;
+            $bill->equivalent_amount = $amount;
+            $bill->misc_amount = $amount;
+            $bill->expire_date = '2018-12-01'; // assumed
             $bill->generated_date = date("Y-m-d");
             $bill->has_reminder = 0;
 //            var_dump($this->request->getData());
 //            exit();
-            if ($this->Bills->save($bill)) {
+            if ($t = $this->Bills->save($bill)) {
+                $bill_item_var = $billItem->patchEntity($bill_item, $postedData);
+                $bill_item_var->bill_id = $t->id; // last inserted id
+                $bill_item_var->detail = "Test details";
+                $bill_item_var->amount = $bill->amount; // testing
+                $bill_item_var->misc_amount = $bill->amount;
+                $bill_item_var->equivalent_amount = $bill->equivalent_amount;
+                $bill_item_var->unit = "Each";
+                $billItem->save($bill_item_var, $postedData);
                 $this->Flash->success(__('The bill has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The bill could not be saved. Please, try again.'));

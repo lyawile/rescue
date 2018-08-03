@@ -3,7 +3,11 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Bill $bill
  */
+//echo $test;
 ?>
+<pre>
+    <?php echo @var_dump($dddd); ?>
+</pre>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
@@ -27,18 +31,9 @@
                 <div class="col-sm-8">
                     <fieldset>
                         <?php
-//                                    echo $this->Form->control('reference');
-//                        echo $this->Form->control('amount');
-//                        echo $this->Form->control('equivalent_amount');
-//                        echo $this->Form->control('misc_amount');
-//                        echo $this->Form->control('expire_date');
-//                        echo $this->Form->control('generated_date');
-//                        echo $this->Form->control('payer_idx');
-                        
                         echo $this->Form->control('payer_name');
                         echo $this->Form->control('payer_mobile');
                         echo $this->Form->control('payer_email');
-//                        echo $this->Form->control('has_reminder');
                         ?>
                         <div class="form-group input select">
                             <label for="group-id">Select atleast one service </label>
@@ -56,14 +51,18 @@
                                 <tr>
                                     <td>1</td>
                                     <td>
-                                        <select name="collection_id" class="form-control" id="group-id">
-                                            <?php foreach ($services as $serv) { ?>
-                                                <option value="<?= $serv->id ?>"><?= $serv->name ?></option>
-                                            <?php } ?>
-                                        </select> 
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <?= $this->Form->control('collection_id', array('type' => 'select', 'options' => $services, 'value' => 1, 'label' => false, 'empty' => 'Select service')); ?>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                       <?=$this->Form->control('bill_items.quantity', array( 'label' => false )) ?>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <?= $this->Form->control('quantity', array('label' => false, 'type' => 'number')) ?>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="actions pull-right">
                                         <a href="" class="btn btn-xs fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="Add service"></a>                                                        
