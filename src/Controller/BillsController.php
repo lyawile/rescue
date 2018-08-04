@@ -52,7 +52,7 @@ class BillsController extends AppController {
         $bill = $this->Bills->newEntity();
         $billItem = $this->loadModel('BillItems');
         $collections = $this->loadModel('Collections');
-        
+
         if ($this->request->is('post')) {
             // get collection id to determine the service cost 
             $postedData = $this->request->getData();
@@ -65,6 +65,7 @@ class BillsController extends AppController {
             $bill->expire_date = '2018-12-01'; // assumed
             $bill->generated_date = date("Y-m-d");
             $bill->has_reminder = 0;
+            $totalAmount = 0;
             if ($t = $this->Bills->save($bill)) {
                 $bill_id = $t->id;
                 for ($i = 0; $i < count($postedData['collection_id']); $i++) {
@@ -91,21 +92,31 @@ class BillsController extends AppController {
                     $bill_item_var->collection_id = $collectionId;
                     $bill_item_var->quantity = $postedData['quantity'][$i];
 //                    debug($bill_item_var);
+                    // get the amount of money that a customer needs to pay by summing up the services cost he has selected
+                    $totalAmount += $amount;
                     $billItem->save($bill_item_var);
                 }
-                // get the amount of money that a customer needs to pay by summing up the services cost he has selected
-                
+                // Update the amount Bills table
+                $query = $this->Bills->query();
+                $query->update()
+                        ->set(['amount' => $totalAmount, 'equivalent_amount' => $totalAmount, 'misc_amount' => $totalAmount])
+                        ->where(['id' => $bill_id])
+                        ->execute();
                 $this->Flash->success(__('The bill has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'getInvoice', 'bill_id' => $bill_id]);
             } // end of the loop to iterate through each service added by the user
-            
+
             $this->Flash->error(__('The bill could not be saved. Please, try again.'));
         }
         $this->set(compact('services'));
     }
-    public function getInvoice(){
-        $test =  "Ahaa!! This is your invoice";
-        $this->set(compact('test'));
+
+    public function getInvoice($bill_id) {
+        $bill_identification = $this->request->query('bill_id');
+        $query = $this->Bills->findById(89);
+        $query->innerJoinWith('BillItems');
+        debug($query);
+        $this->set(compact('query'));
     }
 
     /**
