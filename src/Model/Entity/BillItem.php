@@ -34,7 +34,7 @@ class BillItem extends Entity
      */
     protected $_accessible = [
         'detail' => true,
-        'ammount' => true,
+        'amount' => true,
         'equivalent_amount' => true,
         'misc_amount' => true,
         'quantity' => true,
