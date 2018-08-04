@@ -48,24 +48,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr class="service">
                                     <td>1</td>
                                     <td>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <?= $this->Form->control('collection_id', array('type' => 'select', 'options' => $services, 'value' => 1, 'label' => false, 'empty' => 'Select service')); ?>
+                                                <?= $this->Form->control('collection_id[]', array('type' => 'select', 'options' => $services, 'value' => 1, 'label' => false, 'empty' => 'Select service')); ?>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <?= $this->Form->control('quantity', array('label' => false, 'type' => 'number')) ?>
+                                                <?= $this->Form->control('quantity[]', array('label' => false, 'type' => 'number')) ?>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="actions pull-right">
-                                        <a href="" class="btn btn-xs fa fa-plus" data-toggle="tooltip" data-placement="bottom" title="Add service"></a>                                                        
+                                        <a href="" class="btn btn-xs fa fa-plus "  data-placement="bottom" title="Add service"></a>                                                        
                                     </td>
                                 </tr>
                             </tbody>
