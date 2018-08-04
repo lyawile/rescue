@@ -112,11 +112,24 @@ class BillsController extends AppController {
     }
 
     public function getInvoice($bill_id) {
-        $bill_identification = $this->request->query('bill_id');
-        $query = $this->Bills->findById(89);
-        $query->innerJoinWith('BillItems');
-        debug($query);
-        $this->set(compact('query'));
+        // get the customer details 
+        echo $this->request->query('bill_id');
+        $queryDetails = $this->Bills->find();
+        $queryDetails->innerJoinWith('BillItems', function($data) {
+            return $data->where(['Bills.id' => $this->request->query('bill_id')]);
+        });
+        // get the bill items 
+        $this->loadModel('BillItems');
+        $this->loadModel('Collections');
+        $billDetails =  $this->BillItems->find('all', ['contain'=> 'Collections'] )
+                ->select(['BillItems.amount', 'BillItems.quantity','BillItems.unit', 'Collections.name'])
+                ->where(['BillItems.bill_id' => $this->request->query('bill_id')]);
+        // read total from the bill
+        $queryTotal = $this->Bills->find()->select('amount')->where(['id'=>$this->request->query('bill_id')]);
+        foreach ($queryTotal as $queryT){
+            $totalAmount = $queryT['amount'];
+        }
+        $this->set(compact('queryDetails', 'billDetails', 'totalAmount'));
     }
 
     /**
