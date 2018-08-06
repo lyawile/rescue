@@ -81,19 +81,20 @@ class BillsController extends AppController {
                     foreach ($collectionsData as $d) {
                         $amount = $d->amount;
                     }
+                    $quantity = $postedData['quantity'][$i];
                     $bill_item = $billItem->newEntity();
                     $bill_item_var = $billItem->patchEntity($bill_item, $postedData);
                     $bill_item_var->bill_id = $bill_id; // last inserted bill id
                     $bill_item_var->detail = "Test details";
-                    $bill_item_var->amount = $amount; // testing
-                    $bill_item_var->misc_amount = $amount;
-                    $bill_item_var->equivalent_amount = $amount;
+                    $bill_item_var->amount = $amount * $quantity; // testing
+                    $bill_item_var->misc_amount = $amount * $quantity;
+                    $bill_item_var->equivalent_amount = $amount * $quantity;
                     $bill_item_var->unit = "Each";
                     $bill_item_var->collection_id = $collectionId;
-                    $bill_item_var->quantity = $postedData['quantity'][$i];
+                    $bill_item_var->quantity = $quantity;
 //                    debug($bill_item_var);
                     // get the amount of money that a customer needs to pay by summing up the services cost he has selected
-                    $totalAmount += $amount;
+                    $totalAmount += $amount*$quantity;
                     $billItem->save($bill_item_var);
                 }
                 // Update the amount Bills table
@@ -122,7 +123,7 @@ class BillsController extends AppController {
         $this->loadModel('BillItems');
         $this->loadModel('Collections');
         $billDetails =  $this->BillItems->find('all', ['contain'=> 'Collections'] )
-                ->select(['BillItems.amount', 'BillItems.quantity','BillItems.unit', 'Collections.name'])
+                ->select(['BillItems.amount', 'BillItems.quantity','BillItems.unit', 'Collections.name', 'Collections.amount'])
                 ->where(['BillItems.bill_id' => $this->request->query('bill_id')]);
         // read total from the bill
         $queryTotal = $this->Bills->find()->select('amount')->where(['id'=>$this->request->query('bill_id')]);

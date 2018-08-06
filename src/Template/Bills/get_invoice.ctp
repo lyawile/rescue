@@ -14,7 +14,7 @@ foreach ($queryDetails as $customerDetails) {
 <section class="content-header">
       <h1>
         Invoice
-        <small>#007612</small>
+        <small>#<?=$payerReference = $customerDetails['reference']; ?></small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -27,8 +27,8 @@ foreach ($queryDetails as $customerDetails) {
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <i class="fa fa-globe"></i> The National Examinations Council of Tanzania.
-            <small class="pull-right">Date: <?=$generatedDate = $customerDetails['generated_date'] ?></small>
+            <i class=""><?php echo $this->Html->image('necta-logo.png') ?></i> The National Examinations Council of Tanzania.
+            <small class="pull-right">Generated on:  <?=$generatedDate = $customerDetails['generated_date'] ?></small>
           </h2>
         </div>
         <!-- /.col -->
@@ -58,7 +58,8 @@ foreach ($queryDetails as $customerDetails) {
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
-          <b>Invoice #<?=$payerReference = $customerDetails['reference']; ?></b><br>
+          <b>Invoice #:<?=$payerReference = $customerDetails['reference']; ?></b><br>
+          <b>Control Number #: <?="On processing"; ?></b><br>
           <br>
           <!--<b>Order ID:</b> 4F3S8J<br>-->
           <b>Payment Due:</b> <?=$expireDate = $customerDetails['expire_date']; ?><br>
@@ -74,10 +75,10 @@ foreach ($queryDetails as $customerDetails) {
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>Qty</th>
               <th>Service</th>
+              <th>Quantity</th>
               <th>Unit</th>
-              <th>Description</th>
+              <th>Unit Cost</th>
               <th>Subtotal</th>
             </tr>
             </thead>
@@ -85,11 +86,11 @@ foreach ($queryDetails as $customerDetails) {
                 <?php 
                 foreach ($billDetails as $billData){ ?>
                 <tr>
-              <td><?php echo $billData['quantity']; ?></td>
               <td><?php echo $billData['collection']['name']; ?></td>
+              <td><?php echo $billData['quantity']; ?></td>
               <td><?php echo $billData['unit']; ?> </td>
-              <td></td>
-              <td><?php echo $billData['amount']; ?></td>
+              <td><?php echo number_format($billData['collection']['amount'], 2); ?></td>
+              <td><?php echo number_format($billData['amount'], 2) ; ?></td>
             </tr>
     
 <?php } ?>
@@ -105,26 +106,21 @@ foreach ($queryDetails as $customerDetails) {
         <!-- accepted payments column -->
         <div class="col-xs-6">
           <p class="lead">Payment Methods:</p>
-          <img src="../../dist/img/credit/visa.png" alt="Visa">
-          <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
-          <img src="../../dist/img/credit/american-express.png" alt="American Express">
-          <img src="../../dist/img/credit/paypal2.png" alt="Paypal">
-
           <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg
-            dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+          You can pay in one out of these payment options: Bank, Mobile (Tigo, Vodacom, Airtel, TTCL or Zantel) 
+          or MaxMalipo.
           </p>
         </div>
         <!-- /.col -->
         <div class="col-xs-6">
-          <p class="lead">Amount Due 2/22/2014</p>
+          <!--<p class="lead">Amount Due 2/22/2014</p>-->
 
           <div class="table-responsive">
             <table class="table">
               <tbody>
               <tr>
                 <th>Total:</th>
-                <td><?php echo $totalAmount;  ?></td>
+                <td><?php echo number_format($totalAmount, 2);  ?></td>
               </tr>
             </tbody></table>
           </div>
