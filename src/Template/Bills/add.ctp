@@ -36,7 +36,7 @@
                         echo $this->Form->control('payer_email');
                         ?>
                         <div class="form-group input select">
-                            <label for="group-id">Select atleast one service </label>
+                            <label for="group-id " class="instruction">Select atleast one service </label>
                         </div>
                         <table cellpadding="0" cellspacing="0" class="table table table-striped">
                             <thead>

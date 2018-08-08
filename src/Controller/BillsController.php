@@ -112,9 +112,9 @@ class BillsController extends AppController {
         $this->set(compact('services'));
     }
 
-    public function getInvoice($bill_id) {
+    public function getInvoice($bill_id = null) {
         // get the customer details 
-        echo $this->request->query('bill_id');
+        $this->request->query('bill_id');
         $queryDetails = $this->Bills->find();
         $queryDetails->innerJoinWith('BillItems', function($data) {
             return $data->where(['Bills.id' => $this->request->query('bill_id')]);
