@@ -20,7 +20,12 @@
     <section class="content">
 
         <!-- Default box -->
-        <div class="box with-border">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="btn-group pull-right">
+                    <?= $this->Html->link(__('New District'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                </div>
+            </div>
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
@@ -48,10 +53,10 @@
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $district->id], ['class' => 'btn btn-xs fa fa-eye']) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $district->id], ['class' => 'btn btn-xs fa fa-pencil-square-o']) ?>
+                            <?= $this->Html->link('', ['action' => 'view', $district->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Html->link('', ['action' => 'edit', $district->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $district->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $district->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red']) ?>
+                            __('Are you sure you want to delete # {0}?', $district->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

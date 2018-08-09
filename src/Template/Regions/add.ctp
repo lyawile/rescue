@@ -18,26 +18,24 @@
     </section>
 
     <section class="content">
-        <div class="regions form large-9 medium-8 columns content">
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title"><?= __('Add Region') ?></h3>
-        </div>
-        <div class="box-body">
-            <?= $this->Form->create($region) ?>
-            <fieldset>
-                <?php
-                                    echo $this->Form->control('number');
-                        echo $this->Form->control('name');
-                        echo $this->Form->control('detail');
-                ?>
-            </fieldset>
-        </div>
-        <div class="box-footer">
-            <?= $this->Form->button(__('Submit')) ?>
-        </div>
-
-        <?= $this->Form->end() ?>
+        <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= __('Add Region') ?></h3>
     </div>
+    <div class="box-body">
+        <?= $this->Form->create($region) ?>
+        <fieldset>
+            <?php
+                                echo $this->Form->control('number');
+                    echo $this->Form->control('name');
+                    echo $this->Form->control('detail');
+            ?>
+        </fieldset>
+    </div>
+    <div class="box-footer">
+        <?= $this->Form->button(__('Submit')) ?>
+    </div>
+
+    <?= $this->Form->end() ?>
 </div>    </section>
 </div>

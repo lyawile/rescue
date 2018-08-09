@@ -20,7 +20,12 @@
     <section class="content">
 
         <!-- Default box -->
-        <div class="box with-border">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="btn-group pull-right">
+                    <?= $this->Html->link(__('New Exam Type'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                </div>
+            </div>
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>

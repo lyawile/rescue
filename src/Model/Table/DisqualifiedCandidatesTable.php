@@ -112,6 +112,7 @@ class DisqualifiedCandidatesTable extends Table
             ->allowEmpty('guardian_phone');
 
         $validator
+            ->integer('is_repeater')
             ->requirePresence('is_repeater', 'create')
             ->notEmpty('is_repeater');
 

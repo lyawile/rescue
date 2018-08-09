@@ -203,8 +203,8 @@ Plugin::load('AdminLTE', ['bootstrap' => true, 'routes' => true]);
 Configure::write('Theme', [
     'title' => 'NECTA eServices',
     'logo' => [
-        'mini' => '<b>A</b>LT',
-        'large' => '<b>Admin</b>LTE'
+        'mini' => '<b>e</b>SN',
+        'large' => '<b>eServices </b>NECTA'
     ],
     'login' => [
         'show_remember' => false,
@@ -214,3 +214,7 @@ Configure::write('Theme', [
     'folder' => ROOT,
     'skin' => 'green'
 ]);
+
+/*UPLOAD PLUGIN*/
+Plugin::load('Josegonzalez/Upload');
+/**/

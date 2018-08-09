@@ -18,27 +18,25 @@
     </section>
 
     <section class="content">
-        <div class="subjects form large-9 medium-8 columns content">
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title"><?= __('Edit Subject') ?></h3>
-        </div>
-        <div class="box-body">
-            <?= $this->Form->create($subject) ?>
-            <fieldset>
-                <?php
-                                    echo $this->Form->control('code');
-                        echo $this->Form->control('name');
-                        echo $this->Form->control('short_name');
-                    echo $this->Form->control('exam_types_id', ['options' => $examTypes]);
-                ?>
-            </fieldset>
-        </div>
-        <div class="box-footer">
-            <?= $this->Form->button(__('Submit')) ?>
-        </div>
-
-        <?= $this->Form->end() ?>
+        <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= __('Edit Subject') ?></h3>
     </div>
+    <div class="box-body">
+        <?= $this->Form->create($subject) ?>
+        <fieldset>
+            <?php
+                                echo $this->Form->control('code');
+                    echo $this->Form->control('name');
+                    echo $this->Form->control('short_name');
+                echo $this->Form->control('exam_types_id', ['options' => $examTypes]);
+            ?>
+        </fieldset>
+    </div>
+    <div class="box-footer">
+        <?= $this->Form->button(__('Submit')) ?>
+    </div>
+
+    <?= $this->Form->end() ?>
 </div>    </section>
 </div>

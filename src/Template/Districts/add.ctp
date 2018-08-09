@@ -18,27 +18,25 @@
     </section>
 
     <section class="content">
-        <div class="districts form large-9 medium-8 columns content">
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title"><?= __('Add District') ?></h3>
-        </div>
-        <div class="box-body">
-            <?= $this->Form->create($district) ?>
-            <fieldset>
-                <?php
-                                    echo $this->Form->control('number');
-                        echo $this->Form->control('name');
-                        echo $this->Form->control('detail');
-                    echo $this->Form->control('regions_id', ['options' => $regions]);
-                ?>
-            </fieldset>
-        </div>
-        <div class="box-footer">
-            <?= $this->Form->button(__('Submit')) ?>
-        </div>
-
-        <?= $this->Form->end() ?>
+        <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= __('Add District') ?></h3>
     </div>
+    <div class="box-body">
+        <?= $this->Form->create($district) ?>
+        <fieldset>
+            <?php
+                                echo $this->Form->control('number');
+                    echo $this->Form->control('name');
+                    echo $this->Form->control('detail');
+                echo $this->Form->control('regions_id', ['options' => $regions]);
+            ?>
+        </fieldset>
+    </div>
+    <div class="box-footer">
+        <?= $this->Form->button(__('Submit')) ?>
+    </div>
+
+    <?= $this->Form->end() ?>
 </div>    </section>
 </div>

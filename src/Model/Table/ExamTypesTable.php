@@ -51,7 +51,8 @@ class ExamTypesTable extends Table
         $validator
             ->integer('code')
             ->requirePresence('code', 'create')
-            ->notEmpty('code');
+            ->notEmpty('code')
+            ->add('code', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
             ->scalar('name')
@@ -66,5 +67,19 @@ class ExamTypesTable extends Table
             ->notEmpty('short_name');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['code']));
+
+        return $rules;
     }
 }
