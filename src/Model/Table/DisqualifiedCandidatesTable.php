@@ -39,11 +39,11 @@ class DisqualifiedCandidatesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('ExamTypes', [
-            'foreignKey' => 'exam_types_id',
+            'foreignKey' => 'exam_type_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('Centres', [
-            'foreignKey' => 'centres_id',
+            'foreignKey' => 'centre_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -128,8 +128,8 @@ class DisqualifiedCandidatesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['exam_types_id'], 'ExamTypes'));
-        $rules->add($rules->existsIn(['centres_id'], 'Centres'));
+        $rules->add($rules->existsIn(['exam_type_id'], 'ExamTypes'));
+        $rules->add($rules->existsIn(['centre_id'], 'Centres'));
 
         return $rules;
     }

@@ -113,6 +113,7 @@ class ComposerStaticInit49cb4ecbd1877fd1b404e423cebca4c4
             'App\\' => 4,
             'Ajgl\\Twig\\Extension\\' => 20,
             'AdminLTE\\' => 9,
+            'Acl\\' => 4,
         ),
     );
 
@@ -308,6 +309,10 @@ class ComposerStaticInit49cb4ecbd1877fd1b404e423cebca4c4
         'AdminLTE\\' => 
         array (
             0 => __DIR__ . '/..' . '/maiconpinto/cakephp-adminlte-theme/src',
+        ),
+        'Acl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cakephp/acl/src',
         ),
     );
 

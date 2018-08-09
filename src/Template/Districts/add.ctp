@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\District $district
@@ -18,6 +19,7 @@
     </section>
 
     <section class="content">
+<<<<<<< HEAD
         <div class="box">
     <div class="box-header with-border">
         <h3 class="box-title"><?= __('Add District') ?></h3>
@@ -39,4 +41,29 @@
 
     <?= $this->Form->end() ?>
 </div>    </section>
+=======
+        <div class="districts form large-9 medium-8 columns content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= __('Add District') ?></h3>
+                </div>
+                <div class="box-body">
+            <?= $this->Form->create($district) ?>
+                    <fieldset>
+                <?php
+                                    echo $this->Form->control('number');
+                        echo $this->Form->control('name');
+                        echo $this->Form->control('detail');
+                    echo $this->Form->control('region_id', ['options' => $regions]);
+                ?>
+                    </fieldset>
+                </div>
+                <div class="box-footer">
+            <?= $this->Form->button(__('Submit')) ?>
+                </div>
+
+        <?= $this->Form->end() ?>
+            </div>
+        </div>    </section>
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
 </div>

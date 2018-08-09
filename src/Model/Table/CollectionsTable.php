@@ -11,6 +11,8 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ExamTypesTable|\Cake\ORM\Association\BelongsTo $ExamTypes
  * @property \App\Model\Table\CollectionCategoriesTable|\Cake\ORM\Association\BelongsTo $CollectionCategories
+ * @property |\Cake\ORM\Association\HasMany $BillItems
+ * @property |\Cake\ORM\Association\HasMany $Services
  *
  * @method \App\Model\Entity\Collection get($primaryKey, $options = [])
  * @method \App\Model\Entity\Collection newEntity($data = null, array $options = [])
@@ -39,12 +41,18 @@ class CollectionsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('ExamTypes', [
-            'foreignKey' => 'exam_types_id',
+            'foreignKey' => 'exam_type_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('CollectionCategories', [
-            'foreignKey' => 'collection_categories_id',
+            'foreignKey' => 'collection_categorie_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('BillItems', [
+            'foreignKey' => 'collection_id'
+        ]);
+        $this->hasMany('Services', [
+            'foreignKey' => 'collection_id'
         ]);
     }
 
@@ -98,8 +106,8 @@ class CollectionsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['exam_types_id'], 'ExamTypes'));
-        $rules->add($rules->existsIn(['collection_categories_id'], 'CollectionCategories'));
+        $rules->add($rules->existsIn(['exam_type_id'], 'ExamTypes'));
+        $rules->add($rules->existsIn(['collection_categorie_id'], 'CollectionCategories'));
 
         return $rules;
     }

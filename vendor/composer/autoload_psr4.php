@@ -54,5 +54,6 @@ return array(
     'App\\' => array($baseDir . '/src'),
     'Ajgl\\Twig\\Extension\\' => array($vendorDir . '/ajgl/breakpoint-twig-extension/src'),
     'AdminLTE\\' => array($vendorDir . '/maiconpinto/cakephp-adminlte-theme/src'),
+    'Acl\\' => array($vendorDir . '/cakephp/acl/src'),
     '' => array($vendorDir . '/asm89/twig-cache-extension/lib'),
 );

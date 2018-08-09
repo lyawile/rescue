@@ -20,38 +20,40 @@
     </div>
     <div class="box-body">
         <?= $this->Form->create(${{ singularVar }}) ?>
-        <fieldset>
-            <?php
+        <div class="col-sm-8">
+            <fieldset>
+                <?php
             {% for field in fields if field not in primaryKey %}
                  {%- if keyFields[field] %}
                      {%- set fieldData = Bake.columnData(field, schema) %}
                          {%- if fieldData.null %}
                      echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
-            {{- "\n" }}
-            {%- else %}
-                echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
                 {{- "\n" }}
-            {%- endif %}
-            {%- elseif field not in ['created', 'modified', 'updated'] %}
-                {%- set fieldData = Bake.columnData(field, schema) %}
-                {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
-                    echo $this->Form->control('{{ field }}', ['empty' => true]);
-                    {{- "\n" }}
                 {%- else %}
-                    echo $this->Form->control('{{ field }}');
+                    echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
                     {{- "\n" }}
                 {%- endif %}
-            {%- endif %}
-            {%- endfor %}
-
-            {%- if associations.BelongsToMany %}
-                {%- for assocName, assocData in associations.BelongsToMany %}
-                    echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]);
-                    {{- "\n" }}
+                {%- elseif field not in ['created', 'modified', 'updated'] %}
+                    {%- set fieldData = Bake.columnData(field, schema) %}
+                    {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
+                        echo $this->Form->control('{{ field }}', ['empty' => true]);
+                        {{- "\n" }}
+                    {%- else %}
+                        echo $this->Form->control('{{ field }}');
+                        {{- "\n" }}
+                    {%- endif %}
+                {%- endif %}
                 {%- endfor %}
-            {% endif %}
-            ?>
-        </fieldset>
+
+                {%- if associations.BelongsToMany %}
+                    {%- for assocName, assocData in associations.BelongsToMany %}
+                        echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]);
+                        {{- "\n" }}
+                    {%- endfor %}
+                {% endif %}
+                ?>
+            </fieldset>
+        </div>
     </div>
     <div class="box-footer">
         <?= $this->Form->button(__('Submit')) ?>

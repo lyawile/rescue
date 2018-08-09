@@ -199,6 +199,7 @@ Type::build('timestamp')
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
 Plugin::load('Migrations');
 Plugin::load('AdminLTE', ['bootstrap' => true, 'routes' => true]);
+Plugin::load('Acl', ['bootstrap' => true]);
 
 Configure::write('Theme', [
     'title' => 'NECTA eServices',

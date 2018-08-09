@@ -41,7 +41,7 @@
                                                     <th scope="col"><?= $this->Paginator->sort('contact_two') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('district_distance') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('centre_type') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('districts_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('district_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>

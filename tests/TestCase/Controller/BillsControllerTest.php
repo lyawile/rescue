@@ -16,7 +16,13 @@ class BillsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
+<<<<<<< HEAD
         'app.bills'
+=======
+        'app.bills',
+        'app.bill_items',
+        'app.payments'
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
     ];
 
     /**

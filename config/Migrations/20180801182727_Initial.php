@@ -6,25 +6,158 @@ class Initial extends AbstractMigration
     public function up()
     {
 
-        $this->table('bill_item_candidates')
-            ->addColumn('candidates_id', 'integer', [
+        $this->table('acos')
+            ->addColumn('parent_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
-                'null' => false,
+                'null' => true,
             ])
-            ->addColumn('bill_items_id', 'integer', [
+            ->addColumn('model', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('foreign_key', 'integer', [
                 'default' => null,
                 'limit' => 11,
-                'null' => false,
+                'null' => true,
+            ])
+            ->addColumn('alias', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('lft', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('rght', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
             ])
             ->addIndex(
                 [
-                    'bill_items_id',
+                    'lft',
+                    'rght',
                 ]
             )
             ->addIndex(
                 [
-                    'candidates_id',
+                    'alias',
+                ]
+            )
+            ->create();
+
+        $this->table('aros')
+            ->addColumn('parent_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('model', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('foreign_key', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('alias', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('lft', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addColumn('rght', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => true,
+            ])
+            ->addIndex(
+                [
+                    'lft',
+                    'rght',
+                ]
+            )
+            ->addIndex(
+                [
+                    'alias',
+                ]
+            )
+            ->create();
+
+        $this->table('aros_acos')
+            ->addColumn('aro_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => false,
+            ])
+            ->addColumn('aco_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => false,
+            ])
+            ->addColumn('_create', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addColumn('_read', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addColumn('_update', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addColumn('_delete', 'string', [
+                'default' => '0',
+                'limit' => 2,
+                'null' => false,
+            ])
+            ->addIndex(
+                [
+                    'aro_id',
+                    'aco_id',
+                ],
+                ['unique' => true]
+            )
+            ->addIndex(
+                [
+                    'aco_id',
+                ]
+            )
+            ->create();
+
+        $this->table('bill_item_candidates')
+            ->addColumn('candidate_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => false,
+            ])
+            ->addColumn('bill_item_id', 'integer', [
+                'default' => null,
+                'limit' => 11,
+                'null' => false,
+            ])
+            ->addIndex(
+                [
+                    'bill_item_id',
+                ]
+            )
+            ->addIndex(
+                [
+                    'candidate_id',
                 ]
             )
             ->create();
@@ -35,7 +168,7 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => true,
             ])
-            ->addColumn('ammount', 'decimal', [
+            ->addColumn('amount', 'decimal', [
                 'default' => null,
                 'null' => false,
                 'precision' => 12,
@@ -64,24 +197,24 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => false,
             ])
-            ->addColumn('collections_id', 'integer', [
+            ->addColumn('collection_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('bills_id', 'integer', [
+            ->addColumn('bill_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'bills_id',
+                    'bill_id',
                 ]
             )
             ->addIndex(
                 [
-                    'collections_id',
+                    'collection_id',
                 ]
             )
             ->create();
@@ -153,24 +286,24 @@ class Initial extends AbstractMigration
             ->create();
 
         $this->table('candidate_disabilities')
-            ->addColumn('candidates_id', 'integer', [
+            ->addColumn('candidate_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('disabilities_id', 'integer', [
+            ->addColumn('disabilitie_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'candidates_id',
+                    'candidate_id',
                 ]
             )
             ->addIndex(
                 [
-                    'disabilities_id',
+                    'disabilitie_id',
                 ]
             )
             ->create();
@@ -196,37 +329,37 @@ class Initial extends AbstractMigration
                 'limit' => 11,
                 'null' => true,
             ])
-            ->addColumn('candidates_id', 'integer', [
+            ->addColumn('candidate_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'candidates_id',
+                    'candidate_id',
                 ]
             )
             ->create();
 
         $this->table('candidate_subjects')
-            ->addColumn('candidates_id', 'integer', [
+            ->addColumn('candidate_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('subjects_id', 'integer', [
+            ->addColumn('subject_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'candidates_id',
+                    'candidate_id',
                 ]
             )
             ->addIndex(
                 [
-                    'subjects_id',
+                    'subject_id',
                 ]
             )
             ->create();
@@ -287,24 +420,24 @@ class Initial extends AbstractMigration
                 'limit' => 1,
                 'null' => false,
             ])
-            ->addColumn('exam_types_id', 'integer', [
+            ->addColumn('exam_type_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('centres_id', 'integer', [
+            ->addColumn('centre_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'centres_id',
+                    'centre_id',
                 ]
             )
             ->addIndex(
                 [
-                    'exam_types_id',
+                    'exam_type_id',
                 ]
             )
             ->create();
@@ -361,14 +494,14 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => true,
             ])
-            ->addColumn('districts_id', 'integer', [
+            ->addColumn('district_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'districts_id',
+                    'district_id',
                 ]
             )
             ->create();
@@ -412,30 +545,30 @@ class Initial extends AbstractMigration
                 'limit' => null,
                 'null' => false,
             ])
-            ->addColumn('ammount', 'decimal', [
+            ->addColumn('amount', 'decimal', [
                 'default' => null,
                 'null' => false,
                 'precision' => 12,
                 'scale' => 2,
             ])
-            ->addColumn('exam_types_id', 'integer', [
+            ->addColumn('exam_type_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('collection_categories_id', 'integer', [
+            ->addColumn('collection_categorie_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'collection_categories_id',
+                    'collection_categorie_id',
                 ]
             )
             ->addIndex(
                 [
-                    'exam_types_id',
+                    'exam_type_id',
                 ]
             )
             ->create();
@@ -459,24 +592,24 @@ class Initial extends AbstractMigration
             ->create();
 
         $this->table('disability_disqualified_candidates')
-            ->addColumn('disabilities_id', 'integer', [
+            ->addColumn('disabilitie_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('disqualified_candidates_id', 'integer', [
+            ->addColumn('disqualified_candidate_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'disabilities_id',
+                    'disabilitie_id',
                 ]
             )
             ->addIndex(
                 [
-                    'disqualified_candidates_id',
+                    'disqualified_candidate_id',
                 ]
             )
             ->create();
@@ -502,37 +635,37 @@ class Initial extends AbstractMigration
                 'limit' => 11,
                 'null' => true,
             ])
-            ->addColumn('disqualified_candidates_id', 'integer', [
+            ->addColumn('disqualified_candidate_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'disqualified_candidates_id',
+                    'disqualified_candidate_id',
                 ]
             )
             ->create();
 
         $this->table('disqualified_candidate_subjects')
-            ->addColumn('subjects_id', 'integer', [
+            ->addColumn('subject_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('disqualified_candidates_id', 'integer', [
+            ->addColumn('disqualified_candidate_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'disqualified_candidates_id',
+                    'disqualified_candidate_id',
                 ]
             )
             ->addIndex(
                 [
-                    'subjects_id',
+                    'subject_id',
                 ]
             )
             ->create();
@@ -593,24 +726,24 @@ class Initial extends AbstractMigration
                 'limit' => 1,
                 'null' => false,
             ])
-            ->addColumn('exam_types_id', 'integer', [
+            ->addColumn('exam_type_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('centres_id', 'integer', [
+            ->addColumn('centre_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'centres_id',
+                    'centre_id',
                 ]
             )
             ->addIndex(
                 [
-                    'exam_types_id',
+                    'exam_type_id',
                 ]
             )
             ->create();
@@ -631,14 +764,14 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => true,
             ])
-            ->addColumn('regions_id', 'integer', [
+            ->addColumn('region_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'regions_id',
+                    'region_id',
                 ]
             )
             ->create();
@@ -668,54 +801,54 @@ class Initial extends AbstractMigration
             ->create();
 
         $this->table('group_district_region_school_users')
-            ->addColumn('districts_id', 'integer', [
+            ->addColumn('district_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('regions_id', 'integer', [
+            ->addColumn('region_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('groups_id', 'integer', [
+            ->addColumn('group_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('users_id', 'integer', [
+            ->addColumn('user_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('centres_id', 'integer', [
+            ->addColumn('centre_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'centres_id',
+                    'centre_id',
                 ]
             )
             ->addIndex(
                 [
-                    'districts_id',
+                    'district_id',
                 ]
             )
             ->addIndex(
                 [
-                    'groups_id',
+                    'group_id',
                 ]
             )
             ->addIndex(
                 [
-                    'regions_id',
+                    'region_id',
                 ]
             )
             ->addIndex(
                 [
-                    'users_id',
+                    'user_id',
                 ]
             )
             ->create();
@@ -729,12 +862,12 @@ class Initial extends AbstractMigration
             ->create();
 
         $this->table('payment_reconciliations')
-            ->addColumn('payments_id', 'integer', [
+            ->addColumn('payment_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('recoinciliations_id', 'integer', [
+            ->addColumn('recoinciliation_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
@@ -827,12 +960,12 @@ class Initial extends AbstractMigration
             ])
             ->addIndex(
                 [
-                    'payments_id',
+                    'payment_id',
                 ]
             )
             ->addIndex(
                 [
-                    'recoinciliations_id',
+                    'recoinciliation_id',
                 ]
             )
             ->create();
@@ -921,7 +1054,7 @@ class Initial extends AbstractMigration
                 'limit' => 256,
                 'null' => false,
             ])
-            ->addColumn('bills_id', 'integer', [
+            ->addColumn('bill_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
@@ -933,7 +1066,7 @@ class Initial extends AbstractMigration
             ])
             ->addIndex(
                 [
-                    'bills_id',
+                    'bill_id',
                 ]
             )
             ->create();
@@ -964,24 +1097,24 @@ class Initial extends AbstractMigration
                 'limit' => 11,
                 'null' => true,
             ])
-            ->addColumn('subjects_id', 'integer', [
+            ->addColumn('subject_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
-            ->addColumn('centres_id', 'integer', [
+            ->addColumn('centre_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'centres_id',
+                    'centre_id',
                 ]
             )
             ->addIndex(
                 [
-                    'subjects_id',
+                    'subject_id',
                 ]
             )
             ->create();
@@ -1049,14 +1182,14 @@ class Initial extends AbstractMigration
                 'limit' => 1,
                 'null' => false,
             ])
-            ->addColumn('collections_id', 'integer', [
+            ->addColumn('collection_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => true,
             ])
             ->addIndex(
                 [
-                    'collections_id',
+                    'collection_id',
                 ]
             )
             ->create();
@@ -1077,14 +1210,14 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => false,
             ])
-            ->addColumn('exam_types_id', 'integer', [
+            ->addColumn('exam_type_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'exam_types_id',
+                    'exam_type_id',
                 ]
             )
             ->create();
@@ -1125,21 +1258,21 @@ class Initial extends AbstractMigration
                 'limit' => 45,
                 'null' => false,
             ])
-            ->addColumn('groups_id', 'integer', [
+            ->addColumn('group_id', 'integer', [
                 'default' => null,
                 'limit' => 11,
                 'null' => false,
             ])
             ->addIndex(
                 [
-                    'groups_id',
+                    'group_id',
                 ]
             )
             ->create();
 
         $this->table('bill_item_candidates')
             ->addForeignKey(
-                'bill_items_id',
+                'bill_item_id',
                 'bill_items',
                 'id',
                 [
@@ -1148,7 +1281,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'candidates_id',
+                'candidate_id',
                 'candidates',
                 'id',
                 [
@@ -1160,7 +1293,7 @@ class Initial extends AbstractMigration
 
         $this->table('bill_items')
             ->addForeignKey(
-                'bills_id',
+                'bill_id',
                 'bills',
                 'id',
                 [
@@ -1169,7 +1302,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'collections_id',
+                'collection_id',
                 'collections',
                 'id',
                 [
@@ -1181,7 +1314,7 @@ class Initial extends AbstractMigration
 
         $this->table('candidate_disabilities')
             ->addForeignKey(
-                'candidates_id',
+                'candidate_id',
                 'candidates',
                 'id',
                 [
@@ -1190,7 +1323,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'disabilities_id',
+                'disabilitie_id',
                 'disabilities',
                 'id',
                 [
@@ -1202,7 +1335,7 @@ class Initial extends AbstractMigration
 
         $this->table('candidate_qualifications')
             ->addForeignKey(
-                'candidates_id',
+                'candidate_id',
                 'candidates',
                 'id',
                 [
@@ -1214,7 +1347,7 @@ class Initial extends AbstractMigration
 
         $this->table('candidate_subjects')
             ->addForeignKey(
-                'candidates_id',
+                'candidate_id',
                 'candidates',
                 'id',
                 [
@@ -1223,7 +1356,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'subjects_id',
+                'subject_id',
                 'subjects',
                 'id',
                 [
@@ -1235,7 +1368,7 @@ class Initial extends AbstractMigration
 
         $this->table('candidates')
             ->addForeignKey(
-                'centres_id',
+                'centre_id',
                 'centres',
                 'id',
                 [
@@ -1244,7 +1377,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'exam_types_id',
+                'exam_type_id',
                 'exam_types',
                 'id',
                 [
@@ -1256,7 +1389,7 @@ class Initial extends AbstractMigration
 
         $this->table('centres')
             ->addForeignKey(
-                'districts_id',
+                'district_id',
                 'districts',
                 'id',
                 [
@@ -1268,7 +1401,7 @@ class Initial extends AbstractMigration
 
         $this->table('collections')
             ->addForeignKey(
-                'collection_categories_id',
+                'collection_categorie_id',
                 'collection_categories',
                 'id',
                 [
@@ -1277,7 +1410,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'exam_types_id',
+                'exam_type_id',
                 'exam_types',
                 'id',
                 [
@@ -1289,7 +1422,7 @@ class Initial extends AbstractMigration
 
         $this->table('disability_disqualified_candidates')
             ->addForeignKey(
-                'disabilities_id',
+                'disabilitie_id',
                 'disabilities',
                 'id',
                 [
@@ -1298,7 +1431,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'disqualified_candidates_id',
+                'disqualified_candidate_id',
                 'disqualified_candidates',
                 'id',
                 [
@@ -1310,7 +1443,7 @@ class Initial extends AbstractMigration
 
         $this->table('disqualified_candidate_qualifications')
             ->addForeignKey(
-                'disqualified_candidates_id',
+                'disqualified_candidate_id',
                 'disqualified_candidates',
                 'id',
                 [
@@ -1322,7 +1455,7 @@ class Initial extends AbstractMigration
 
         $this->table('disqualified_candidate_subjects')
             ->addForeignKey(
-                'disqualified_candidates_id',
+                'disqualified_candidate_id',
                 'disqualified_candidates',
                 'id',
                 [
@@ -1331,7 +1464,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'subjects_id',
+                'subject_id',
                 'subjects',
                 'id',
                 [
@@ -1343,7 +1476,7 @@ class Initial extends AbstractMigration
 
         $this->table('disqualified_candidates')
             ->addForeignKey(
-                'centres_id',
+                'centre_id',
                 'centres',
                 'id',
                 [
@@ -1352,7 +1485,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'exam_types_id',
+                'exam_type_id',
                 'exam_types',
                 'id',
                 [
@@ -1364,7 +1497,7 @@ class Initial extends AbstractMigration
 
         $this->table('districts')
             ->addForeignKey(
-                'regions_id',
+                'region_id',
                 'regions',
                 'id',
                 [
@@ -1376,7 +1509,7 @@ class Initial extends AbstractMigration
 
         $this->table('group_district_region_school_users')
             ->addForeignKey(
-                'centres_id',
+                'centre_id',
                 'centres',
                 'id',
                 [
@@ -1385,7 +1518,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'districts_id',
+                'district_id',
                 'districts',
                 'id',
                 [
@@ -1394,7 +1527,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'groups_id',
+                'group_id',
                 'groups',
                 'id',
                 [
@@ -1403,7 +1536,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'regions_id',
+                'region_id',
                 'regions',
                 'id',
                 [
@@ -1412,7 +1545,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'users_id',
+                'user_id',
                 'users',
                 'id',
                 [
@@ -1424,7 +1557,7 @@ class Initial extends AbstractMigration
 
         $this->table('payment_reconciliations')
             ->addForeignKey(
-                'payments_id',
+                'payment_id',
                 'payments',
                 'id',
                 [
@@ -1433,7 +1566,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'recoinciliations_id',
+                'recoinciliation_id',
                 'reconciliations',
                 'id',
                 [
@@ -1445,7 +1578,7 @@ class Initial extends AbstractMigration
 
         $this->table('payments')
             ->addForeignKey(
-                'bills_id',
+                'bill_id',
                 'bills',
                 'id',
                 [
@@ -1457,7 +1590,7 @@ class Initial extends AbstractMigration
 
         $this->table('practicals')
             ->addForeignKey(
-                'centres_id',
+                'centre_id',
                 'centres',
                 'id',
                 [
@@ -1466,7 +1599,7 @@ class Initial extends AbstractMigration
                 ]
             )
             ->addForeignKey(
-                'subjects_id',
+                'subject_id',
                 'subjects',
                 'id',
                 [
@@ -1478,7 +1611,7 @@ class Initial extends AbstractMigration
 
         $this->table('services')
             ->addForeignKey(
-                'collections_id',
+                'collection_id',
                 'collections',
                 'id',
                 [
@@ -1490,7 +1623,7 @@ class Initial extends AbstractMigration
 
         $this->table('subjects')
             ->addForeignKey(
-                'exam_types_id',
+                'exam_type_id',
                 'exam_types',
                 'id',
                 [
@@ -1502,7 +1635,7 @@ class Initial extends AbstractMigration
 
         $this->table('users')
             ->addForeignKey(
-                'groups_id',
+                'group_id',
                 'groups',
                 'id',
                 [
@@ -1517,149 +1650,152 @@ class Initial extends AbstractMigration
     {
         $this->table('bill_item_candidates')
             ->dropForeignKey(
-                'bill_items_id'
+                'bill_item_id'
             )
             ->dropForeignKey(
-                'candidates_id'
+                'candidate_id'
             )->save();
 
         $this->table('bill_items')
             ->dropForeignKey(
-                'bills_id'
+                'bill_id'
             )
             ->dropForeignKey(
-                'collections_id'
+                'collection_id'
             )->save();
 
         $this->table('candidate_disabilities')
             ->dropForeignKey(
-                'candidates_id'
+                'candidate_id'
             )
             ->dropForeignKey(
-                'disabilities_id'
+                'disabilitie_id'
             )->save();
 
         $this->table('candidate_qualifications')
             ->dropForeignKey(
-                'candidates_id'
+                'candidate_id'
             )->save();
 
         $this->table('candidate_subjects')
             ->dropForeignKey(
-                'candidates_id'
+                'candidate_id'
             )
             ->dropForeignKey(
-                'subjects_id'
+                'subject_id'
             )->save();
 
         $this->table('candidates')
             ->dropForeignKey(
-                'centres_id'
+                'centre_id'
             )
             ->dropForeignKey(
-                'exam_types_id'
+                'exam_type_id'
             )->save();
 
         $this->table('centres')
             ->dropForeignKey(
-                'districts_id'
+                'district_id'
             )->save();
 
         $this->table('collections')
             ->dropForeignKey(
-                'collection_categories_id'
+                'collection_categorie_id'
             )
             ->dropForeignKey(
-                'exam_types_id'
+                'exam_type_id'
             )->save();
 
         $this->table('disability_disqualified_candidates')
             ->dropForeignKey(
-                'disabilities_id'
+                'disabilitie_id'
             )
             ->dropForeignKey(
-                'disqualified_candidates_id'
+                'disqualified_candidate_id'
             )->save();
 
         $this->table('disqualified_candidate_qualifications')
             ->dropForeignKey(
-                'disqualified_candidates_id'
+                'disqualified_candidate_id'
             )->save();
 
         $this->table('disqualified_candidate_subjects')
             ->dropForeignKey(
-                'disqualified_candidates_id'
+                'disqualified_candidate_id'
             )
             ->dropForeignKey(
-                'subjects_id'
+                'subject_id'
             )->save();
 
         $this->table('disqualified_candidates')
             ->dropForeignKey(
-                'centres_id'
+                'centre_id'
             )
             ->dropForeignKey(
-                'exam_types_id'
+                'exam_type_id'
             )->save();
 
         $this->table('districts')
             ->dropForeignKey(
-                'regions_id'
+                'region_id'
             )->save();
 
         $this->table('group_district_region_school_users')
             ->dropForeignKey(
-                'centres_id'
+                'centre_id'
             )
             ->dropForeignKey(
-                'districts_id'
+                'district_id'
             )
             ->dropForeignKey(
-                'groups_id'
+                'group_id'
             )
             ->dropForeignKey(
-                'regions_id'
+                'region_id'
             )
             ->dropForeignKey(
-                'users_id'
+                'user_id'
             )->save();
 
         $this->table('payment_reconciliations')
             ->dropForeignKey(
-                'payments_id'
+                'payment_id'
             )
             ->dropForeignKey(
-                'recoinciliations_id'
+                'recoinciliation_id'
             )->save();
 
         $this->table('payments')
             ->dropForeignKey(
-                'bills_id'
+                'bill_id'
             )->save();
 
         $this->table('practicals')
             ->dropForeignKey(
-                'centres_id'
+                'centre_id'
             )
             ->dropForeignKey(
-                'subjects_id'
+                'subject_id'
             )->save();
 
         $this->table('services')
             ->dropForeignKey(
-                'collections_id'
+                'collection_id'
             )->save();
 
         $this->table('subjects')
             ->dropForeignKey(
-                'exam_types_id'
+                'exam_type_id'
             )->save();
 
         $this->table('users')
             ->dropForeignKey(
-                'groups_id'
+                'group_id'
             )->save();
 
+        $this->table('acos')->drop()->save();
+        $this->table('aros')->drop()->save();
+        $this->table('aros_acos')->drop()->save();
         $this->table('bill_item_candidates')->drop()->save();
         $this->table('bill_items')->drop()->save();
         $this->table('bills')->drop()->save();

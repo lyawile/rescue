@@ -34,7 +34,7 @@
                                                     <th scope="col"><?= $this->Paginator->sort('code') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('short_name') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('exam_types_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('exam_type_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>

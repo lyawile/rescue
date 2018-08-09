@@ -9,6 +9,12 @@ use Cake\Validation\Validator;
 /**
  * Groups Model
  *
+<<<<<<< HEAD
+=======
+ * @property |\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
+ * @property |\Cake\ORM\Association\HasMany $Users
+ *
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
  * @method \App\Model\Entity\Group get($primaryKey, $options = [])
  * @method \App\Model\Entity\Group newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Group[] newEntities(array $data, array $options = [])
@@ -31,9 +37,24 @@ class GroupsTable extends Table
     {
         parent::initialize($config);
 
+<<<<<<< HEAD
         $this->setTable('groups');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+=======
+        $this->addBehavior('Acl.Acl', ['type' => 'requester']);
+
+        $this->setTable('groups');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
+
+        $this->hasMany('GroupDistrictRegionSchoolUsers', [
+            'foreignKey' => 'group_id'
+        ]);
+        $this->hasMany('Users', [
+            'foreignKey' => 'group_id'
+        ]);
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
     }
 
     /**

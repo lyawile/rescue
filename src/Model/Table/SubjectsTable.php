@@ -38,7 +38,7 @@ class SubjectsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('ExamTypes', [
-            'foreignKey' => 'exam_types_id',
+            'foreignKey' => 'exam_type_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -85,7 +85,7 @@ class SubjectsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['exam_types_id'], 'ExamTypes'));
+        $rules->add($rules->existsIn(['exam_type_id'], 'ExamTypes'));
 
         return $rules;
     }

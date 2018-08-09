@@ -38,7 +38,7 @@ class CentresTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Districts', [
-            'foreignKey' => 'districts_id',
+            'foreignKey' => 'district_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -118,7 +118,7 @@ class CentresTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['districts_id'], 'Districts'));
+        $rules->add($rules->existsIn(['district_id'], 'Districts'));
 
         return $rules;
     }

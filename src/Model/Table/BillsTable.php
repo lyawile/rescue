@@ -9,6 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Bills Model
  *
+ * @property \App\Model\Table\BillItemsTable|\Cake\ORM\Association\HasMany $BillItems
+ * @property \App\Model\Table\PaymentsTable|\Cake\ORM\Association\HasMany $Payments
+ *
  * @method \App\Model\Entity\Bill get($primaryKey, $options = [])
  * @method \App\Model\Entity\Bill newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Bill[] newEntities(array $data, array $options = [])
@@ -34,6 +37,13 @@ class BillsTable extends Table
         $this->setTable('bills');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('BillItems', [
+            'foreignKey' => 'bill_id'
+        ]);
+        $this->hasMany('Payments', [
+            'foreignKey' => 'bill_id'
+        ]);
     }
 
     /**
@@ -99,6 +109,7 @@ class BillsTable extends Table
             ->allowEmpty('payer_email');
 
         $validator
+            ->integer('has_reminder')
             ->requirePresence('has_reminder', 'create')
             ->notEmpty('has_reminder');
 

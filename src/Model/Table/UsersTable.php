@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\GroupsTable|\Cake\ORM\Association\BelongsTo $Groups
+ * @property |\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -33,13 +34,18 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('Acl.Acl', ['type' => 'requester']);
+
         $this->setTable('users');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Groups', [
-            'foreignKey' => 'groups_id',
+            'foreignKey' => 'group_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('GroupDistrictRegionSchoolUsers', [
+            'foreignKey' => 'user_id'
         ]);
     }
 
@@ -109,7 +115,7 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']));
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['groups_id'], 'Groups'));
+        $rules->add($rules->existsIn(['group_id'], 'Groups'));
 
         return $rules;
     }

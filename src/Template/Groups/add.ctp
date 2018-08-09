@@ -24,11 +24,21 @@
     </div>
     <div class="box-body">
         <?= $this->Form->create($group) ?>
+<<<<<<< HEAD
         <fieldset>
             <?php
                                 echo $this->Form->control('name');
             ?>
         </fieldset>
+=======
+        <div class="col-sm-8">
+            <fieldset>
+                <?php
+                                    echo $this->Form->control('name');
+                ?>
+            </fieldset>
+        </div>
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
     </div>
     <div class="box-footer">
         <?= $this->Form->button(__('Submit')) ?>

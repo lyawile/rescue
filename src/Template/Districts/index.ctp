@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\District[]|\Cake\Collection\CollectionInterface $districts
@@ -34,23 +35,24 @@
                                                     <th scope="col"><?= $this->Paginator->sort('number') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('detail') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('regions_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('region_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($districts as $district): ?>
-                    <tr>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($district->id) ?></td>
-                                                                                                                                                                                                                                                                                                                                        <td><?= $this->Number->format($district->number) ?></td>
-                                                                                                                                                                                                                                                                                                                                        <td><?= h($district->name) ?></td>
-                                                                                                                                                                                                                                                                                                                                        <td><?= h($district->detail) ?></td>
-                                                                                                                                                                                                                                                    <td><?= $district->has('region') ?
+                        <tr>
+                            <td><?= $this->Number->format($district->id) ?></td>
+                            <td><?= $this->Number->format($district->number) ?></td>
+                            <td><?= h($district->name) ?></td>
+                            <td><?= h($district->detail) ?></td>
+                            <td><?= $district->has('region') ?
                                         $this->Html->link($district
                                         ->region->name, ['controller' =>
                                         'Regions', 'action' => 'view', $district
                                         ->region
                                         ->id]) : '' ?>
+<<<<<<< HEAD
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
                             <?= $this->Html->link('', ['action' => 'view', $district->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
@@ -59,6 +61,16 @@
                             __('Are you sure you want to delete # {0}?', $district->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>
                     </tr>
+=======
+                            </td>
+                            <td class="actions pull-right">
+                            <?= $this->Html->link('', ['action' => 'view', $district->id], ['class' => 'btn btn-xs fa fa-eye']) ?>
+                            <?= $this->Html->link('', ['action' => 'edit', $district->id], ['class' => 'btn btn-xs fa fa-pencil-square-o']) ?>
+                            <?= $this->Form->postLink('', ['action' => 'delete', $district->id], ['confirm' =>
+                            __('Are you sure you want to delete # {0}?', $district->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red']) ?>
+                            </td>
+                        </tr>
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
                     <?php endforeach; ?>
                     </tbody>
                 </table>

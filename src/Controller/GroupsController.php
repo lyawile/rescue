@@ -13,6 +13,16 @@ use App\Controller\AppController;
 class GroupsController extends AppController
 {
 
+<<<<<<< HEAD
+=======
+    public function initialize()
+    {
+        parent::initialize();
+
+//        $this->Auth->allow();
+    }
+
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
     /**
      * Index method
      *
@@ -35,7 +45,11 @@ class GroupsController extends AppController
     public function view($id = null)
     {
         $group = $this->Groups->get($id, [
+<<<<<<< HEAD
             'contain' => []
+=======
+            'contain' => ['Aros']
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
         ]);
 
         $this->set('group', $group);

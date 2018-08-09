@@ -8,6 +8,11 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $name
+<<<<<<< HEAD
+=======
+ *
+ * @property \Acl\Model\Entity\Aro[] $aro
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
  */
 class Group extends Entity
 {
@@ -22,6 +27,17 @@ class Group extends Entity
      * @var array
      */
     protected $_accessible = [
+<<<<<<< HEAD
         'name' => true
     ];
+=======
+        'name' => true,
+        'aro' => true
+    ];
+
+    public function parentNode()
+    {
+        return null;
+    }
+>>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
 }

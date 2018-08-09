@@ -29,6 +29,12 @@ use Cake\Event\Event;
 class AppController extends Controller
 {
 
+    public $components = [
+        'Acl' => [
+            'className' => 'Acl.Acl'
+        ]
+    ];
+
     /**
      * Initialization hook method.
      *
@@ -48,6 +54,9 @@ class AppController extends Controller
         ]);
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
+            'authorize' => [
+                'Acl.Actions' => ['actionPath' => 'controllers/']
+            ],
             'authenticate' => [
                 'Form' => [
                     'fields' => [
@@ -57,8 +66,14 @@ class AppController extends Controller
                 ]
             ],
             'loginAction' => [
+                'plugin' => false,
                 'controller' => 'users',
                 'action' => 'login'
+            ],
+            'unauthorizedRedirect' => [
+                'controller' => 'users',
+                'action' => 'login',
+                'prefix' => false
             ]
         ]);
 
