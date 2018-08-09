@@ -9,6 +9,11 @@ use Cake\Validation\Validator;
 /**
  * ExamTypes Model
  *
+ * @property \App\Model\Table\CandidatesTable|\Cake\ORM\Association\HasMany $Candidates
+ * @property \App\Model\Table\CollectionsTable|\Cake\ORM\Association\HasMany $Collections
+ * @property \App\Model\Table\DisqualifiedCandidatesTable|\Cake\ORM\Association\HasMany $DisqualifiedCandidates
+ * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\HasMany $Subjects
+ *
  * @method \App\Model\Entity\ExamType get($primaryKey, $options = [])
  * @method \App\Model\Entity\ExamType newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\ExamType[] newEntities(array $data, array $options = [])
@@ -34,6 +39,19 @@ class ExamTypesTable extends Table
         $this->setTable('exam_types');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Candidates', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('Collections', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('DisqualifiedCandidates', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('Subjects', [
+            'foreignKey' => 'exam_type_id'
+        ]);
     }
 
     /**

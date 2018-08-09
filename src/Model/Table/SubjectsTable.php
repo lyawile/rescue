@@ -10,6 +10,9 @@ use Cake\Validation\Validator;
  * Subjects Model
  *
  * @property \App\Model\Table\ExamTypesTable|\Cake\ORM\Association\BelongsTo $ExamTypes
+ * @property \App\Model\Table\CandidateSubjectsTable|\Cake\ORM\Association\HasMany $CandidateSubjects
+ * @property \App\Model\Table\DisqualifiedCandidateSubjectsTable|\Cake\ORM\Association\HasMany $DisqualifiedCandidateSubjects
+ * @property \App\Model\Table\PracticalsTable|\Cake\ORM\Association\HasMany $Practicals
  *
  * @method \App\Model\Entity\Subject get($primaryKey, $options = [])
  * @method \App\Model\Entity\Subject newEntity($data = null, array $options = [])
@@ -40,6 +43,15 @@ class SubjectsTable extends Table
         $this->belongsTo('ExamTypes', [
             'foreignKey' => 'exam_type_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('CandidateSubjects', [
+            'foreignKey' => 'subject_id'
+        ]);
+        $this->hasMany('DisqualifiedCandidateSubjects', [
+            'foreignKey' => 'subject_id'
+        ]);
+        $this->hasMany('Practicals', [
+            'foreignKey' => 'subject_id'
         ]);
     }
 

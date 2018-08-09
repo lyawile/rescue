@@ -11,6 +11,10 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ExamTypesTable|\Cake\ORM\Association\BelongsTo $ExamTypes
  * @property \App\Model\Table\CentresTable|\Cake\ORM\Association\BelongsTo $Centres
+ * @property \App\Model\Table\BillItemCandidatesTable|\Cake\ORM\Association\HasMany $BillItemCandidates
+ * @property \App\Model\Table\CandidateDisabilitiesTable|\Cake\ORM\Association\HasMany $CandidateDisabilities
+ * @property \App\Model\Table\CandidateQualificationsTable|\Cake\ORM\Association\HasMany $CandidateQualifications
+ * @property \App\Model\Table\CandidateSubjectsTable|\Cake\ORM\Association\HasMany $CandidateSubjects
  *
  * @method \App\Model\Entity\Candidate get($primaryKey, $options = [])
  * @method \App\Model\Entity\Candidate newEntity($data = null, array $options = [])
@@ -39,12 +43,24 @@ class CandidatesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('ExamTypes', [
-            'foreignKey' => 'exam_types_id',
+            'foreignKey' => 'exam_type_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('Centres', [
-            'foreignKey' => 'centres_id',
+            'foreignKey' => 'centre_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('BillItemCandidates', [
+            'foreignKey' => 'candidate_id'
+        ]);
+        $this->hasMany('CandidateDisabilities', [
+            'foreignKey' => 'candidate_id'
+        ]);
+        $this->hasMany('CandidateQualifications', [
+            'foreignKey' => 'candidate_id'
+        ]);
+        $this->hasMany('CandidateSubjects', [
+            'foreignKey' => 'candidate_id'
         ]);
     }
 
@@ -128,8 +144,8 @@ class CandidatesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['exam_types_id'], 'ExamTypes'));
-        $rules->add($rules->existsIn(['centres_id'], 'Centres'));
+        $rules->add($rules->existsIn(['exam_type_id'], 'ExamTypes'));
+        $rules->add($rules->existsIn(['centre_id'], 'Centres'));
 
         return $rules;
     }

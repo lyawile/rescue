@@ -24,17 +24,19 @@
     </div>
     <div class="box-body">
         <?= $this->Form->create($practical) ?>
-        <fieldset>
-            <?php
-                                echo $this->Form->control('practical_type');
-                    echo $this->Form->control('group_A');
-                    echo $this->Form->control('group_B');
-                    echo $this->Form->control('group_C');
-                    echo $this->Form->control('total');
-                echo $this->Form->control('subjects_id', ['options' => $subjects]);
-                echo $this->Form->control('centres_id', ['options' => $centres]);
-            ?>
-        </fieldset>
+        <div class="col-sm-8">
+            <fieldset>
+                <?php
+                                    echo $this->Form->control('practical_type');
+                        echo $this->Form->control('group_A');
+                        echo $this->Form->control('group_B');
+                        echo $this->Form->control('group_C');
+                        echo $this->Form->control('total');
+                    echo $this->Form->control('subject_id', ['options' => $subjects]);
+                    echo $this->Form->control('centre_id', ['options' => $centres]);
+                ?>
+            </fieldset>
+        </div>
     </div>
     <div class="box-footer">
         <?= $this->Form->button(__('Submit')) ?>

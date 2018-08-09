@@ -36,8 +36,8 @@
                                                     <th scope="col"><?= $this->Paginator->sort('group_B') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('group_C') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('total') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('subjects_id') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('centres_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('subject_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>

@@ -8,11 +8,9 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $name
-<<<<<<< HEAD
-=======
  *
- * @property \Acl\Model\Entity\Aro[] $aro
->>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
+ * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
+ * @property \App\Model\Entity\User[] $users
  */
 class Group extends Entity
 {
@@ -27,17 +25,8 @@ class Group extends Entity
      * @var array
      */
     protected $_accessible = [
-<<<<<<< HEAD
-        'name' => true
-    ];
-=======
         'name' => true,
-        'aro' => true
+        'group_district_region_school_users' => true,
+        'users' => true
     ];
-
-    public function parentNode()
-    {
-        return null;
-    }
->>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
 }

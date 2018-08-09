@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\GroupsTable|\Cake\ORM\Association\BelongsTo $Groups
- * @property |\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
+ * @property \App\Model\Table\GroupDistrictRegionSchoolUsersTable|\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -33,8 +33,6 @@ class UsersTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-
-        $this->addBehavior('Acl.Acl', ['type' => 'requester']);
 
         $this->setTable('users');
         $this->setDisplayField('id');

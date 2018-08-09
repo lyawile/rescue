@@ -10,6 +10,11 @@ use Cake\ORM\Entity;
  * @property int $code
  * @property string $name
  * @property string $short_name
+ *
+ * @property \App\Model\Entity\Candidate[] $candidates
+ * @property \App\Model\Entity\Collection[] $collections
+ * @property \App\Model\Entity\DisqualifiedCandidate[] $disqualified_candidates
+ * @property \App\Model\Entity\Subject[] $subjects
  */
 class ExamType extends Entity
 {
@@ -26,6 +31,10 @@ class ExamType extends Entity
     protected $_accessible = [
         'code' => true,
         'name' => true,
-        'short_name' => true
+        'short_name' => true,
+        'candidates' => true,
+        'collections' => true,
+        'disqualified_candidates' => true,
+        'subjects' => true
     ];
 }

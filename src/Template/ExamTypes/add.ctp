@@ -24,13 +24,15 @@
     </div>
     <div class="box-body">
         <?= $this->Form->create($examType) ?>
-        <fieldset>
-            <?php
-                                echo $this->Form->control('code');
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('short_name');
-            ?>
-        </fieldset>
+        <div class="col-sm-8">
+            <fieldset>
+                <?php
+                                    echo $this->Form->control('code');
+                        echo $this->Form->control('name');
+                        echo $this->Form->control('short_name');
+                ?>
+            </fieldset>
+        </div>
     </div>
     <div class="box-footer">
         <?= $this->Form->button(__('Submit')) ?>

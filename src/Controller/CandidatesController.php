@@ -51,7 +51,6 @@ class CandidatesController extends AppController
         // Set the layout
       //  $this->layout = 'frontend';
     }
-    
 
     /**
      * Index method
@@ -78,7 +77,7 @@ class CandidatesController extends AppController
     public function view($id = null)
     {
         $candidate = $this->Candidates->get($id, [
-            'contain' => ['ExamTypes', 'Centres']
+            'contain' => ['ExamTypes', 'Centres', 'BillItemCandidates', 'CandidateDisabilities', 'CandidateQualifications', 'CandidateSubjects']
         ]);
 
         $this->set('candidate', $candidate);
@@ -151,7 +150,6 @@ class CandidatesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-	
 	public function bulk()
     {
 		 $uploadData = '';

@@ -105,7 +105,149 @@
                                 <td><?= h($candidate->date_of_birth) ?></td>
                             </tr>
                                                                                 </table>
-                                                            </div>
+                                                                                                            <div class="related">
+                        <h4><?= __('Related Bill Item Candidates') ?></h4>
+                        <?php if (!empty($candidate->bill_item_candidates)): ?>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tr>
+                                                                    <th scope="col"><?= __('Id') ?></th>
+                                                                    <th scope="col"><?= __('Candidate Id') ?></th>
+                                                                    <th scope="col"><?= __('Bill Item Id') ?></th>
+                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($candidate->bill_item_candidates as $billItemCandidates): ?>
+                            <tr>
+                                                                    <td><?= h($billItemCandidates->id) ?></td>
+                                                                    <td><?= h($billItemCandidates->candidate_id) ?></td>
+                                                                    <td><?= h($billItemCandidates->bill_item_id) ?></td>
+                                                                                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['controller' => 'BillItemCandidates',
+                                    'action'
+                                    =>
+                                    'view', $billItemCandidates->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'BillItemCandidates',
+                                    'action'
+                                    =>
+                                    'edit', $billItemCandidates->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'BillItemCandidates',
+                                    'action' =>
+                                    'delete', $billItemCandidates->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $billItemCandidates->id)]) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </div>
+                                                                            <div class="related">
+                        <h4><?= __('Related Candidate Disabilities') ?></h4>
+                        <?php if (!empty($candidate->candidate_disabilities)): ?>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tr>
+                                                                    <th scope="col"><?= __('Id') ?></th>
+                                                                    <th scope="col"><?= __('Candidate Id') ?></th>
+                                                                    <th scope="col"><?= __('Disabilitie Id') ?></th>
+                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($candidate->candidate_disabilities as $candidateDisabilities): ?>
+                            <tr>
+                                                                    <td><?= h($candidateDisabilities->id) ?></td>
+                                                                    <td><?= h($candidateDisabilities->candidate_id) ?></td>
+                                                                    <td><?= h($candidateDisabilities->disabilitie_id) ?></td>
+                                                                                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['controller' => 'CandidateDisabilities',
+                                    'action'
+                                    =>
+                                    'view', $candidateDisabilities->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CandidateDisabilities',
+                                    'action'
+                                    =>
+                                    'edit', $candidateDisabilities->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'CandidateDisabilities',
+                                    'action' =>
+                                    'delete', $candidateDisabilities->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $candidateDisabilities->id)]) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </div>
+                                                                            <div class="related">
+                        <h4><?= __('Related Candidate Qualifications') ?></h4>
+                        <?php if (!empty($candidate->candidate_qualifications)): ?>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tr>
+                                                                    <th scope="col"><?= __('Id') ?></th>
+                                                                    <th scope="col"><?= __('Centre Number') ?></th>
+                                                                    <th scope="col"><?= __('Candidate Number') ?></th>
+                                                                    <th scope="col"><?= __('Exam Year') ?></th>
+                                                                    <th scope="col"><?= __('Experience') ?></th>
+                                                                    <th scope="col"><?= __('Candidate Id') ?></th>
+                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($candidate->candidate_qualifications as $candidateQualifications): ?>
+                            <tr>
+                                                                    <td><?= h($candidateQualifications->id) ?></td>
+                                                                    <td><?= h($candidateQualifications->centre_number) ?></td>
+                                                                    <td><?= h($candidateQualifications->candidate_number) ?></td>
+                                                                    <td><?= h($candidateQualifications->exam_year) ?></td>
+                                                                    <td><?= h($candidateQualifications->experience) ?></td>
+                                                                    <td><?= h($candidateQualifications->candidate_id) ?></td>
+                                                                                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['controller' => 'CandidateQualifications',
+                                    'action'
+                                    =>
+                                    'view', $candidateQualifications->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CandidateQualifications',
+                                    'action'
+                                    =>
+                                    'edit', $candidateQualifications->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'CandidateQualifications',
+                                    'action' =>
+                                    'delete', $candidateQualifications->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $candidateQualifications->id)]) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </div>
+                                                                            <div class="related">
+                        <h4><?= __('Related Candidate Subjects') ?></h4>
+                        <?php if (!empty($candidate->candidate_subjects)): ?>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tr>
+                                                                    <th scope="col"><?= __('Id') ?></th>
+                                                                    <th scope="col"><?= __('Candidate Id') ?></th>
+                                                                    <th scope="col"><?= __('Subject Id') ?></th>
+                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($candidate->candidate_subjects as $candidateSubjects): ?>
+                            <tr>
+                                                                    <td><?= h($candidateSubjects->id) ?></td>
+                                                                    <td><?= h($candidateSubjects->candidate_id) ?></td>
+                                                                    <td><?= h($candidateSubjects->subject_id) ?></td>
+                                                                                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['controller' => 'CandidateSubjects',
+                                    'action'
+                                    =>
+                                    'view', $candidateSubjects->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CandidateSubjects',
+                                    'action'
+                                    =>
+                                    'edit', $candidateSubjects->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'CandidateSubjects',
+                                    'action' =>
+                                    'delete', $candidateSubjects->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $candidateSubjects->id)]) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </div>
+                            </div>
         </div>
     </section>
 </div>

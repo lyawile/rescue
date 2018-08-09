@@ -79,7 +79,47 @@
                                 <td><?= $this->Number->format($user->id) ?></td>
                             </tr>
                                                                                                     </table>
-                                                            </div>
+                                                                                                            <div class="related">
+                        <h4><?= __('Related Group District Region School Users') ?></h4>
+                        <?php if (!empty($user->group_district_region_school_users)): ?>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tr>
+                                                                    <th scope="col"><?= __('Id') ?></th>
+                                                                    <th scope="col"><?= __('District Id') ?></th>
+                                                                    <th scope="col"><?= __('Region Id') ?></th>
+                                                                    <th scope="col"><?= __('Group Id') ?></th>
+                                                                    <th scope="col"><?= __('User Id') ?></th>
+                                                                    <th scope="col"><?= __('Centre Id') ?></th>
+                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($user->group_district_region_school_users as $groupDistrictRegionSchoolUsers): ?>
+                            <tr>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->district_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->region_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->group_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->user_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->centre_id) ?></td>
+                                                                                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['controller' => 'GroupDistrictRegionSchoolUsers',
+                                    'action'
+                                    =>
+                                    'view', $groupDistrictRegionSchoolUsers->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'GroupDistrictRegionSchoolUsers',
+                                    'action'
+                                    =>
+                                    'edit', $groupDistrictRegionSchoolUsers->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'GroupDistrictRegionSchoolUsers',
+                                    'action' =>
+                                    'delete', $groupDistrictRegionSchoolUsers->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $groupDistrictRegionSchoolUsers->id)]) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </div>
+                            </div>
         </div>
     </section>
 </div>

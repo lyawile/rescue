@@ -41,17 +41,10 @@
                                                                                                                                                                                                                 <td><?= $this->Number->format($group->id) ?></td>
                                                                                                                                                                                                                                                                             <td><?= h($group->name) ?></td>
                                                                                                                                     <td class="actions pull-right">
-<<<<<<< HEAD
-                            <?= $this->Html->link('', ['action' => 'view', $group->id], ['class' => 'btn btn-xs fa fa-eye']) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $group->id], ['class' => 'btn btn-xs fa fa-pencil-square-o']) ?>
-                            <?= $this->Form->postLink('', ['action' => 'delete', $group->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $group->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red']) ?>
-=======
                             <?= $this->Html->link('', ['action' => 'view', $group->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
                             <?= $this->Html->link('', ['action' => 'edit', $group->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $group->id], ['confirm' =>
                             __('Are you sure you want to delete # {0}?', $group->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
->>>>>>> 46c60288ea9de37159a95c261b2a1153559036ae
                         </td>
                     </tr>
                     <?php endforeach; ?>

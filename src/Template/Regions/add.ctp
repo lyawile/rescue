@@ -24,13 +24,15 @@
     </div>
     <div class="box-body">
         <?= $this->Form->create($region) ?>
-        <fieldset>
-            <?php
-                                echo $this->Form->control('number');
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('detail');
-            ?>
-        </fieldset>
+        <div class="col-sm-8">
+            <fieldset>
+                <?php
+                                    echo $this->Form->control('number');
+                        echo $this->Form->control('name');
+                        echo $this->Form->control('detail');
+                ?>
+            </fieldset>
+        </div>
     </div>
     <div class="box-footer">
         <?= $this->Form->button(__('Submit')) ?>

@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property int $group_B
  * @property int $group_C
  * @property int $total
- * @property int $subjects_id
- * @property int $centres_id
+ * @property int $subject_id
+ * @property int $centre_id
  *
  * @property \App\Model\Entity\Subject $subject
  * @property \App\Model\Entity\Centre $centre
@@ -36,8 +36,8 @@ class Practical extends Entity
         'group_B' => true,
         'group_C' => true,
         'total' => true,
-        'subjects_id' => true,
-        'centres_id' => true,
+        'subject_id' => true,
+        'centre_id' => true,
         'subject' => true,
         'centre' => true
     ];

@@ -9,6 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Regions Model
  *
+ * @property \App\Model\Table\DistrictsTable|\Cake\ORM\Association\HasMany $Districts
+ * @property \App\Model\Table\GroupDistrictRegionSchoolUsersTable|\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
+ *
  * @method \App\Model\Entity\Region get($primaryKey, $options = [])
  * @method \App\Model\Entity\Region newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Region[] newEntities(array $data, array $options = [])
@@ -34,6 +37,13 @@ class RegionsTable extends Table
         $this->setTable('regions');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Districts', [
+            'foreignKey' => 'region_id'
+        ]);
+        $this->hasMany('GroupDistrictRegionSchoolUsers', [
+            'foreignKey' => 'region_id'
+        ]);
     }
 
     /**

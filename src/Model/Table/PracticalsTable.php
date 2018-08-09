@@ -39,11 +39,11 @@ class PracticalsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Subjects', [
-            'foreignKey' => 'subjects_id',
+            'foreignKey' => 'subject_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('Centres', [
-            'foreignKey' => 'centres_id',
+            'foreignKey' => 'centre_id',
             'joinType' => 'INNER'
         ]);
     }
@@ -94,8 +94,8 @@ class PracticalsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['subjects_id'], 'Subjects'));
-        $rules->add($rules->existsIn(['centres_id'], 'Centres'));
+        $rules->add($rules->existsIn(['subject_id'], 'Subjects'));
+        $rules->add($rules->existsIn(['centre_id'], 'Centres'));
 
         return $rules;
     }

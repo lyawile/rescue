@@ -53,10 +53,10 @@
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $subject->id], ['class' => 'btn btn-xs fa fa-eye']) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $subject->id], ['class' => 'btn btn-xs fa fa-pencil-square-o']) ?>
+                            <?= $this->Html->link('', ['action' => 'view', $subject->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Html->link('', ['action' => 'edit', $subject->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $subject->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $subject->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red']) ?>
+                            __('Are you sure you want to delete # {0}?', $subject->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

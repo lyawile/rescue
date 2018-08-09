@@ -18,13 +18,13 @@
     </section>
 
     <section class="content">
-        <div class="examTypes form large-9 medium-8 columns content">
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title"><?= __('Edit Exam Type') ?></h3>
-        </div>
-        <div class="box-body">
-            <?= $this->Form->create($examType) ?>
+        <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= __('Edit Exam Type') ?></h3>
+    </div>
+    <div class="box-body">
+        <?= $this->Form->create($examType) ?>
+        <div class="col-sm-8">
             <fieldset>
                 <?php
                                     echo $this->Form->control('code');
@@ -33,11 +33,11 @@
                 ?>
             </fieldset>
         </div>
-        <div class="box-footer">
-            <?= $this->Form->button(__('Submit')) ?>
-        </div>
-
-        <?= $this->Form->end() ?>
     </div>
+    <div class="box-footer">
+        <?= $this->Form->button(__('Submit')) ?>
+    </div>
+
+    <?= $this->Form->end() ?>
 </div>    </section>
 </div>
