@@ -17,7 +17,10 @@ class SubjectsControllerTest extends IntegrationTestCase
      */
     public $fixtures = [
         'app.subjects',
-        'app.exam_types'
+        'app.exam_types',
+        'app.candidate_subjects',
+        'app.disqualified_candidate_subjects',
+        'app.practicals'
     ];
 
     /**

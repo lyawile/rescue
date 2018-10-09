@@ -21,13 +21,13 @@ class SubjectsFixture extends TestFixture
         'code' => ['type' => 'string', 'length' => 45, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'name' => ['type' => 'string', 'length' => 45, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'short_name' => ['type' => 'string', 'length' => 45, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'exam_types_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'exam_type_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
-            'exam_types_id' => ['type' => 'index', 'columns' => ['exam_types_id'], 'length' => []],
+            'exam_type_id' => ['type' => 'index', 'columns' => ['exam_type_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-            'subjects_ibfk_1' => ['type' => 'foreign', 'columns' => ['exam_types_id'], 'references' => ['exam_types', 'id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
+            'subjects_ibfk_1' => ['type' => 'foreign', 'columns' => ['exam_type_id'], 'references' => ['exam_types', 'id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -49,7 +49,7 @@ class SubjectsFixture extends TestFixture
                 'code' => 'Lorem ipsum dolor sit amet',
                 'name' => 'Lorem ipsum dolor sit amet',
                 'short_name' => 'Lorem ipsum dolor sit amet',
-                'exam_types_id' => 1
+                'exam_type_id' => 1
             ],
         ];
         parent::init();

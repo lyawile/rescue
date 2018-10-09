@@ -24,7 +24,9 @@ class RegionsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.regions'
+        'app.regions',
+        'app.districts',
+        'app.group_district_region_school_users'
     ];
 
     /**

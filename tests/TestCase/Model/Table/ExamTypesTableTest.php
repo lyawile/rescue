@@ -24,7 +24,11 @@ class ExamTypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.exam_types'
+        'app.exam_types',
+        'app.candidates',
+        'app.collections',
+        'app.disqualified_candidates',
+        'app.subjects'
     ];
 
     /**
@@ -67,6 +71,16 @@ class ExamTypesTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

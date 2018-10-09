@@ -17,6 +17,8 @@ use Cake\ORM\Entity;
  * @property string $ID_number
  * @property \Cake\I18n\FrozenDate $date_of_birth
  * @property string $guardian_phone
+ * @property int $work_experience
+ * @property string $combination
  * @property int $is_repeater
  * @property int $exam_type_id
  * @property int $centre_id
@@ -51,6 +53,8 @@ class Candidate extends Entity
         'ID_number' => true,
         'date_of_birth' => true,
         'guardian_phone' => true,
+        'work_experience' => true,
+        'combination' => true,
         'is_repeater' => true,
         'exam_type_id' => true,
         'centre_id' => true,

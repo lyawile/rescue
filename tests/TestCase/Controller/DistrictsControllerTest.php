@@ -17,7 +17,9 @@ class DistrictsControllerTest extends IntegrationTestCase
      */
     public $fixtures = [
         'app.districts',
-        'app.regions'
+        'app.regions',
+        'app.centres',
+        'app.group_district_region_school_users'
     ];
 
     /**

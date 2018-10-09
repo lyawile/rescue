@@ -64,6 +64,10 @@
                                     <th scope="row"><?= __('Guardian Phone') ?></th>
                                     <td><?= h($candidate->guardian_phone) ?></td>
                                 </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Combination') ?></th>
+                                    <td><?= h($candidate->combination) ?></td>
+                                </tr>
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Exam Type') ?></th>
                                     <td><?= $candidate->has('exam_type') ?
@@ -95,6 +99,10 @@
                                                     <tr>
                                 <th scope="row"><?= __('PSLE Year') ?></th>
                                 <td><?= $this->Number->format($candidate->PSLE_year) ?></td>
+                            </tr>
+                                                    <tr>
+                                <th scope="row"><?= __('Work Experience') ?></th>
+                                <td><?= $this->Number->format($candidate->work_experience) ?></td>
                             </tr>
                                                     <tr>
                                 <th scope="row"><?= __('Is Repeater') ?></th>
@@ -146,14 +154,14 @@
                             <tr>
                                                                     <th scope="col"><?= __('Id') ?></th>
                                                                     <th scope="col"><?= __('Candidate Id') ?></th>
-                                                                    <th scope="col"><?= __('Disabilitie Id') ?></th>
+                                                                    <th scope="col"><?= __('Disability Id') ?></th>
                                                                 <th scope="col" class="actions"><?= __('Actions') ?></th>
                             </tr>
                             <?php foreach ($candidate->candidate_disabilities as $candidateDisabilities): ?>
                             <tr>
                                                                     <td><?= h($candidateDisabilities->id) ?></td>
                                                                     <td><?= h($candidateDisabilities->candidate_id) ?></td>
-                                                                    <td><?= h($candidateDisabilities->disabilitie_id) ?></td>
+                                                                    <td><?= h($candidateDisabilities->disability_id) ?></td>
                                                                                                 <td class="actions">
                                     <?= $this->Html->link(__('View'), ['controller' => 'CandidateDisabilities',
                                     'action'

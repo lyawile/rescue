@@ -16,7 +16,11 @@ class ExamTypesControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.exam_types'
+        'app.exam_types',
+        'app.candidates',
+        'app.collections',
+        'app.disqualified_candidates',
+        'app.subjects'
     ];
 
     /**

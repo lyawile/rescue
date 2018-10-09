@@ -27,7 +27,7 @@
         <div class="col-sm-8">
             <fieldset>
                 <?php
-                                    echo $this->Form->control('number');
+                        echo $this->Form->control('number');
                         echo $this->Form->control('first_name');
                         echo $this->Form->control('other_name');
                         echo $this->Form->control('surname');
@@ -37,6 +37,8 @@
                         echo $this->Form->control('ID_number');
                         echo $this->Form->control('date_of_birth', ['empty' => true]);
                         echo $this->Form->control('guardian_phone');
+                        echo $this->Form->control('work_experience');
+                        echo $this->Form->control('combination');
                         echo $this->Form->control('is_repeater');
                     echo $this->Form->control('exam_type_id', ['options' => $examTypes]);
                     echo $this->Form->control('centre_id', ['options' => $centres]);

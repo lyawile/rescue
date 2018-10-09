@@ -128,6 +128,15 @@ class CandidatesTable extends Table
             ->allowEmpty('guardian_phone');
 
         $validator
+            ->integer('work_experience')
+            ->allowEmpty('work_experience');
+
+        $validator
+            ->scalar('combination')
+            ->maxLength('combination', 32)
+            ->allowEmpty('combination');
+
+        $validator
             ->integer('is_repeater')
             ->requirePresence('is_repeater', 'create')
             ->notEmpty('is_repeater');

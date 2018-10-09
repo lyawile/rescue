@@ -25,7 +25,9 @@ class DistrictsTableTest extends TestCase
      */
     public $fixtures = [
         'app.districts',
-        'app.regions'
+        'app.regions',
+        'app.centres',
+        'app.group_district_region_school_users'
     ];
 
     /**
