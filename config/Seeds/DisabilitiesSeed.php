@@ -22,7 +22,7 @@ class DisabilitiesSeed extends AbstractSeed
             [
                 'id' => '1',
                 'name' => 'Blind',
-                'shortname' => 'BR',
+                'shortname' => 'BL',
                 'details' => NULL,
             ],
             [
@@ -33,20 +33,14 @@ class DisabilitiesSeed extends AbstractSeed
             ],
             [
                 'id' => '3',
-                'name' => 'Intellectual Impairment',
-                'shortname' => 'II',
-                'details' => NULL,
-            ],
-            [
-                'id' => '4',
                 'name' => 'Hearing Impairment',
                 'shortname' => 'HI',
                 'details' => NULL,
             ],
             [
-                'id' => '5',
-                'name' => 'Physica Impairment',
-                'shortname' => 'PI',
+                'id' => '4',
+                'name' => 'Intellectual Impairment',
+                'shortname' => 'II',
                 'details' => NULL,
             ],
         ];

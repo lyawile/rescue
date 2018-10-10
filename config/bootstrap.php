@@ -204,8 +204,8 @@ Plugin::load('Acl', ['bootstrap' => true]);
 Configure::write('Theme', [
     'title' => 'NECTA eServices',
     'logo' => [
-        'mini' => '<b>e</b>SN',
-        'large' => '<b>eServices </b>NECTA'
+        'mini' => '<b>A</b>LT',
+        'large' => '<b>Admin</b>LTE'
     ],
     'login' => [
         'show_remember' => false,
@@ -215,7 +215,3 @@ Configure::write('Theme', [
     'folder' => ROOT,
     'skin' => 'green'
 ]);
-
-/*UPLOAD PLUGIN*/
-Plugin::load('Josegonzalez/Upload');
-/**/
