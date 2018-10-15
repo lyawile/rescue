@@ -34,6 +34,7 @@
                                                     <th scope="col"><?= $this->Paginator->sort('code') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('short_name') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('has_ca') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
@@ -44,6 +45,7 @@
                                                                                                                                                                                                                                                                             <td><?= $this->Number->format($examType->code) ?></td>
                                                                                                                                                                                                                                                                             <td><?= h($examType->name) ?></td>
                                                                                                                                                                                                                                                                             <td><?= h($examType->short_name) ?></td>
+                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($examType->has_ca) ?></td>
                                                                                                                                     <td class="actions pull-right">
                             <?= $this->Html->link('', ['action' => 'view', $examType->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
                             <?= $this->Html->link('', ['action' => 'edit', $examType->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>

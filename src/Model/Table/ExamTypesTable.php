@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * ExamTypes Model
  *
  * @property \App\Model\Table\CandidatesTable|\Cake\ORM\Association\HasMany $Candidates
+ * @property \App\Model\Table\CentreExamTypesTable|\Cake\ORM\Association\HasMany $CentreExamTypes
  * @property \App\Model\Table\CollectionsTable|\Cake\ORM\Association\HasMany $Collections
  * @property \App\Model\Table\DisqualifiedCandidatesTable|\Cake\ORM\Association\HasMany $DisqualifiedCandidates
  * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\HasMany $Subjects
@@ -41,6 +42,9 @@ class ExamTypesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Candidates', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('CentreExamTypes', [
             'foreignKey' => 'exam_type_id'
         ]);
         $this->hasMany('Collections', [
@@ -83,6 +87,10 @@ class ExamTypesTable extends Table
             ->maxLength('short_name', 8)
             ->requirePresence('short_name', 'create')
             ->notEmpty('short_name');
+
+        $validator
+            ->requirePresence('has_ca', 'create')
+            ->notEmpty('has_ca');
 
         return $validator;
     }

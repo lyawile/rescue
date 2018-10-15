@@ -1,14 +1,14 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\ExamType $examType
+ * @var \App\Model\Entity\Centre $centre
  */
 ?>
 
-<div class="examTypes view large-9 medium-8 columns content">
+<div class="centres view large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
-            <?= __('Exam Types') ?>
+            <?= __('Centres') ?>
             <small>short description</small>
         </h1>
         <ol class="breadcrumb">
@@ -21,15 +21,15 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h4 class="pull-left"><?= h($examType->name) ?></h4>
+                <h4 class="pull-left"><?= h($centre->name) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Exam Type'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Html->link(__('New Centre'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Exam Type'), ['action' => 'edit', $examType->id],
+                    <?= $this->Html->link(__('Edit Centre'), ['action' => 'edit', $centre->id],
                     ['class' => 'btn btn-default']) ?>
-                    <?= $this->Form->postLink(__('Delete Exam Type'), ['action' => 'delete', $examType->id
+                    <?= $this->Form->postLink(__('Delete Centre'), ['action' => 'delete', $centre->id
                     ],
-                    ['confirm' => __('Are you sure you want to delete # {0}?', $examType->id), 'class' => 'btn
+                    ['confirm' => __('Are you sure you want to delete # {0}?', $centre->id), 'class' => 'btn
                     btn-danger']) ?>
                 </div>
             </div>
@@ -37,29 +37,63 @@
             <div class="box-body">
                 <table class="vertical-table table table table-striped">
                                                                                                         <tr>
-                                    <th scope="row"><?= __('Name') ?></th>
-                                    <td><?= h($examType->name) ?></td>
+                                    <th scope="row"><?= __('Number') ?></th>
+                                    <td><?= h($centre->number) ?></td>
                                 </tr>
                                                                                                                 <tr>
-                                    <th scope="row"><?= __('Short Name') ?></th>
-                                    <td><?= h($examType->short_name) ?></td>
+                                    <th scope="row"><?= __('Name') ?></th>
+                                    <td><?= h($centre->name) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Ownership') ?></th>
+                                    <td><?= h($centre->ownership) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Detail') ?></th>
+                                    <td><?= h($centre->detail) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Principal Name') ?></th>
+                                    <td><?= h($centre->principal_name) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Principal Phone') ?></th>
+                                    <td><?= h($centre->principal_phone) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Contact One') ?></th>
+                                    <td><?= h($centre->contact_one) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Contact Two') ?></th>
+                                    <td><?= h($centre->contact_two) ?></td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th scope="row"><?= __('Centre Type') ?></th>
+                                    <td><?= h($centre->centre_type) ?></td>
+                                </tr>
+                                                                                                                                                <tr>
+                                    <th scope="row"><?= __('District') ?></th>
+                                    <td><?= $centre->has('district') ?
+                                        $this->Html->link($centre
+                                        ->district->name, ['controller' =>
+                                        'Districts', 'action' => 'view', $centre
+                                        ->district
+                                        ->id]) : '' ?>
+                                    </td>
                                 </tr>
                                                                                                                                                                     <tr>
                                 <th scope="row"><?= __('Id') ?></th>
-                                <td><?= $this->Number->format($examType->id) ?></td>
+                                <td><?= $this->Number->format($centre->id) ?></td>
                             </tr>
                                                     <tr>
-                                <th scope="row"><?= __('Code') ?></th>
-                                <td><?= $this->Number->format($examType->code) ?></td>
-                            </tr>
-                                                    <tr>
-                                <th scope="row"><?= __('Has Ca') ?></th>
-                                <td><?= $this->Number->format($examType->has_ca) ?></td>
+                                <th scope="row"><?= __('District Distance') ?></th>
+                                <td><?= $this->Number->format($centre->district_distance) ?></td>
                             </tr>
                                                                                                     </table>
                                                                                                             <div class="related">
                         <h4><?= __('Related Candidates') ?></h4>
-                        <?php if (!empty($examType->candidates)): ?>
+                        <?php if (!empty($centre->candidates)): ?>
                         <table cellpadding="0" cellspacing="0" class="table table table-striped">
                             <tr>
                                                                     <th scope="col"><?= __('Id') ?></th>
@@ -81,7 +115,7 @@
                                                                     <th scope="col"><?= __('Billhash') ?></th>
                                                                 <th scope="col" class="actions"><?= __('Actions') ?></th>
                             </tr>
-                            <?php foreach ($examType->candidates as $candidates): ?>
+                            <?php foreach ($centre->candidates as $candidates): ?>
                             <tr>
                                                                     <td><?= h($candidates->id) ?></td>
                                                                     <td><?= h($candidates->number) ?></td>
@@ -120,86 +154,8 @@
                         <?php endif; ?>
                     </div>
                                                                             <div class="related">
-                        <h4><?= __('Related Centre Exam Types') ?></h4>
-                        <?php if (!empty($examType->centre_exam_types)): ?>
-                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
-                            <tr>
-                                                                    <th scope="col"><?= __('Id') ?></th>
-                                                                    <th scope="col"><?= __('Exam Type Id') ?></th>
-                                                                    <th scope="col"><?= __('Centre Id') ?></th>
-                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
-                            </tr>
-                            <?php foreach ($examType->centre_exam_types as $centreExamTypes): ?>
-                            <tr>
-                                                                    <td><?= h($centreExamTypes->id) ?></td>
-                                                                    <td><?= h($centreExamTypes->exam_type_id) ?></td>
-                                                                    <td><?= h($centreExamTypes->centre_id) ?></td>
-                                                                                                <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'CentreExamTypes',
-                                    'action'
-                                    =>
-                                    'view', $centreExamTypes->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CentreExamTypes',
-                                    'action'
-                                    =>
-                                    'edit', $centreExamTypes->id]) ?>
-                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'CentreExamTypes',
-                                    'action' =>
-                                    'delete', $centreExamTypes->id], ['confirm' => __('Are you sure you want to delete #
-                                    {0}?', $centreExamTypes->id)]) ?>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </table>
-                        <?php endif; ?>
-                    </div>
-                                                                            <div class="related">
-                        <h4><?= __('Related Collections') ?></h4>
-                        <?php if (!empty($examType->collections)): ?>
-                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
-                            <tr>
-                                                                    <th scope="col"><?= __('Id') ?></th>
-                                                                    <th scope="col"><?= __('Name') ?></th>
-                                                                    <th scope="col"><?= __('Description') ?></th>
-                                                                    <th scope="col"><?= __('Start Date') ?></th>
-                                                                    <th scope="col"><?= __('End Date') ?></th>
-                                                                    <th scope="col"><?= __('Amount') ?></th>
-                                                                    <th scope="col"><?= __('Exam Type Id') ?></th>
-                                                                    <th scope="col"><?= __('Collection Categorie Id') ?></th>
-                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
-                            </tr>
-                            <?php foreach ($examType->collections as $collections): ?>
-                            <tr>
-                                                                    <td><?= h($collections->id) ?></td>
-                                                                    <td><?= h($collections->name) ?></td>
-                                                                    <td><?= h($collections->description) ?></td>
-                                                                    <td><?= h($collections->start_date) ?></td>
-                                                                    <td><?= h($collections->end_date) ?></td>
-                                                                    <td><?= h($collections->amount) ?></td>
-                                                                    <td><?= h($collections->exam_type_id) ?></td>
-                                                                    <td><?= h($collections->collection_categorie_id) ?></td>
-                                                                                                <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'Collections',
-                                    'action'
-                                    =>
-                                    'view', $collections->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'Collections',
-                                    'action'
-                                    =>
-                                    'edit', $collections->id]) ?>
-                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Collections',
-                                    'action' =>
-                                    'delete', $collections->id], ['confirm' => __('Are you sure you want to delete #
-                                    {0}?', $collections->id)]) ?>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </table>
-                        <?php endif; ?>
-                    </div>
-                                                                            <div class="related">
                         <h4><?= __('Related Disqualified Candidates') ?></h4>
-                        <?php if (!empty($examType->disqualified_candidates)): ?>
+                        <?php if (!empty($centre->disqualified_candidates)): ?>
                         <table cellpadding="0" cellspacing="0" class="table table table-striped">
                             <tr>
                                                                     <th scope="col"><?= __('Id') ?></th>
@@ -218,7 +174,7 @@
                                                                     <th scope="col"><?= __('Centre Id') ?></th>
                                                                 <th scope="col" class="actions"><?= __('Actions') ?></th>
                             </tr>
-                            <?php foreach ($examType->disqualified_candidates as $disqualifiedCandidates): ?>
+                            <?php foreach ($centre->disqualified_candidates as $disqualifiedCandidates): ?>
                             <tr>
                                                                     <td><?= h($disqualifiedCandidates->id) ?></td>
                                                                     <td><?= h($disqualifiedCandidates->number) ?></td>
@@ -254,37 +210,83 @@
                         <?php endif; ?>
                     </div>
                                                                             <div class="related">
-                        <h4><?= __('Related Subjects') ?></h4>
-                        <?php if (!empty($examType->subjects)): ?>
+                        <h4><?= __('Related Group District Region School Users') ?></h4>
+                        <?php if (!empty($centre->group_district_region_school_users)): ?>
                         <table cellpadding="0" cellspacing="0" class="table table table-striped">
                             <tr>
                                                                     <th scope="col"><?= __('Id') ?></th>
-                                                                    <th scope="col"><?= __('Code') ?></th>
-                                                                    <th scope="col"><?= __('Name') ?></th>
-                                                                    <th scope="col"><?= __('Short Name') ?></th>
-                                                                    <th scope="col"><?= __('Exam Type Id') ?></th>
+                                                                    <th scope="col"><?= __('District Id') ?></th>
+                                                                    <th scope="col"><?= __('Region Id') ?></th>
+                                                                    <th scope="col"><?= __('Group Id') ?></th>
+                                                                    <th scope="col"><?= __('User Id') ?></th>
+                                                                    <th scope="col"><?= __('Centre Id') ?></th>
                                                                 <th scope="col" class="actions"><?= __('Actions') ?></th>
                             </tr>
-                            <?php foreach ($examType->subjects as $subjects): ?>
+                            <?php foreach ($centre->group_district_region_school_users as $groupDistrictRegionSchoolUsers): ?>
                             <tr>
-                                                                    <td><?= h($subjects->id) ?></td>
-                                                                    <td><?= h($subjects->code) ?></td>
-                                                                    <td><?= h($subjects->name) ?></td>
-                                                                    <td><?= h($subjects->short_name) ?></td>
-                                                                    <td><?= h($subjects->exam_type_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->district_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->region_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->group_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->user_id) ?></td>
+                                                                    <td><?= h($groupDistrictRegionSchoolUsers->centre_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'Subjects',
+                                    <?= $this->Html->link(__('View'), ['controller' => 'GroupDistrictRegionSchoolUsers',
                                     'action'
                                     =>
-                                    'view', $subjects->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'Subjects',
+                                    'view', $groupDistrictRegionSchoolUsers->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'GroupDistrictRegionSchoolUsers',
                                     'action'
                                     =>
-                                    'edit', $subjects->id]) ?>
-                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Subjects',
+                                    'edit', $groupDistrictRegionSchoolUsers->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'GroupDistrictRegionSchoolUsers',
                                     'action' =>
-                                    'delete', $subjects->id], ['confirm' => __('Are you sure you want to delete #
-                                    {0}?', $subjects->id)]) ?>
+                                    'delete', $groupDistrictRegionSchoolUsers->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $groupDistrictRegionSchoolUsers->id)]) ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>
+                        <?php endif; ?>
+                    </div>
+                                                                            <div class="related">
+                        <h4><?= __('Related Practicals') ?></h4>
+                        <?php if (!empty($centre->practicals)): ?>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tr>
+                                                                    <th scope="col"><?= __('Id') ?></th>
+                                                                    <th scope="col"><?= __('Practical Type') ?></th>
+                                                                    <th scope="col"><?= __('Group A') ?></th>
+                                                                    <th scope="col"><?= __('Group B') ?></th>
+                                                                    <th scope="col"><?= __('Group C') ?></th>
+                                                                    <th scope="col"><?= __('Total') ?></th>
+                                                                    <th scope="col"><?= __('Subject Id') ?></th>
+                                                                    <th scope="col"><?= __('Centre Id') ?></th>
+                                                                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                            </tr>
+                            <?php foreach ($centre->practicals as $practicals): ?>
+                            <tr>
+                                                                    <td><?= h($practicals->id) ?></td>
+                                                                    <td><?= h($practicals->practical_type) ?></td>
+                                                                    <td><?= h($practicals->group_A) ?></td>
+                                                                    <td><?= h($practicals->group_B) ?></td>
+                                                                    <td><?= h($practicals->group_C) ?></td>
+                                                                    <td><?= h($practicals->total) ?></td>
+                                                                    <td><?= h($practicals->subject_id) ?></td>
+                                                                    <td><?= h($practicals->centre_id) ?></td>
+                                                                                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['controller' => 'Practicals',
+                                    'action'
+                                    =>
+                                    'view', $practicals->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['controller' => 'Practicals',
+                                    'action'
+                                    =>
+                                    'edit', $practicals->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Practicals',
+                                    'action' =>
+                                    'delete', $practicals->id], ['confirm' => __('Are you sure you want to delete #
+                                    {0}?', $practicals->id)]) ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

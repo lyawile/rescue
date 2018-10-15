@@ -23,6 +23,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
+                    <?= $this->Html->link(__('Upload Registration'), ['action' => 'bulk'], ['class' => 'btn btn btn-success']) ?>
                     <?= $this->Html->link(__('New Candidate'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                     
                 </div>
@@ -47,7 +48,7 @@
                        <!--     <th scope="col"><?= $this->Paginator->sort('is_repeater') ?></th> -->
                        <th scope="col"><?= $this->Paginator->sort('exam_type_id') ?></th>
                        <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th>
-                       <th scope="col">Choose</th>
+                       <th scope="col"><?= $this->Form->input('Select All', array('type'=>'checkbox','class'=>'chkhd')) ?></th>
                        <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
@@ -96,7 +97,7 @@
             </div>
             <div class="box-footer">
           		<div class="pull-right">
-                <?= $this->Form->create(null, ['url' => ['controller' => 'Candidates', 'action' => 'fees']]);?>
+                <?= $this->Form->create(null, ['url' => ['controller' => 'Epay', 'action' => 'fees']]);?>
                 <?= $this->Form->input('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
 				<?= $this->Form->button(__('Pay Fees')) ?>
                 <?= $this->Form->end() ?>

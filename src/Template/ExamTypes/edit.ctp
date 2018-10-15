@@ -30,6 +30,7 @@
                                     echo $this->Form->control('code');
                         echo $this->Form->control('name');
                         echo $this->Form->control('short_name');
+                        echo $this->Form->control('has_ca');
                 ?>
             </fieldset>
         </div>

@@ -10,44 +10,27 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Helper;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 require ROOT.DS.'vendor' .DS. 'phpoffice/phpspreadsheet/src/Bootstrap.php';
+
 /**
- * Candidates Controller
+ * CandidateCas Controller
  *
- * @property \App\Model\Table\CandidatesTable $Candidates
+ * @property \App\Model\Table\CandidateCasTable $CandidateCas
  *
- * @method \App\Model\Entity\Candidate[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\CandidateCa[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CandidatesController extends AppController
+class CandidateCasController extends AppController
 {
+	var $centreID;
 	 public function initialize(){
         parent::initialize();
         
-        // Include the FlashComponent
+        // Include the FlashComponent  
         $this->loadComponent('Flash');
-		
-		$this->loadModel('Disabilities');
-		
 		$this->loadModel('Subjects');
 		$this->loadModel('ExamTypes');
-		
-		//centres  
 		$this->loadModel('Centres');
-		$this->loadModel('Practicals');
-		
-		//candidates
 		$this->loadModel('Candidates');
-		$this->loadModel('CandidateQualifications');
-		$this->loadModel('CandidateSubjects');
-		$this->loadModel('CandidateDisabilities');
-		
-		//disaqualified candidates
-		$this->loadModel('DisqualifiedCandidates');
-		$this->loadModel('DisabilityDisqualifiedCandidates');
-		$this->loadModel('DisqualifiedCandidateQualifications');
-		$this->loadModel('DisqualifiedCandidateSubjects');
-  
-        // Set the layout
-      //  $this->layout = 'frontend';
+		$this->loadModel('CentreExamTypes');
     }
 
     /**
@@ -58,27 +41,27 @@ class CandidatesController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['ExamTypes', 'Centres']
+            'contain' => ['CandidateSubjects']
         ];
-        $candidates = $this->paginate($this->Candidates);
+        $candidateCas = $this->paginate($this->CandidateCas);
 
-        $this->set(compact('candidates'));
+        $this->set(compact('candidateCas'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Candidate id.
+     * @param string|null $id Candidate Ca id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $candidate = $this->Candidates->get($id, [
-            'contain' => ['ExamTypes', 'Centres', 'BillItemCandidates', 'CandidateDisabilities', 'CandidateQualifications', 'CandidateSubjects']
+        $candidateCa = $this->CandidateCas->get($id, [
+            'contain' => ['CandidateSubjects']
         ]);
 
-        $this->set('candidate', $candidate);
+        $this->set('candidateCa', $candidateCa);
     }
 
     /**
@@ -88,67 +71,189 @@ class CandidatesController extends AppController
      */
     public function add()
     {
-        $candidate = $this->Candidates->newEntity();
+        $candidateCa = $this->CandidateCas->newEntity();
         if ($this->request->is('post')) {
-            $candidate = $this->Candidates->patchEntity($candidate, $this->request->getData());
-            if ($this->Candidates->save($candidate)) {
-                $this->Flash->success(__('The candidate has been saved.'));
+            $candidateCa = $this->CandidateCas->patchEntity($candidateCa, $this->request->getData());
+            if ($this->CandidateCas->save($candidateCa)) {
+                $this->Flash->success(__('The candidate ca has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The candidate could not be saved. Please, try again.'));
+            $this->Flash->error(__('The candidate ca could not be saved. Please, try again.'));
         }
-        $examTypes = $this->Candidates->ExamTypes->find('list', ['limit' => 200]);
-        $centres = $this->Candidates->Centres->find('list', ['limit' => 200]);
-        $this->set(compact('candidate', 'examTypes', 'centres'));
+        $candidateSubjects = $this->CandidateCas->CandidateSubjects->find('list', ['limit' => 200]);
+        $this->set(compact('candidateCa', 'candidateSubjects'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Candidate id.
+     * @param string|null $id Candidate Ca id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $candidate = $this->Candidates->get($id, [
+        $candidateCa = $this->CandidateCas->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $candidate = $this->Candidates->patchEntity($candidate, $this->request->getData());
-            if ($this->Candidates->save($candidate)) {
-                $this->Flash->success(__('The candidate has been saved.'));
+            $candidateCa = $this->CandidateCas->patchEntity($candidateCa, $this->request->getData());
+            if ($this->CandidateCas->save($candidateCa)) {
+                $this->Flash->success(__('The candidate ca has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The candidate could not be saved. Please, try again.'));
+            $this->Flash->error(__('The candidate ca could not be saved. Please, try again.'));
         }
-        $examTypes = $this->Candidates->ExamTypes->find('list', ['limit' => 200]);
-        $centres = $this->Candidates->Centres->find('list', ['limit' => 200]);
-        $this->set(compact('candidate', 'examTypes', 'centres'));
+        $candidateSubjects = $this->CandidateCas->CandidateSubjects->find('list', ['limit' => 200]);
+        $this->set(compact('candidateCa', 'candidateSubjects'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Candidate id.
+     * @param string|null $id Candidate Ca id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $candidate = $this->Candidates->get($id);
-        if ($this->Candidates->delete($candidate)) {
-            $this->Flash->success(__('The candidate has been deleted.'));
+        $candidateCa = $this->CandidateCas->get($id);
+        if ($this->CandidateCas->delete($candidateCa)) {
+            $this->Flash->success(__('The candidate ca has been deleted.'));
         } else {
-            $this->Flash->error(__('The candidate could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The candidate ca could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
     }
 	
+	public function templatedown()
+    {	 
+        if ($this->request->is('post')) 
+		{
+			echo $this->request->data['etype']; echo '<br>';
+			echo $this->request->data['centre'];
+			exit;
+            $this->Flash->error(__('YOU Sir, have Posted'));
+			
+		}
+        else 
+		{
+			 $this->Flash->set(__('Please Enter Only Marks/Grades in the Template, 
+			 Do not alter the Template in anyway, add or remove any Sheet or Candidates or Row or Column. Use only downloaded Template, do not make yours!'));
+		}
+		
+		
+		$cnt = $this->get
+		entres->find('all',array('fields' => array('id','number','name')));
+		$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
+		
+		if(!$cnt->isEmpty())
+		{
+			$centres=$cnt->toArray();
+			$centre=array();
+			$a=0;
+			foreach($centres as $k=>$v)
+			{
+				if($a==0)$getexm=$v['id'];
+				$centre[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$a++;
+			}
+			
+			$this->centreID=$getexm;
+			$etype=$this->getexam($getexm);
+			$this->set('etypes',$etype);
+			$this->set('centres', $centre);
+		}
+		else
+		{
+			$this->Flash->error(__('No Centres With Candidates Available'));
+			$etype=array('No Exams');
+			$centre=array('No Centres');
+			$this->set('etypes',$etype);
+			$this->set('centres', $centre);
+		}
+		
+    }
+	private function getexam($centid)
+	{
+		//echo $centid;exit;
+		$ety = $this->ExamTypes->find('all',array('fields' => array('id','short_name')))->where(['has_ca' => 1]);//
+		$ety->innerJoinWith('CentreExamTypes', function ($q) { return $q->where(['centre_id' => $this->centreID]);});
+		$etypes=$ety->toArray();
+		$etype=array();
+		foreach($etypes as $k=>$v)$etype[$v['id'].'-'.$v['short_name']]= $v['short_name'];
+		return $etype;
+	}
+	private function getsubjects($exam)
+	{
+		//echo $centid;exit;
+		$subs = $this->Subjects->find('all',array('fields' => array('id','code','name')))->where(['exam_type_id' => $exam]);//
+		$subjects=$subs->toArray();
+		$subject=array();
+		foreach($subjects as $k=>$v)$subject[$v['id'].'-'.$v['code']]= $v['name'];
+		return $subject;
+	}
+	
+	public function getcentres($distid)
+	{
+		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['district_id' => $distid]);
+		$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
+		if(!$cnt->isEmpty())
+		{
+			$centres=$cnt->toArray();
+			$centre=array();
+			$a=0;
+			foreach($centres as $k=>$v)
+			{
+				$centre[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$a++;
+			}
+			return $centre;
+		}
+		return false;
+	}
+	
+	public function getdistricts($regid)
+	{
+		$dst = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['region_id' => $regid]);
+		if(!$dst->isEmpty())
+		{
+			$dists=$dst->toArray();
+			$dist=array();
+			$a=0;
+			foreach($dists as $k=>$v)
+			{
+				$dist[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$a++;
+			}
+			return $dist;
+		}
+		return false;
+	}
+	
+	public function getregions($distid)
+	{
+		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['district_id' => $distid]);
+		$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
+		if(!$cnt->isEmpty())
+		{
+			$centres=$cnt->toArray();
+			$centre=array();
+			$a=0;
+			foreach($centres as $k=>$v)
+			{
+				if($a==0)$getexm=$v['id'];
+				$centre[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$a++;
+			}
+			return $centre;
+		}
+		return false;
+	}
 	public function bulk()
     {
 		 $uploadData = '';
@@ -160,7 +265,7 @@ class CandidatesController extends AppController
 				
 				if(in_array($this->request->data['file']['type'],$allowedtypes) )
 				{
-					$uploadPath = 'uploads/files/';
+					$uploadPath = 'uploads/cas/';
 					$uploadFile = $uploadPath.$fileName;
 					//$ftype = $this->request->data['file']['name'];
 					if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
@@ -207,13 +312,14 @@ class CandidatesController extends AppController
 			subs - Beginning Column fo subjects, sube- ending column for subjects, pg - Parent/Guardian
 		
 		************/
+	//CONTINUOUS ASSESSMENT FORM FOR SECONDARY  SCHOOLS									
+	//CONTINUOUS ASSESSMENT FORM FOR TEACHER TRAINING COLLEGES								
+
 	$templates=array(
-	'CSEE'=>array(array('CSEE'),25
+	'CSEE'=>array(array('IV'),25
 	,array('sft'=>1,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>20,'dis'=>21,'gp'=>23,'7n'=>false,'7y'=>false,'cmb'=>false)),
-	'ACSEE'=>array(array('ADVANCED CERTIFICATE OF SECONDARY EDUCATION EXAMINATION'),22
+	'ACSEE'=>array(array('VI'),22
 	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>16,'dis'=>17,'gp'=>20,'7n'=>false,'7y'=>false,'cmb'=>18)),
-	'FTNA'=>array(array('FTNA'),27
-	,array('sft'=>0,'sfb'=>1,'we'=>false,'rep'=>1,'sex'=>2,'nem'=>3,'dob'=>6,'subs'=>9,'sube'=>20,'dis'=>21,'gp'=>23,'7n'=>24,'7y'=>25,'cmb'=>false)),
 	'DSEE'=>array(array('DIPLOMA IN SECONDARY EDUCATION EXAMINATION'),26
 	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>22,'dis'=>23,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)),
 	'DTE'=>array(array('DIPLOMA IN TECHNICAL EDUCATION EXAMINATION'),26
@@ -377,6 +483,7 @@ class CandidatesController extends AppController
 					$pract_phy=$this->Practicals->newEntity();
 					$pract_phy->subjects_id=$sub_phy->id; 
 					$pract_phy->centres_id=$cent->id;
+
 
 					$pract_phy->practical_type=$phys_practType;
 					$pract_phy->group_A=$phys_practA;
@@ -690,6 +797,119 @@ class CandidatesController extends AppController
 		} //DATA CHECK
 		
 	}
+	public function cadown()
+	{
+		$this->write();
+	}
+	
+	private function write()
+	{
+		$subs= array('031'=>'PHYSICS','032'=>'CHEMISRTY','033'=>'BIOLOGY','040'=>'MATHEMATICS','013'=>'GEOGRAPHY');
+		$dwnpath='downloads/ca/';
+		$head=array();
+		$head['A1']='THE NATIONAL EXAMINATIONS COUNCIL OF TANZANIA';
+		$head['A2']='CONTINUOUS ASSESSMENT FORM FOR SECONDARY  SCHOOLS';
+		
+		$head['D3']='FORM C.A. 1';
+		$head['F3']='Phone No:';
+		$head['H3']='766232987';
+		
+		$head['A4']='CENTRE NUMBER:';
+		$head['B4']='S0788';
+		$head['C4']='NAME:';
+		$head['D4']='BUTURI SECONDARY SCHOOL';
+		$head['E4']='YEAR:';
+		$head['F4']='2018';
+		
+		//
+		$head['A5']='SUBJECT CODE:';
+		//$head['B5']=$ksb;
+		$head['C5']='NAME:';
+		//$head['D5']=$sub;
+		$head['E5']='YEAR:';
+		$head['F5']='2018';
+		
+		//
+		$head['A6']="STUDENT'S";
+		$head['B6']='NAME OF STUDENT';
+		$head['C6']='F-3/5';
+		$head['D6']='F-3/5';
+		$head['E6']='PROJECT %';
+		
+		//
+		$head['A7']='IDENTIFICATION No.';
+		$head['B7']='FORM II EXAM No.';
+		$head['E7']='FIRST NAME';
+		$head['F7']='MIDDLE NAME';
+		$head['G7']='SURNAME';
+		$head['H7']='T1 %';
+		$head['I7']='T2 %';
+		$head['J7']='T1 %';
+		
+		$spreadsheet = new Spreadsheet();
+		$helper = new Helper\Sample();
+		$helper ->log( 'Create new Spreadsheet object' );
+		$spreadsheet  = new Spreadsheet();
+		//Set document properties 
+		$helper ->log('Set document properties');
+		$spreadsheet ->getProperties()
+		->setCreator('shubh ')
+		->setLastModifiedBy('Arjun')
+		->setTitle('TCA')
+		->setSubject('SCA')
+		->setDescription('DCA')
+		->setKeywords('office PhpSpreadsheet php')
+		->setCategory('catCA');
+		// Add some data 
+		$helper ->log('Add some data');
+		$a=0;
+		foreach($subs as $ksb=>$sub)
+		{
+			$head['B5']=$ksb;
+			$head['D5']=ucfirst(strtolower($sub));
+			if($a>0)$spreadsheet ->createSheet();
+			foreach($head as $k=>$v)
+			{
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue($k, $v);
+			}
+			$spreadsheet->getActiveSheet()->mergeCells('$A1:$H1');
+			$spreadsheet->getActiveSheet()->mergeCells('$A2:$H2');			
+			/*foreach(range('A','H') as $columnID) 
+			{
+				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			}*/
+			$spreadsheet->getActiveSheet()->getProtection()->setSheet(true);
+			$spreadsheet->getActiveSheet()->getStyle('H8:J20') ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			
+			$validation = $spreadsheet->getActiveSheet()->getCell('H8') ->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_WHOLE );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(true);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Input error');
+			$validation->setError('Number is not allowed!');
+			$validation->setPromptTitle('Allowed input');
+			$validation->setPrompt('Only numbers between 0 and 100 are allowed.');
+			$validation->setFormula1(0.00);
+			$validation->setFormula2(100.00);
+
+			/*$spreadsheet ->setActiveSheetIndex(0)
+			->setCellValue('A1', 'Hello')
+			->setCellValue('B1', 'world!')
+			->setCellValue('A2', 'Hello')
+			->setCellValue('B2', 'world!');
+			$helper ->log('Rename worksheet');*/
+			$spreadsheet ->getActiveSheet()
+			->setTitle($ksb.'-'.$sub);
+			$a++;	
+		}
+		$writer = new Xlsx($spreadsheet);
+		$writer ->save($dwnpath.'CA'.date('Y').'.xlsx');
+		die;
+		
+	}
+	
 	private function chapa($dt)
 	{
 		echo '<pre>';
