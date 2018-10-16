@@ -21,7 +21,9 @@ class BillsController extends AppController {
      */
     public function index() {
         $bills = $this->paginate($this->Bills);
-
+        var_dump($this->Auth->user());
+        var_dump($_SESSION);
+        exit();
         $this->set(compact('bills'));
     }
 
@@ -46,6 +48,14 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
+        // Check if all the session value keys are set and valid
+        // values from the session 
+        $payer_name = 'admin';
+        $payer_item = 'must be compared from the exam type and grab the is_current in order to determine the current fee cost';
+        $payer_mobile = '0718440572';
+        $payer_email = 'test@eservice.com';
+        $payer_quantity = 1;
+        
         $services = TableRegistry::getTableLocator()->get('collections');
         $services = $services->find('list');
 //        $services = $services->find('list')->select(['id', 'name', 'amount']);

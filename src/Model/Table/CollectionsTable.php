@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -23,8 +24,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Collection[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Collection findOrCreate($search, callable $callback = null, $options = [])
  */
-class CollectionsTable extends Table
-{
+class CollectionsTable extends Table {
 
     /**
      * Initialize method
@@ -32,8 +32,7 @@ class CollectionsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->setTable('collections');
@@ -62,37 +61,39 @@ class CollectionsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
-    {
+    public function validationDefault(Validator $validator) {
         $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
+                ->integer('id')
+                ->allowEmpty('id', 'create');
 
         $validator
-            ->scalar('name')
-            ->maxLength('name', 45)
-            ->requirePresence('name', 'create')
-            ->notEmpty('name');
+                ->scalar('name')
+                ->maxLength('name', 45)
+                ->requirePresence('name', 'create')
+                ->notEmpty('name');
 
         $validator
-            ->scalar('description')
-            ->maxLength('description', 45)
-            ->allowEmpty('description');
+                ->scalar('description')
+                ->maxLength('description', 45)
+                ->allowEmpty('description');
 
         $validator
-            ->dateTime('start_date')
-            ->requirePresence('start_date', 'create')
-            ->notEmpty('start_date');
+                ->dateTime('start_date')
+                ->requirePresence('start_date', 'create')
+                ->notEmpty('start_date');
 
         $validator
-            ->dateTime('end_date')
-            ->requirePresence('end_date', 'create')
-            ->notEmpty('end_date');
+                ->dateTime('end_date')
+                ->requirePresence('end_date', 'create')
+                ->notEmpty('end_date');
 
         $validator
-            ->decimal('ammount')
-            ->requirePresence('ammount', 'create')
-            ->notEmpty('ammount');
+                ->decimal('ammount')
+                ->requirePresence('ammount', 'create')
+                ->notEmpty('ammount');
+        $validator
+                ->requirePresence('is_current', 'create')
+                ->notEmpty('is_current');
 
         return $validator;
     }
@@ -104,11 +105,11 @@ class CollectionsTable extends Table
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules)
-    {
+    public function buildRules(RulesChecker $rules) {
         $rules->add($rules->existsIn(['exam_type_id'], 'ExamTypes'));
         $rules->add($rules->existsIn(['collection_categorie_id'], 'CollectionCategories'));
 
         return $rules;
     }
+
 }

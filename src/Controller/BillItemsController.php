@@ -24,7 +24,6 @@ class BillItemsController extends AppController
             'contain' => ['Collections', 'Bills']
         ];
         $billItems = $this->paginate($this->BillItems);
-
         $this->set(compact('billItems'));
     }
 

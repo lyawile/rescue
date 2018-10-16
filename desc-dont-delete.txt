@@ -1,0 +1,11 @@
+When the request for a bill is submitted via the Bills controller, the following actions should be done by the add action:
+    1. Validate the Request, if  the request is invalid or empty, load the page for service request
+    2. If the values submitted via session are valid ones, take the values for a bill request via session values, these values must be
+        (a) Take the Username for a bill request involving more than one candidate and take the names of candidate if the request is for only single candidate
+        (b)Exam type: Will be used to determine the cost in bill items. Take the is_current from the examtype to get the exact cost
+        (c) Assume the units is 1 for all cases if the request is via session
+        (d) mobile number 
+        (e) payer email
+Return values:
+1. key
+2. item_id
