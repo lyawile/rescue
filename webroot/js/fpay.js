@@ -35,5 +35,29 @@ $(document).ready(function(){
 		}
 	});
 	
+	$('.chkhd').click(function(){
+		var obj=$(this);
+		if(obj.is(':checked')) 
+			{
+				$('.chk').prop('checked','true');
+				$('.chkhd').prop('checked','true');
+				var cands = [];
+				var a = 0;
+				$(document).find('.chk').each(function(){
+					cands[a]=$(this).prop('value');
+					a++;
+				});
+				$('#put').prop('value',cands.join());
+				
+			}
+			else 
+			{
+				$('.chk').removeAttr('checked');
+				$('.chkhd').removeAttr('checked');
+				$('#put').prop('value','');
+			}
+	
+	});
+	
 	
 });
