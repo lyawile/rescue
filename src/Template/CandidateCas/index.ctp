@@ -23,7 +23,7 @@
         <div class="box">
             <div class="box-header with-border">
            		<div class="btn-group pull-right">
-                    <?= $this->Html->link(__('Download CA Template'), ['action' => 'cadown'], ['class' => 'btn btn btn-info']) ?>
+                    <?= $this->Html->link(__('Download CA Template'), ['action' => 'templatedown'], ['class' => 'btn btn btn-info']) ?>
                     <?= $this->Html->link(__('Upload CA file'), ['action' => 'bulk'], ['class' => 'btn btn btn-info']) ?>
                     <?= $this->Html->link(__('New Candidate CA'), ['action' => 'add'], ['class' => 'btn btn btn-info']) ?>
                 </div>

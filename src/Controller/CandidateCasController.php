@@ -28,7 +28,10 @@ class CandidateCasController extends AppController
         $this->loadComponent('Flash');
 		$this->loadModel('Subjects');
 		$this->loadModel('ExamTypes');
+		
 		$this->loadModel('Centres');
+		$this->loadModel('Districts');
+		$this->loadModel('Regions');
 		$this->loadModel('Candidates');
 		$this->loadModel('CentreExamTypes');
     }
@@ -134,10 +137,15 @@ class CandidateCasController extends AppController
     {	 
         if ($this->request->is('post')) 
 		{
-			echo $this->request->data['etype']; echo '<br>';
-			echo $this->request->data['centre'];
-			exit;
-            $this->Flash->error(__('YOU Sir, have Posted'));
+			$etype =  explode('_',$this->request->data['etype']);
+			$cent = explode('_',$this->request->data['centre']);
+			$subs = $this->request->data['chksub'];
+			if($cent[0]<1 )$this->Flash->error(__('Please Select Centre'));
+			else if($etype[0]<1)$this->Flash->error(__('Please Select Exam'));
+			else
+			{
+				$this->write($etype[1],$cent[0],$cent[2].'_'.$cent[1],$subs);
+			}
 			
 		}
         else 
@@ -146,47 +154,100 @@ class CandidateCasController extends AppController
 			 Do not alter the Template in anyway, add or remove any Sheet or Candidates or Row or Column. Use only downloaded Template, do not make yours!'));
 		}
 		
+		$reg=$this->getregions();//
+		$this->set('burl',$this->base);
+		$this->set('regions',$reg);
+		$this->set('districts', array('Select Region'));
+		$this->set('etypes',array('Select Centre'));
+		$this->set('centres', array('Select District'));		
 		
-		$cnt = $this->get
-		entres->find('all',array('fields' => array('id','number','name')));
-		$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
-		
-		if(!$cnt->isEmpty())
-		{
-			$centres=$cnt->toArray();
-			$centre=array();
-			$a=0;
-			foreach($centres as $k=>$v)
-			{
-				if($a==0)$getexm=$v['id'];
-				$centre[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
-				$a++;
-			}
-			
-			$this->centreID=$getexm;
-			$etype=$this->getexam($getexm);
-			$this->set('etypes',$etype);
-			$this->set('centres', $centre);
-		}
-		else
-		{
-			$this->Flash->error(__('No Centres With Candidates Available'));
-			$etype=array('No Exams');
-			$centre=array('No Centres');
-			$this->set('etypes',$etype);
-			$this->set('centres', $centre);
-		}
-		
+		if(isset($reg[-1]))$this->Flash->error(__('No Regions Available'));
     }
+	
+	public function loaddistricts($reg)
+	{
+		$dsts=$this->getdistricts($reg);
+		$a=1;
+		$out='{"option0":{"value":"0","text":"District"}';
+		foreach($dsts as $k=>$v)
+		{
+			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
+			$a++;
+		}
+		$out.='}';
+		echo $out;
+		exit();
+	}
+	public function loadcentres($dist)
+	{
+		
+		$cnts=$this->getcentres($dist);
+		
+		$a=1;
+		$out='{"option0":{"value":"0","text":"Centre"}';
+		foreach($cnts as $k=>$v)
+		{
+			$k=str_replace('"',"'",$k);
+			$v=str_replace('"',"'",$v);
+			
+			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
+			$a++;
+		}
+		$out.='}';
+		echo $out;
+		exit();
+	}
+	
+	public function loadexams($cent)
+	{
+		$this->centreID=$cent;
+		$cnts=$this->getexam($cent);
+		$a=1;
+		$out='{"option0":{"value":"0","text":"Exams"}';
+		foreach($cnts as $k=>$v)
+		{
+			$k=str_replace('"',"'",$k);
+			$v=str_replace('"',"'",$v);
+			
+			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
+			$a++;
+		}
+		$out.='}';
+		echo $out;
+		exit();
+	}
+	
+	public function loadsubjects($exam)
+	{
+		$cnts=$this->getsubjects($exam);
+		$a=1;
+		$out='{"option0":{"value":"0","text":"Exams"}';
+		foreach($cnts as $k=>$v)
+		{
+			$k=str_replace('"',"'",$k);
+			$v=str_replace('"',"'",$v);
+			
+			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
+			$a++;
+		}
+		$out.='}';
+		echo $out;
+		exit();
+	}
+		
 	private function getexam($centid)
 	{
 		//echo $centid;exit;
 		$ety = $this->ExamTypes->find('all',array('fields' => array('id','short_name')))->where(['has_ca' => 1]);//
 		$ety->innerJoinWith('CentreExamTypes', function ($q) { return $q->where(['centre_id' => $this->centreID]);});
-		$etypes=$ety->toArray();
-		$etype=array();
-		foreach($etypes as $k=>$v)$etype[$v['id'].'-'.$v['short_name']]= $v['short_name'];
-		return $etype;
+		if(!$ety->isEmpty())
+		{
+			$etypes=$ety->toArray();
+			$etype=array();
+			foreach($etypes as $k=>$v)$etype[$v['id'].'_'.$v['short_name']]= $v['short_name'];
+			return $etype;
+		}
+		return array(-1=>'No Exams');
 	}
 	private function getsubjects($exam)
 	{
@@ -194,14 +255,14 @@ class CandidateCasController extends AppController
 		$subs = $this->Subjects->find('all',array('fields' => array('id','code','name')))->where(['exam_type_id' => $exam]);//
 		$subjects=$subs->toArray();
 		$subject=array();
-		foreach($subjects as $k=>$v)$subject[$v['id'].'-'.$v['code']]= $v['name'];
+		foreach($subjects as $k=>$v)$subject[$v['id'].'_'.$v['code'].'_'.$v['name']]= $v['name'];
 		return $subject;
 	}
 	
 	public function getcentres($distid)
 	{
 		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['district_id' => $distid]);
-		$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
+		//$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
 		if(!$cnt->isEmpty())
 		{
 			$centres=$cnt->toArray();
@@ -209,17 +270,17 @@ class CandidateCasController extends AppController
 			$a=0;
 			foreach($centres as $k=>$v)
 			{
-				$centre[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$centre[$v['id'].'_'.$v['number'].'_'.$v['name']]=$v['number'].' - '.$v['name'];
 				$a++;
 			}
 			return $centre;
 		}
-		return false;
+		return array(-1=>'No Centres');
 	}
 	
 	public function getdistricts($regid)
 	{
-		$dst = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['region_id' => $regid]);
+		$dst = $this->Districts->find('all',array('fields' => array('id','number','name')))->where(['region_id' => $regid]);
 		if(!$dst->isEmpty())
 		{
 			$dists=$dst->toArray();
@@ -227,32 +288,32 @@ class CandidateCasController extends AppController
 			$a=0;
 			foreach($dists as $k=>$v)
 			{
-				$dist[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$dist[$v['id']]=$v['number'].' - '.$v['name'];
 				$a++;
 			}
 			return $dist;
 		}
-		return false;
+		return array(-1=>'No Districts');
 	}
 	
-	public function getregions($distid)
+	public function getregions()
 	{
-		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['district_id' => $distid]);
-		$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
-		if(!$cnt->isEmpty())
+		$reg = $this->Regions->find('all',array('fields' => array('id','number','name')));
+		if(!$reg->isEmpty())
 		{
-			$centres=$cnt->toArray();
-			$centre=array();
+			$regs=$reg->toArray();
+			$region=array();
 			$a=0;
-			foreach($centres as $k=>$v)
+			$region[0]='Region';
+			foreach($regs as $k=>$v)
 			{
 				if($a==0)$getexm=$v['id'];
-				$centre[$v['id'].'-'.$v['number'].' - '.$v['name']]=$v['number'].' - '.$v['name'];
+				$region[$v['id']]=$v['number'].' - '.$v['name'];
 				$a++;
 			}
-			return $centre;
+			return $region;
 		}
-		return false;
+		return array(-1=>'No Regions');
 	}
 	public function bulk()
     {
@@ -432,8 +493,6 @@ class CandidateCasController extends AppController
 			if($keepRead)
 			{
 				$metaDT=$templates[$examTP][2];
-				
-				
 				if($examTP=='CSoEE')
 				{				
 					//AREAS
@@ -802,49 +861,33 @@ class CandidateCasController extends AppController
 		$this->write();
 	}
 	
-	private function write()
+	private function write($exam, $centid, $centre, $subs)
 	{
-		$subs= array('031'=>'PHYSICS','032'=>'CHEMISRTY','033'=>'BIOLOGY','040'=>'MATHEMATICS','013'=>'GEOGRAPHY');
+		$cands = $this->Candidates->find('all',array('fields' => array('id','first_name','other_name','surname','number')))->where(['centre_id' => $centid]);
+		
+		
+		//$subs= array('031'=>'PHYSICS','032'=>'CHEMISRTY','033'=>'BIOLOGY','040'=>'MATHEMATICS','013'=>'GEOGRAPHY');
 		$dwnpath='downloads/ca/';
 		$head=array();
 		$head['A1']='THE NATIONAL EXAMINATIONS COUNCIL OF TANZANIA';
 		$head['A2']='CONTINUOUS ASSESSMENT FORM FOR SECONDARY  SCHOOLS';
 		
-		$head['D3']='FORM C.A. 1';
-		$head['F3']='Phone No:';
-		$head['H3']='766232987';
+		//ROW3
+		$head['A3']=$exam;		$head['D3']='FORM C.A. 1';		$head['F3']='Phone No:';		$head['H3']='766232987';
 		
-		$head['A4']='CENTRE NUMBER:';
-		$head['B4']='S0788';
-		$head['C4']='NAME:';
-		$head['D4']='BUTURI SECONDARY SCHOOL';
-		$head['E4']='YEAR:';
-		$head['F4']='2018';
+		//ROW4		
+		$cent=explode('_', $centre);		
+		$head['A4']='CENTRE NUMBER:';	$head['B4']=$cent[1];	$head['C4']='NAME:';	$head['D4']=$cent[0];	$head['E4']='YEAR:'; $head['F4']=date('Y');
 		
-		//
-		$head['A5']='SUBJECT CODE:';
-		//$head['B5']=$ksb;
-		$head['C5']='NAME:';
-		//$head['D5']=$sub;
-		$head['E5']='YEAR:';
-		$head['F5']='2018';
+		//ROW5
+		$head['A5']='SUBJECT CODE:';/*$head['B5']=$ksb;*/	$head['C5']='NAME:'; /*$head['D5']=$sub;*/	$head['E5']='FORM:';	$head['F5']='VI';
 		
-		//
-		$head['A6']="STUDENT'S";
-		$head['B6']='NAME OF STUDENT';
-		$head['C6']='F-3/5';
-		$head['D6']='F-3/5';
-		$head['E6']='PROJECT %';
+		//ROW6
+		$head['A6']="STUDENT'S";	$head['B6']='NAME OF STUDENT';	$head['C6']='F-3/5';	$head['D6']='F-3/5';	$head['E6']='PROJECT %';
 		
-		//
-		$head['A7']='IDENTIFICATION No.';
-		$head['B7']='FORM II EXAM No.';
-		$head['E7']='FIRST NAME';
-		$head['F7']='MIDDLE NAME';
-		$head['G7']='SURNAME';
-		$head['H7']='T1 %';
-		$head['I7']='T2 %';
-		$head['J7']='T1 %';
+		//ROW7
+		$head['A7']='INDEX No.';/*$head['B7']='FORM II EXAM No.';*/	$head['B7']='FIRST NAME'; $head['C7']='MIDDLE NAME'; $head['D7']='SURNAME'; $head['E7']='T1 %';
+		$head['F7']='T2 %';		$head['G7']='T1 %';
 		
 		$spreadsheet = new Spreadsheet();
 		$helper = new Helper\Sample();
@@ -863,8 +906,13 @@ class CandidateCasController extends AppController
 		// Add some data 
 		$helper ->log('Add some data');
 		$a=0;
-		foreach($subs as $ksb=>$sub)
+		foreach($subs as $val)
 		{
+			//53_121_KISWAHILI
+			$somo=explode('_',$val);
+			$ksb = $somo[1];
+			$sub = $somo[2];
+			
 			$head['B5']=$ksb;
 			$head['D5']=ucfirst(strtolower($sub));
 			if($a>0)$spreadsheet ->createSheet();
@@ -872,16 +920,34 @@ class CandidateCasController extends AppController
 			{
 				$spreadsheet ->setActiveSheetIndex($a)->setCellValue($k, $v);
 			}
-			$spreadsheet->getActiveSheet()->mergeCells('$A1:$H1');
-			$spreadsheet->getActiveSheet()->mergeCells('$A2:$H2');			
+			$spreadsheet->getActiveSheet()->mergeCells('$A1:$G1');
+			$spreadsheet->getActiveSheet()->mergeCells('$A2:$G2');		
+			
+			//CANDIDATES
+			$rw=8;
+				if(!$cands->isEmpty())
+				{
+					$cand=$cands->toArray();
+					
+					foreach($cand as $v)
+					{
+						$spreadsheet ->setActiveSheetIndex($a)->setCellValue('A'.$rw,$v['number']);
+						$spreadsheet ->setActiveSheetIndex($a)->setCellValue('B'.$rw,$v['first_name']);
+						$spreadsheet ->setActiveSheetIndex($a)->setCellValue('C'.$rw,$v['other_name']);
+						$spreadsheet ->setActiveSheetIndex($a)->setCellValue('D'.$rw,$v['surname']);
+						$rw++;
+					}
+				}
+			//
+				
 			/*foreach(range('A','H') as $columnID) 
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}*/
 			$spreadsheet->getActiveSheet()->getProtection()->setSheet(true);
-			$spreadsheet->getActiveSheet()->getStyle('H8:J20') ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			$spreadsheet->getActiveSheet()->getStyle('E8:G'.($rw-1)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
 			
-			$validation = $spreadsheet->getActiveSheet()->getCell('H8') ->getDataValidation();
+			$validation = $spreadsheet->getActiveSheet()->getCell('E8') ->getDataValidation();
 			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_WHOLE );
 			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
 			$validation->setAllowBlank(true);
