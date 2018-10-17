@@ -23,31 +23,40 @@
             <div class="box-header with-border">
                 <h4 class="pull-left">???</h4>
                 <div class="btn-group pull-right">
-                   comands here
+                   comands here<div id="mxg"></div>
                 </div>
             </div>
             <!-- Default box -->
             <div class="box-body">
                 <?= $this->Form->create(null, ['url' => ['action' => 'templatedown']]);?>
+                <?= $this->Form->input('', array('type'=>'hidden','name'=>'urlx','id'=>'urlx','value'=>$this->Url->build('/', true))) ?>                
                 <table class="vertical-table table table table-striped">
                 <tr>
-                   <th scope="row">CENTRES</th>
+                   <th scope="row">
+                   <?= $this->Form->select('region', $regions, ['class'=>'form-control', 'id'=>'region']); ?>
+                   </th>
+                   <th scope="row">
+                   <?= $this->Form->select('district', $districts, ['class'=>'form-control', 'id'=>'district']); ?>
+                   </th>
                    <th scope="row">
                    <?= $this->Form->select('centre', $centres, ['class'=>'form-control', 'id'=>'centre']); ?>
                    </th>
-                   <th scope="row"></th><th scope="row"></th>
-                   <th scope="row">EXAM TYPE</th>
                    <th scope="row">
                    <?= $this->Form->select('etype', $etypes, ['class'=>'form-control', 'id'=>'etype']); ?>
                    </th>
                 </tr>
                 <tr>
-                   <td colspan="6">
+                   <td colspan="4">
                    <div id="subs" style="overflow:auto">Subjects</div>                   
                    </td>
                 </tr>
                 <tr>
-                   <td colspan="6">
+                   <td colspan="4">
+                   <div id="subs" style="overflow:auto">Subjects</div>                   
+                   </td>
+                </tr>
+                <tr>
+                   <td colspan="4">
                    <small></small>
                    		<div class="btn-group pull-right">
                          <?= $this->Form->button(__('Get Template')) ?>
