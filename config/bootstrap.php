@@ -209,7 +209,7 @@ Configure::write('Theme', [
     ],
     'login' => [
         'show_remember' => false,
-        'show_register' => true,
+        'show_register' => false,
         'show_social' => false
     ],
     'folder' => ROOT,
