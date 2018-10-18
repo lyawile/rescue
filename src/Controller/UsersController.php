@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -136,5 +137,22 @@ class UsersController extends AppController
     {
         $this->Flash->success(__('Logged out successfully'));
         return $this->redirect($this->Auth->logout());
+    }
+
+    public function changeUserPassword($id = null)
+    {
+        $user = $this->Users->get($id);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success(_('Password has been changed'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Password could not be changed. Please, try again.'));
+        }
+
+        $this->set(compact('user'));
     }
 }

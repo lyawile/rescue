@@ -27,14 +27,14 @@
                 <div class="col-sm-8">
                     <fieldset>
                         <?php
+                        echo $this->Form->control('username');
+                        echo $this->Form->control('group_id', ['options' => $groups]);
                         echo $this->Form->control('first_name');
                         echo $this->Form->control('other_name');
                         echo $this->Form->control('surname');
-                        echo $this->Form->control('username');
                         echo $this->Form->control('password');
                         echo $this->Form->control('email');
                         echo $this->Form->control('mobile');
-                        echo $this->Form->control('group_id', ['options' => $groups]);
                         ?>
                     </fieldset>
                 </div>
