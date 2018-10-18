@@ -55,22 +55,25 @@ class BillsController extends AppController {
         $payer_mobile = '0718440572';
         $payer_email = 'test@eservice.com';
         $numberOfCands = 2; // this is equal to the quantity in billing 
-        if (true) {
-           return $this->redirect(['action' => 'verifyBill']);
-        } else {
-            $services = TableRegistry::getTableLocator()->get('collections');
-            $services = $services->find('list');
+        $services = TableRegistry::getTableLocator()->get('collections');
+        $services = $services->find('list');
 //        $services = $services->find('list')->select(['id', 'name', 'amount']);
-            $bill = $this->Bills->newEntity();
-            $billItem = $this->loadModel('BillItems');
-            $collections = $this->loadModel('Collections');
+        $bill = $this->Bills->newEntity();
+        $billItem = $this->loadModel('BillItems');
+        $collections = $this->loadModel('Collections');
 
-            // get the current amount for a requested service
-            $data = $collections->find('all', array('fields' => array('amount')))
-                    ->where(['is_current' => 1, 'exam_type_id' => $exam_type]);
-            foreach ($data as $data) {
-                $amount = $data->amount;
-            }
+        // get the current amount for a requested service
+        $data = $collections->find('all', array('fields' => array('amount')))
+                ->where(['is_current' => 1, 'exam_type_id' => $exam_type]);
+        foreach ($data as $data) {
+            $amount = $data->amount;
+        }
+        if (isset($payer_name) && !empty($payer_name)) {
+            $test = 'go';
+//           return $this->redirect(['action' => 'verifyBill']);
+            $this->set(compact(['payer_name','amount', 'numberOfCands']));
+        } else {
+
             if ($this->request->is('post')) {
                 // get collection id to determine the service cost 
                 $postedData = $this->request->getData();
@@ -192,9 +195,6 @@ class BillsController extends AppController {
         }
 
         return $this->redirect(['action' => 'index']);
-    }
-    public function verifyBill(){
-        echo "Test";
     }
 
 }
