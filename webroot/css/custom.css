@@ -4,3 +4,7 @@
     /*line-height: 90px;*/
     /*margin-top: 20px !important;*/
 }
+
+.error-message {
+    color: #DD4B39;
+}
