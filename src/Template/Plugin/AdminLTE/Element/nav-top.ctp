@@ -16,6 +16,10 @@ if (file_exists($file)) {
             <span class="sr-only">Toggle navigation</span>
         </a>
 
+        <div class="user-level">
+            <?= $this->Form->control('region_id', ['options' => $regions, 'class' => 'region', 'label' => false]); ?>
+        </div>
+
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
@@ -224,7 +228,8 @@ if (file_exists($file)) {
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                        <span style="margin-right: 8px"><?php echo $this->Html->image('user2-160x160.jpg', array('class' => 'img-circle', 'alt' => 'User Image', 'height' => '20px')); ?></span>
+                        <span
+                            style="margin-right: 8px"><?php echo $this->Html->image('user2-160x160.jpg', array('class' => 'img-circle', 'alt' => 'User Image', 'height' => '20px')); ?></span>
                         <span class="hidden-xs"><?= $this->request->session()->read('Auth.User.username') ?></span>
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
