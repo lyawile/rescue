@@ -48,41 +48,45 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        // Check if all the session value keys are set and valid
-        // values from the session 
+//         Check if all the session value keys are set and valid
+//         values from the session 
         $payer_name = 'admin';
         $exam_type = 2;
         $payer_mobile = '0718440572';
         $payer_email = 'test@eservice.com';
         $numberOfCands = 2; // this is equal to the quantity in billing 
         $services = TableRegistry::getTableLocator()->get('collections');
-        $services = $services->find('list');
+        if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
+            $services = $services->find('all', array('fields' => array('amount','name','id')))->where(['exam_type_id' => $exam_type, 'is_current'=> 1]);
+            foreach ($services as $serv){
+                $amountForRequestedService = $serv->amount;
+                $requestedServiceName = $serv->id;
+            }
+        } else {
+            $services = $services->find('list')->where(['exam_type_id not in' => array(1, 2, 3, 4, 5, 6, 7, 9)]);
+        }
 //        $services = $services->find('list')->select(['id', 'name', 'amount']);
         $bill = $this->Bills->newEntity();
         $billItem = $this->loadModel('BillItems');
         $collections = $this->loadModel('Collections');
 
-        // get the current amount for a requested service
-        $data = $collections->find('all', array('fields' => array('amount')))
-                ->where(['is_current' => 1, 'exam_type_id' => $exam_type]);
-        foreach ($data as $data) {
-            $amount = $data->amount;
-        }
-        if (isset($payer_name) && !empty($payer_name)) {
-            $test = 'go';
+
+        if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
+            $switcher = 1;
 //           return $this->redirect(['action' => 'verifyBill']);
-            $this->set(compact(['payer_name','amount', 'numberOfCands']));
+            $this->set(compact(['payer_name','payer_mobile','payer_email', 'amount', 'numberOfCands', 'switcher', 'amountForRequestedService','requestedServiceName' ]));
+            var_dump($this->request->session()->read());
+            exit();
         } else {
 
             if ($this->request->is('post')) {
                 // get collection id to determine the service cost 
                 $postedData = $this->request->getData();
-
                 $bill = $this->Bills->patchEntity($bill, $postedData);
                 $bill->reference = 'NECTA' . date("Y") . date("mdhis", time()); // assumed reference number, will be changed later on consensus
-                $bill->amount = $amount; // not right place just fix amount for now
-                $bill->equivalent_amount = $amount;
-                $bill->misc_amount = $amount;
+                $bill->amount = 0; // not right place just fix amount for now
+                $bill->equivalent_amount = 0;
+                $bill->misc_amount = 0;
                 $bill->expire_date = '2018-12-01'; // assumed
                 $bill->generated_date = date("Y-m-d");
                 $bill->has_reminder = 0;
@@ -90,17 +94,14 @@ class BillsController extends AppController {
                 if ($t = $this->Bills->save($bill)) {
                     $bill_id = $t->id;
                     for ($i = 0; $i < count($postedData['collection_id']); $i++) {
-//                For debugging purpose only
-//                echo $coll_id = $postedData['collection_id'][$i];
-//                echo "-----------";
-//                echo $quantity = $postedData['quantity'][$i];
-//                echo "<br/>";
-//              Business logic 
                         $collectionId = $postedData['collection_id'][$i];
                         // get the service amount
-                        $collectionsData = $collections->find()->where(["id" => $collectionId]);
-                        foreach ($collectionsData as $d) {
-                            $amount = $d->amount;
+//                        $collectionsData = $collections->find()->where(["id" => $collectionId]);// old
+                        // get the current amount for a requested service
+                        $data = $collections->find('all', array('fields' => array('amount')))
+                                ->where(["id" => $collectionId]);
+                        foreach ($data as $data) {
+                            $amount = $data->amount;
                         }
                         $quantity = $postedData['quantity'][$i];
                         $bill_item = $billItem->newEntity();

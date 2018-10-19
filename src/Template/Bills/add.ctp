@@ -1,5 +1,5 @@
 <pre>
-    <?php echo @$payer_name; ?>
+    <?php // echo @$payer_name; ?>
 </pre>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
@@ -24,9 +24,9 @@
                 <div class="col-sm-8">
                     <fieldset>
                         <?php
-                        echo $this->Form->control('payer_name');
-                        echo $this->Form->control('payer_mobile');
-                        echo $this->Form->control('payer_email');
+                        echo $this->Form->control('payer_name', array('default'=> @$payer_name));
+                        echo $this->Form->control('payer_mobile', array('default'=> @$payer_mobile));
+                        echo $this->Form->control('payer_email', array('default'=> @$payer_email));
                         ?>
                         <div class="form-group input select">
                             <label for="group-id">Select atleast one service </label>
@@ -41,7 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (!isset($payer_name) && empty($payer_name)) { ?>
+                                <?php if (!isset($switcher) && empty($switcher)) { ?>
                                     <tr class="service">
                                         <td>1</td>
                                         <td>
@@ -67,15 +67,15 @@
                                 <td>
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <?php echo $this->Form->control('payer_name', array('disabled'=>true, 'label'=> FALSE, 'default'=> 'Test name')); ?>
+                                            <?php echo $this->Form->control('collection_id[]', array('disabled'=>true, 'label'=> FALSE, 'default'=> $requestedServiceName)); ?>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <?= $this->Form->control('payer_name', array('disabled'=>true, 'label'=> FALSE, 'default'=> $numberOfCands));  ?>
-                                            <?= $this->Form->hidden('amount', array('disabled'=>true, 'label'=> FALSE, 'default'=> $amount));  ?>
+                                            <?= $this->Form->control('quantity[]', array('disabled'=>true, 'label'=> FALSE, 'default'=> $numberOfCands));  ?>
+                                            <?php //echo $this->Form->hidden('amount', array('disabled'=>true, 'label'=> FALSE, 'default'=> $amountForRequestedService));  ?>
                                         </div>
                                     </div>
                                 </td>
