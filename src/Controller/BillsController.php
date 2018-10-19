@@ -57,8 +57,8 @@ class BillsController extends AppController {
         $numberOfCands = 2; // this is equal to the quantity in billing 
         $services = TableRegistry::getTableLocator()->get('collections');
         if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
-            $services = $services->find('all', array('fields' => array('amount','name','id')))->where(['exam_type_id' => $exam_type, 'is_current'=> 1]);
-            foreach ($services as $serv){
+            $services = $services->find('all', array('fields' => array('amount', 'name', 'id')))->where(['exam_type_id' => $exam_type, 'is_current' => 1]);
+            foreach ($services as $serv) {
                 $amountForRequestedService = $serv->amount;
                 $requestedServiceName = $serv->id;
             }
@@ -74,65 +74,66 @@ class BillsController extends AppController {
         if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
             $switcher = 1;
 //           return $this->redirect(['action' => 'verifyBill']);
-            $this->set(compact(['payer_name','payer_mobile','payer_email', 'amount', 'numberOfCands', 'switcher', 'amountForRequestedService','requestedServiceName' ]));
-            var_dump($this->request->session()->read());
-            exit();
-        } else {
+            $this->set(compact(['payer_name', 'payer_mobile', 'payer_email', 'amount', 'numberOfCands', 'switcher', 'amountForRequestedService', 'requestedServiceName']));
+//            var_dump($this->request->session()->read());
 
-            if ($this->request->is('post')) {
-                // get collection id to determine the service cost 
-                $postedData = $this->request->getData();
-                $bill = $this->Bills->patchEntity($bill, $postedData);
-                $bill->reference = 'NECTA' . date("Y") . date("mdhis", time()); // assumed reference number, will be changed later on consensus
-                $bill->amount = 0; // not right place just fix amount for now
-                $bill->equivalent_amount = 0;
-                $bill->misc_amount = 0;
-                $bill->expire_date = '2018-12-01'; // assumed
-                $bill->generated_date = date("Y-m-d");
-                $bill->has_reminder = 0;
-                $totalAmount = 0;
-                if ($t = $this->Bills->save($bill)) {
-                    $bill_id = $t->id;
-                    for ($i = 0; $i < count($postedData['collection_id']); $i++) {
-                        $collectionId = $postedData['collection_id'][$i];
-                        // get the service amount
-//                        $collectionsData = $collections->find()->where(["id" => $collectionId]);// old
-                        // get the current amount for a requested service
-                        $data = $collections->find('all', array('fields' => array('amount')))
-                                ->where(["id" => $collectionId]);
-                        foreach ($data as $data) {
-                            $amount = $data->amount;
-                        }
-                        $quantity = $postedData['quantity'][$i];
-                        $bill_item = $billItem->newEntity();
-                        $bill_item_var = $billItem->patchEntity($bill_item, $postedData);
-                        $bill_item_var->bill_id = $bill_id; // last inserted bill id
-                        $bill_item_var->detail = "Test details";
-                        $bill_item_var->amount = $amount * $quantity; // testing
-                        $bill_item_var->misc_amount = $amount * $quantity;
-                        $bill_item_var->equivalent_amount = $amount * $quantity;
-                        $bill_item_var->unit = "Each";
-                        $bill_item_var->collection_id = $collectionId;
-                        $bill_item_var->quantity = $quantity;
-//                    debug($bill_item_var);
-                        // get the amount of money that a customer needs to pay by summing up the services cost he has selected
-                        $totalAmount += $amount * $quantity;
-                        $billItem->save($bill_item_var);
-                    }
-                    // Update the amount Bills table
-                    $query = $this->Bills->query();
-                    $query->update()
-                            ->set(['amount' => $totalAmount, 'equivalent_amount' => $totalAmount, 'misc_amount' => $totalAmount])
-                            ->where(['id' => $bill_id])
-                            ->execute();
-                    $this->Flash->success(__('The bill has been saved.'));
-                    return $this->redirect(['action' => 'getInvoice', 'bill_id' => $bill_id]);
-                } // end of the loop to iterate through each service added by the user
-
-                $this->Flash->error(__('The bill could not be saved. Please, try again.'));
-            }
-            $this->set(compact('services'));
+            echo $this->request->session()->read('username');
+//            var_dump($this->request->session()->read());
         }
+
+        if ($this->request->is('post')) {
+            // get collection id to determine the service cost 
+            $postedData = $this->request->getData();
+            $bill = $this->Bills->patchEntity($bill, $postedData);
+            $bill->reference = 'NECTA' . date("Y") . date("mdhis", time()); // assumed reference number, will be changed later on consensus
+            $bill->amount = 0; // not right place just fix amount for now
+            $bill->equivalent_amount = 0;
+            $bill->misc_amount = 0;
+            $bill->expire_date = '2018-12-01'; // assumed
+            $bill->generated_date = date("Y-m-d");
+            $bill->has_reminder = 0;
+            $totalAmount = 0;
+            if ($t = $this->Bills->save($bill)) {
+                $bill_id = $t->id;
+                for ($i = 0; $i < count($postedData['collection_id']); $i++) {
+                    $collectionId = $postedData['collection_id'][$i];
+                    // get the service amount
+//                        $collectionsData = $collections->find()->where(["id" => $collectionId]);// old
+                    // get the current amount for a requested service
+                    $data = $collections->find('all', array('fields' => array('amount')))
+                            ->where(["id" => $collectionId]);
+                    foreach ($data as $data) {
+                        $amount = $data->amount;
+                    }
+                    $quantity = $postedData['quantity'][$i];
+                    $bill_item = $billItem->newEntity();
+                    $bill_item_var = $billItem->patchEntity($bill_item, $postedData);
+                    $bill_item_var->bill_id = $bill_id; // last inserted bill id
+                    $bill_item_var->detail = "Test details";
+                    $bill_item_var->amount = $amount * $quantity; // testing
+                    $bill_item_var->misc_amount = $amount * $quantity;
+                    $bill_item_var->equivalent_amount = $amount * $quantity;
+                    $bill_item_var->unit = "Each";
+                    $bill_item_var->collection_id = $collectionId;
+                    $bill_item_var->quantity = $quantity;
+//                    debug($bill_item_var);
+                    // get the amount of money that a customer needs to pay by summing up the services cost he has selected
+                    $totalAmount += $amount * $quantity;
+                    $billItem->save($bill_item_var);
+                }
+                // Update the amount Bills table
+                $query = $this->Bills->query();
+                $query->update()
+                        ->set(['amount' => $totalAmount, 'equivalent_amount' => $totalAmount, 'misc_amount' => $totalAmount])
+                        ->where(['id' => $bill_id])
+                        ->execute();
+                $this->Flash->success(__('The bill has been saved.'));
+                return $this->redirect(['action' => 'getInvoice', 'bill_id' => $bill_id]);
+            } // end of the loop to iterate through each service added by the user
+
+            $this->Flash->error(__('The bill could not be saved. Please, try again.'));
+        }
+        $this->set(compact('services'));
     }
 
     public function getInvoice($bill_id) {
