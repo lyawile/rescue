@@ -873,7 +873,7 @@ class CandidateCasController extends AppController
 		$head['A2']='CONTINUOUS ASSESSMENT FORM FOR SECONDARY  SCHOOLS';
 		
 		//ROW3
-		$head['A3']=$exam;		$head['D3']='FORM C.A. 1';		$head['F3']='Phone No:';		$head['H3']='766232987';
+		$head['A3']=$exam;		$head['B3']='FORM C.A. 1';		$head['C3']='Phone No:';		$head['D3']='766232987';
 		
 		//ROW4		
 		$cent=explode('_', $centre);		
@@ -887,7 +887,7 @@ class CandidateCasController extends AppController
 		
 		//ROW7
 		$head['A7']='INDEX No.';/*$head['B7']='FORM II EXAM No.';*/	$head['B7']='FIRST NAME'; $head['C7']='MIDDLE NAME'; $head['D7']='SURNAME'; $head['E7']='T1 %';
-		$head['F7']='T2 %';		$head['G7']='T1 %';
+		$head['F7']='T2 %';		$head['G7']='T1 %'; $head['H7']='PR %';
 		
 		$spreadsheet = new Spreadsheet();
 		$helper = new Helper\Sample();
@@ -895,14 +895,19 @@ class CandidateCasController extends AppController
 		$spreadsheet  = new Spreadsheet();
 		//Set document properties 
 		$helper ->log('Set document properties');
+		$user=$this->Auth->user('first_name').' '.$this->Auth->user('other_name').' '.$this->Auth->user('surname');
 		$spreadsheet ->getProperties()
-		->setCreator('shubh ')
-		->setLastModifiedBy('Arjun')
-		->setTitle('TCA')
-		->setSubject('SCA')
-		->setDescription('DCA')
-		->setKeywords('office PhpSpreadsheet php')
-		->setCategory('catCA');
+		->setCreator($user)
+		->setLastModifiedBy($user)
+		->setTitle('NECTA eSERVICE'.date('Y').' CA Template')
+		->setSubject('Candidate CA')
+		->setDescription('Continuous Assessment Template')
+		->setKeywords('NECTA CA Template')
+		->setCategory('CA');
+		
+		//
+		$spreadsheet->getSecurity()->setLockStructure(true);
+		$spreadsheet->getSecurity()->setWorkbookPassword("BARAZA");
 		// Add some data 
 		$helper ->log('Add some data');
 		$a=0;
@@ -938,14 +943,28 @@ class CandidateCasController extends AppController
 						$rw++;
 					}
 				}
-			//
 				
-			/*foreach(range('A','H') as $columnID) 
+			$spreadsheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
+			//
+			/*error_reporting(0);
+			foreach(range('A','H') as $columnID) 
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
-			}*/
+			}
+			*/
+			//SHEET PROTECTION
+			$spreadsheet->getActiveSheet()->getProtection()->setPassword('BARAZA');
 			$spreadsheet->getActiveSheet()->getProtection()->setSheet(true);
-			$spreadsheet->getActiveSheet()->getStyle('E8:G'.($rw-1)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			$spreadsheet->getActiveSheet()->getProtection()->setSort(true);
+			$spreadsheet->getActiveSheet()->getProtection()->setInsertRows(true);
+			$spreadsheet->getActiveSheet()->getProtection()->setInsertColumns(true);
+			$spreadsheet->getActiveSheet()->getProtection()->setFormatCells(true);
+			//$spreadsheet->getActiveSheet()->getProtection()->setSheet(true);
+			$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			
+			//$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1))->getFill()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
+			$fill=array('fill' => array('type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,'color' => array('rgb' => 'FF0000')));
+			$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1))->applyFromArray($fill);
 			
 			$validation = $spreadsheet->getActiveSheet()->getCell('E8') ->getDataValidation();
 			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_WHOLE );
@@ -953,21 +972,82 @@ class CandidateCasController extends AppController
 			$validation->setAllowBlank(true);
 			$validation->setShowInputMessage(true);
 			$validation->setShowErrorMessage(true);
-			$validation->setErrorTitle('Input error');
-			$validation->setError('Number is not allowed!');
-			$validation->setPromptTitle('Allowed input');
+			$validation->setErrorTitle('Marks error');
+			$validation->setError('Marks not allowed!');
+			$validation->setPromptTitle('Allowed Marks');
 			$validation->setPrompt('Only numbers between 0 and 100 are allowed.');
 			$validation->setFormula1(0.00);
 			$validation->setFormula2(100.00);
 
-			/*$spreadsheet ->setActiveSheetIndex(0)
-			->setCellValue('A1', 'Hello')
-			->setCellValue('B1', 'world!')
-			->setCellValue('A2', 'Hello')
-			->setCellValue('B2', 'world!');
-			$helper ->log('Rename worksheet');*/
-			$spreadsheet ->getActiveSheet()
-			->setTitle($ksb.'-'.$sub);
+			//STYLE HEAD 1
+			$h1=array( 'font' => array('bold' => true,'size' => 16)
+			,'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+			//STYLE HEAD 2
+			$h2=array( 'font' => array('bold' => false,'size' => 14)
+			,'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+			//STYLE HEAD 3
+			$h3=array( 'font' => array('bold' => true)
+			,'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+		
+			$spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray($h1);
+			$spreadsheet->getActiveSheet()->getStyle('A2')->applyFromArray($h2);
+			$spreadsheet->getActiveSheet()->getStyle('A3')->applyFromArray($h3);
+			
+			//SET BORDERS			
+			$bod=array( 'borders' => array('outline' =>  array('borderStyle'=>\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,'outline' =>array('color' => ['argb' => 'FFFF0000']))));
+			foreach(range('A','H') as $columnID) 
+			{
+				for($i=7;$i<$rw;$i++)
+				{
+					$spreadsheet->getActiveSheet()->getStyle($columnID.$i)->applyFromArray($bod);
+				}
+			}
+			
+			//THE BOLDS
+			foreach(range('A','G') as $col) $spreadsheet->getActiveSheet()->getStyle($col.'7')->applyFromArray($h3);
+			$bolds=array('B4','D4','B5','D5','F5');
+			foreach($bolds as $cell) $spreadsheet->getActiveSheet()->getStyle($cell)->applyFromArray($h3);
+			
+			///****/
+			
+			//FOOTER
+				/*I certify that the information given in this form is correct						
+				Name and signature of subject teacher     .    						
+				WYCLIFFE OTENYO			Date	20.03.2018		
+				Name and signature of Head of department     .    						
+				WYCLIFFE OTENYO			Date	20.03.2018		*/
+
+			//******//
+			$ft=array();
+			$ft['B'.$rw]='I certify that the information given in this form is correct';
+			$ft['B'.($rw+1)]='Name and signature of subject teacher';
+			$ft['B'.($rw+2)]='WYCLIFFE OTENYO';	$ft['E'.($rw+2)]='Date';	$ft['F'.($rw+2)]='20.03.2018';
+			$ft['B'.($rw+3)]='Name and signature of Head of department ';
+			$ft['B'.($rw+4)]='WYCLIFFE OTENYO';	$ft['E'.($rw+4)]='Date';	$ft['F'.($rw+4)]='20.03.2018';
+			foreach($ft as $kf=>$vf)
+			{
+				//echo $kf.'||';
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue($kf, $vf);
+			}//exit;
+			$spreadsheet->getActiveSheet()->mergeCells('$B'.$rw.':H$'.$rw);
+			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+1).':H$'.($rw+1));
+			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+3).':H$'.($rw+3));
+			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+2).':D$'.($rw+2));
+			$spreadsheet->getActiveSheet()->mergeCells('$F'.($rw+2).':H$'.($rw+2));
+			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+4).':D$'.($rw+4));
+			$spreadsheet->getActiveSheet()->mergeCells('$F'.($rw+4).':H$'.($rw+4));
+			//STYLE FOOTER
+			$SF1=array( 'font' => array('bold' => true,'italic' => true)
+			,'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+			$SF2=array( 'font' => array('bold' => true,'italic' => true));
+			
+			$spreadsheet->getActiveSheet()->getStyle('B'.($rw))->applyFromArray($SF1);
+			$f2=array('B'.($rw+1),'B'.($rw+3),'E'.($rw+2),'E'.($rw+4));
+			foreach($f2 as $cell) $spreadsheet->getActiveSheet()->getStyle($cell)->applyFromArray($SF2);
+			
+			//finishing SHEET
+			$spreadsheet ->getActiveSheet()->setTitle($ksb.'-'.$sub);
+			
 			$a++;	
 		}
 		$writer = new Xlsx($spreadsheet);
