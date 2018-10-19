@@ -27,10 +27,10 @@
                     btn-default']) ?>
                     <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id],
                         ['class' => 'btn btn-default']) ?>
-                    <?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id
-                    ],
-                        ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn
-                    btn-danger']) ?>
+  <!--                  <?// $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id
+//                    ],
+//                        ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn
+//                    btn-danger']) ?>-->
                 </div>
             </div>
             <!-- Default box -->

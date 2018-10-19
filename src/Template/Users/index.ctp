@@ -60,8 +60,7 @@
                                 <?= $this->Html->link('', ['action' => 'view', $user->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
                                 <?= $this->Html->link('', ['action' => 'edit', $user->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                                 <?= $this->Html->link('', ['action' => 'changeUserPassword', $user->id], ['class' => 'btn btn-xs fa fa-key', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Change password')]) ?>
-                                <?= $this->Form->postLink('', ['action' => 'delete', $user->id], ['confirm' =>
-                                    __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
+      <!--                          <?// $this->Form->postLink('', ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>-->
                             </td>
                         </tr>
                     <?php endforeach; ?>

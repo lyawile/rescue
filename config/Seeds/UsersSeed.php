@@ -25,7 +25,7 @@ class UsersSeed extends AbstractSeed
                 'other_name' => 'eServices',
                 'surname' => 'NECTA',
                 'username' => 'admin',
-                'password' => '$2y$10$W72LT5Ss5Vb91eGrCIM9OuQgb1ZXesKau.P1/ncD/9wLqKBF.rxjS',
+                'password' => '$2y$10$ZnhGAGfKtOOlAzD/4dRPC.5cjb165D0Ym00/CbFVH.eJTarFF4vta',
                 'email' => 'eservices@necta.go.tz',
                 'mobile' => '0715897436',
                 'group_id' => '1',
