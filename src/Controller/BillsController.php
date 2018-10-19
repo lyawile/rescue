@@ -48,19 +48,30 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-//         Check if all the session value keys are set and valid
-//         values from the session 
-        $payer_name = 'admin';
-        $exam_type = 2;
-        $payer_mobile = '0718440572';
-        $payer_email = 'test@eservice.com';
-        $numberOfCands = 2; // this is equal to the quantity in billing 
+
+        $payerDetails = $this->request->session()->read('candfee');
+//        var_dump($payerDetails);
+//        exit();
+        $requestId = $payerDetails['reqid'];
+        $payer_name = $payerDetails['fullname'];
+        $payer_mobile = $payerDetails['phone'];
+        $payer_email = $payerDetails['email'];
+        $exam_type = $payerDetails['examid'];
+        $numberOfCands = $payerDetails['count']; // this is equal to the quantity in billing 
+//        exit();
+//        $payer_name = 'admin';
+//        $exam_type = 2;
+//        $payer_mobile = '0718440572';
+//        $payer_email = 'test@eservice.com';
+//        $numberOfCands = 2; 
+
         $services = TableRegistry::getTableLocator()->get('collections');
         if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
             $services = $services->find('all', array('fields' => array('amount', 'name', 'id')))->where(['exam_type_id' => $exam_type, 'is_current' => 1]);
             foreach ($services as $serv) {
                 $amountForRequestedService = $serv->amount;
-                $requestedServiceName = $serv->id;
+                $requestedServiceName = $serv->name;
+                $requestedServiceId = $serv->id;
             }
         } else {
             $services = $services->find('list')->where(['exam_type_id not in' => array(1, 2, 3, 4, 5, 6, 7, 9)]);
@@ -69,15 +80,10 @@ class BillsController extends AppController {
         $bill = $this->Bills->newEntity();
         $billItem = $this->loadModel('BillItems');
         $collections = $this->loadModel('Collections');
-
-
         if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
             $switcher = 1;
 //           return $this->redirect(['action' => 'verifyBill']);
-            $this->set(compact(['payer_name', 'payer_mobile', 'payer_email', 'amount', 'numberOfCands', 'switcher', 'amountForRequestedService', 'requestedServiceName']));
-//            var_dump($this->request->session()->read());
-
-            echo $this->request->session()->read('username');
+            $this->set(compact(['payer_name', 'payer_mobile', 'payer_email', 'amount', 'numberOfCands', 'switcher', 'amountForRequestedService', 'requestedServiceName', 'requestedServiceId']));
 //            var_dump($this->request->session()->read());
         }
 

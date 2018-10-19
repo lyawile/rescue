@@ -67,7 +67,7 @@
                                 <td>
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <?php echo $this->Form->control('collection_id[]', array('disabled'=>true, 'label'=> FALSE, 'default'=> $requestedServiceName)); ?>
+                                            <?php echo $this->Form->control('', array('disabled'=>true, 'label'=> FALSE, 'default'=> $requestedServiceName)); ?>
                                         </div>
                                     </div>
                                 </td>
@@ -75,7 +75,8 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <?= $this->Form->control('quantity[]', array('disabled'=>true, 'label'=> FALSE, 'default'=> $numberOfCands));  ?>
-                                            <?php //echo $this->Form->hidden('amount', array('disabled'=>true, 'label'=> FALSE, 'default'=> $amountForRequestedService));  ?>
+                                            <?php echo $this->Form->hidden('amount', array('disabled'=>true, 'label'=> FALSE, 'default'=> $amountForRequestedService));  ?>
+                                            <?php echo $this->Form->hidden('collection_id[]', array('disabled'=>true, 'label'=> FALSE, 'default'=> $requestedServiceId));  ?>
                                         </div>
                                     </div>
                                 </td>
