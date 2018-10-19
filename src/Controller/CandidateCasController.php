@@ -943,7 +943,8 @@ class CandidateCasController extends AppController
 						$rw++;
 					}
 				}
-				
+			
+			//SHEET WIDTH
 			$spreadsheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(14);
 			//
 			/*error_reporting(0);
@@ -952,6 +953,7 @@ class CandidateCasController extends AppController
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
 			*/
+			
 			//SHEET PROTECTION
 			$spreadsheet->getActiveSheet()->getProtection()->setPassword('BARAZA');
 			$spreadsheet->getActiveSheet()->getProtection()->setSheet(true);
@@ -978,6 +980,8 @@ class CandidateCasController extends AppController
 			$validation->setPrompt('Only numbers between 0 and 100 are allowed.');
 			$validation->setFormula1(0.00);
 			$validation->setFormula2(100.00);
+			//
+			$spreadsheet->getActiveSheet()->getCell('B8')->setDataValidation(clone $validation);
 
 			//STYLE HEAD 1
 			$h1=array( 'font' => array('bold' => true,'size' => 16)

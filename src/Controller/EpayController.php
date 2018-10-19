@@ -73,6 +73,7 @@ class EpayController extends AppController
 				$sendpay['fullname']=$candidate->first_name.' '.$candidate->other_name.' '.$candidate->surname;
 				$sendpay['phone']=$candidate->mobile;
 				$sendpay['email']=$candidate->email;
+				$sendpay['examid']=$candidate->exam_type_id;
 				$sendpay['count']=1;
 				
 				/*
@@ -87,9 +88,11 @@ class EpayController extends AppController
 			{
 				//BULK CANDIDADOS
 				$msg= 'Many<br>';
+				$candidate = $this->Candidates->get($getcand[0]);
 				$sendpay['fullname']=$this->Auth->user('first_name').' '.$this->Auth->user('other_name').' '.$this->Auth->user('surname');
 				$sendpay['phone']=$this->Auth->user('mobile');
 				$sendpay['email']=$this->Auth->user('email');
+				$sendpay['examid']=$candidate->exam_type_id;
 				$sendpay['count']=sizeof($getcand);
 			}
 			
