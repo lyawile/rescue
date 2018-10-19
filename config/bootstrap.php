@@ -204,8 +204,8 @@ Plugin::load('Acl', ['bootstrap' => true]);
 Configure::write('Theme', [
     'title' => 'NECTA eServices',
     'logo' => [
-        'mini' => '<b>A</b>LT',
-        'large' => '<b>Admin</b>LTE'
+        'mini' => '<b>N</b><span style="color: yellow">eS</span>',
+        'large' => '<b>NECTA</b> <span style="color: yellow">e<b>Services</b></span>'
     ],
     'login' => [
         'show_remember' => false,

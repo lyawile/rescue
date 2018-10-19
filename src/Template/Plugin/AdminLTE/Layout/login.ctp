@@ -28,7 +28,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?php echo $this->Url->build(array('controller' => 'pages', 'action' => 'display', 'home')); ?>"><?php echo Configure::read('Theme.logo.large'); ?></a>
+    <?php echo Configure::read('Theme.logo.large'); ?>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
