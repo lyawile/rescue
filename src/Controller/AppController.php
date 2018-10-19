@@ -82,6 +82,9 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+        $this->loadModel('Regions');
+        $regions = $this->Regions->find('list');
+        $this->set(compact('regions'));
     }
 
     public function beforeRender(Event $event)
