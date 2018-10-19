@@ -20,20 +20,16 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><?= __('Edit User') ?></h3>
+                <h3 class="box-title"><?= __('Change password') ?></h3>
             </div>
             <div class="box-body">
                 <?= $this->Form->create($user) ?>
                 <div class="col-sm-8">
                     <fieldset>
                         <?php
-                        echo $this->Form->control('username');
-                        echo $this->Form->control('group_id', ['options' => $groups]);
-                        echo $this->Form->control('surname');
-                        echo $this->Form->control('first_name');
-                        echo $this->Form->control('other_name');
-                        echo $this->Form->control('email');
-                        echo $this->Form->control('mobile');
+                        echo $this->Form->control('old_password', ['value' => '', 'label' => 'Current pasword', 'type' => 'password']);
+                        echo $this->Form->control('password1', ['value' => '', 'label' => 'New password', 'type' => 'password']);
+                        echo $this->Form->control('password2', ['value' => '', 'label' => 'Confirm new password', 'type' => 'password']);
                         ?>
                     </fieldset>
                 </div>

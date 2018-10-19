@@ -1,13 +1,8 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\User $user
- */
-?>
+
 <div class="users index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
-            <?= __('Users') ?>
+            <?= __('Permissions') ?>
             <small>short description</small>
         </h1>
         <ol class="breadcrumb">
@@ -20,20 +15,14 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><?= __('Edit User') ?></h3>
+                <h3 class="box-title"><?= __('Group permission') ?></h3>
             </div>
             <div class="box-body">
-                <?= $this->Form->create($user) ?>
+                <form>
                 <div class="col-sm-8">
                     <fieldset>
                         <?php
-                        echo $this->Form->control('username');
                         echo $this->Form->control('group_id', ['options' => $groups]);
-                        echo $this->Form->control('surname');
-                        echo $this->Form->control('first_name');
-                        echo $this->Form->control('other_name');
-                        echo $this->Form->control('email');
-                        echo $this->Form->control('mobile');
                         ?>
                     </fieldset>
                 </div>

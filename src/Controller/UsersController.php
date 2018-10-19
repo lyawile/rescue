@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -104,18 +105,18 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
-        } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
+//    public function delete($id = null)
+//    {
+//        $this->request->allowMethod(['post', 'delete']);
+//        $user = $this->Users->get($id);
+//        if ($this->Users->delete($user)) {
+//            $this->Flash->success(__('The user has been deleted.'));
+//        } else {
+//            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+//        }
+//
+//        return $this->redirect(['action' => 'index']);
+//    }
 
     public function login()
     {
@@ -136,5 +137,46 @@ class UsersController extends AppController
     {
         $this->Flash->success(__('Logged out successfully'));
         return $this->redirect($this->Auth->logout());
+    }
+
+    public function changeUserPassword($id = null)
+    {
+        $user = $this->Users->get($id);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $user = $this->Users->patchEntity($user, $this->request->getData(), ['fieldList' => 'password']);
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('Password has been changed'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Password could not be changed. Please, try again.'));
+        }
+
+        $this->set(compact('user'));
+    }
+
+    public function changePassword($id = null){
+
+        $user = $this->Users->get($id);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, [
+                'old_password' => $this->request->getData('old_password'),
+                'password' => $this->request->getData('password1'),
+                'password1' => $this->request->getData('password1'),
+                'password2' => $this->request->getData('password2')
+            ],
+                ['validate' => 'password']
+            );
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('Password has been changed'));
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+
+            $this->Flash->error(__('Password could not be changed. Please, try again.'));
+        }
+        $this->set(compact('user'));
     }
 }

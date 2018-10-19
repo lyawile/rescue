@@ -19,15 +19,15 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'registration']); ?>"><i
+                <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'registration']); ?>"><i
                             class="fa fa-circle-o"></i><?= __('Registration') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'finance']); ?>"><i
+                <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'finance']); ?>"><i
                             class="fa fa-circle-o"></i><?= __('Finance') ?></a></li>
             </ul>
         </li>
         <li class="treeview">
             <a href="#">
-                <i class="fa fa-graduation-cap"></i> <span><?= __('Users') ?></span>
+                <i class="fa fa-users"></i> <span><?= __('Users') ?></span>
                 <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>

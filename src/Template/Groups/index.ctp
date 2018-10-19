@@ -30,23 +30,20 @@
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
                     <tr>
-                                                    <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                                                <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+                        <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($groups as $group): ?>
-                    <tr>
-                                                                                                                                                                                                                <td><?= $this->Number->format($group->id) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($group->name) ?></td>
-                                                                                                                                    <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $group->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $group->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
-                            <?= $this->Form->postLink('', ['action' => 'delete', $group->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $group->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><?= h($group->name) ?></td>
+                            <td class="actions pull-right">
+                                <?= $this->Html->link('', ['action' => 'edit', $group->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                                <?= $this->Form->postLink('', ['action' => 'delete', $group->id], ['confirm' =>
+                                    __('Are you sure you want to delete # {0}?', $group->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -59,7 +56,8 @@
                     <?= $this->Paginator->next(__('next') . ' >') ?>
                     <?= $this->Paginator->last(__('last') . ' >>') ?>
                 </ul>
-                <p class="pull-right" style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}},
+                <p class="pull-right"
+                   style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}},
                     showing {{current}} record(s) out of {{count}} total')]) ?></p>
             </div>
             <!-- /.box-footer-->
