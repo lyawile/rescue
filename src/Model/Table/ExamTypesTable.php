@@ -9,6 +9,12 @@ use Cake\Validation\Validator;
 /**
  * ExamTypes Model
  *
+ * @property \App\Model\Table\CandidatesTable|\Cake\ORM\Association\HasMany $Candidates
+ * @property \App\Model\Table\CentreExamTypesTable|\Cake\ORM\Association\HasMany $CentreExamTypes
+ * @property \App\Model\Table\CollectionsTable|\Cake\ORM\Association\HasMany $Collections
+ * @property \App\Model\Table\DisqualifiedCandidatesTable|\Cake\ORM\Association\HasMany $DisqualifiedCandidates
+ * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\HasMany $Subjects
+ *
  * @method \App\Model\Entity\ExamType get($primaryKey, $options = [])
  * @method \App\Model\Entity\ExamType newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\ExamType[] newEntities(array $data, array $options = [])
@@ -34,6 +40,22 @@ class ExamTypesTable extends Table
         $this->setTable('exam_types');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Candidates', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('CentreExamTypes', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('Collections', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('DisqualifiedCandidates', [
+            'foreignKey' => 'exam_type_id'
+        ]);
+        $this->hasMany('Subjects', [
+            'foreignKey' => 'exam_type_id'
+        ]);
     }
 
     /**
@@ -51,7 +73,8 @@ class ExamTypesTable extends Table
         $validator
             ->integer('code')
             ->requirePresence('code', 'create')
-            ->notEmpty('code');
+            ->notEmpty('code')
+            ->add('code', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
             ->scalar('name')
@@ -65,6 +88,24 @@ class ExamTypesTable extends Table
             ->requirePresence('short_name', 'create')
             ->notEmpty('short_name');
 
+        $validator
+            ->requirePresence('has_ca', 'create')
+            ->notEmpty('has_ca');
+
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['code']));
+
+        return $rules;
     }
 }

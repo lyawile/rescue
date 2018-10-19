@@ -10,6 +10,9 @@ use Cake\ORM\Entity;
  * @property int $number
  * @property string $name
  * @property string $detail
+ *
+ * @property \App\Model\Entity\District[] $districts
+ * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
  */
 class Region extends Entity
 {
@@ -26,6 +29,8 @@ class Region extends Entity
     protected $_accessible = [
         'number' => true,
         'name' => true,
-        'detail' => true
+        'detail' => true,
+        'districts' => true,
+        'group_district_region_school_users' => true
     ];
 }

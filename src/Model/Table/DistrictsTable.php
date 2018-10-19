@@ -10,6 +10,8 @@ use Cake\Validation\Validator;
  * Districts Model
  *
  * @property \App\Model\Table\RegionsTable|\Cake\ORM\Association\BelongsTo $Regions
+ * @property \App\Model\Table\CentresTable|\Cake\ORM\Association\HasMany $Centres
+ * @property \App\Model\Table\GroupDistrictRegionSchoolUsersTable|\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
  *
  * @method \App\Model\Entity\District get($primaryKey, $options = [])
  * @method \App\Model\Entity\District newEntity($data = null, array $options = [])
@@ -40,6 +42,12 @@ class DistrictsTable extends Table
         $this->belongsTo('Regions', [
             'foreignKey' => 'region_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Centres', [
+            'foreignKey' => 'district_id'
+        ]);
+        $this->hasMany('GroupDistrictRegionSchoolUsers', [
+            'foreignKey' => 'district_id'
         ]);
     }
 

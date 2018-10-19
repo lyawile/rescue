@@ -9,7 +9,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $name
  *
- * @property \Acl\Model\Entity\Aro[] $aro
+ * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
+ * @property \App\Model\Entity\User[] $users
  */
 class Group extends Entity
 {
@@ -25,11 +26,7 @@ class Group extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'aro' => true
+        'group_district_region_school_users' => true,
+        'users' => true
     ];
-
-    public function parentNode()
-    {
-        return null;
-    }
 }

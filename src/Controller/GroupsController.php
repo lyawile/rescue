@@ -13,13 +13,6 @@ use App\Controller\AppController;
 class GroupsController extends AppController
 {
 
-    public function initialize()
-    {
-        parent::initialize();
-
-//        $this->Auth->allow();
-    }
-
     /**
      * Index method
      *
@@ -42,7 +35,7 @@ class GroupsController extends AppController
     public function view($id = null)
     {
         $group = $this->Groups->get($id, [
-            'contain' => ['Aros']
+            'contain' => ['GroupDistrictRegionSchoolUsers', 'Users']
         ]);
 
         $this->set('group', $group);

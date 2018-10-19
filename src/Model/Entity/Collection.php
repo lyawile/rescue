@@ -39,6 +39,7 @@ class Collection extends Entity
         'exam_type_id' => true,
         'collection_categorie_id' => true,
         'exam_type' => true,
-        'collection_category' => true
+        'collection_category' => true,
+        'is_current' => true
     ];
 }

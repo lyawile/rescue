@@ -35,7 +35,7 @@ class ExamTypesController extends AppController
     public function view($id = null)
     {
         $examType = $this->ExamTypes->get($id, [
-            'contain' => []
+            'contain' => ['Candidates', 'CentreExamTypes', 'Collections', 'DisqualifiedCandidates', 'Subjects']
         ]);
 
         $this->set('examType', $examType);

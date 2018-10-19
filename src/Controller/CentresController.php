@@ -38,7 +38,7 @@ class CentresController extends AppController
     public function view($id = null)
     {
         $centre = $this->Centres->get($id, [
-            'contain' => ['Districts']
+            'contain' => ['Districts', 'Candidates', 'DisqualifiedCandidates', 'GroupDistrictRegionSchoolUsers', 'Practicals']
         ]);
 
         $this->set('centre', $centre);

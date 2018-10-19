@@ -35,7 +35,7 @@ class RegionsController extends AppController
     public function view($id = null)
     {
         $region = $this->Regions->get($id, [
-            'contain' => []
+            'contain' => ['Districts', 'GroupDistrictRegionSchoolUsers']
         ]);
 
         $this->set('region', $region);

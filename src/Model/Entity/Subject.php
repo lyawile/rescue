@@ -13,6 +13,9 @@ use Cake\ORM\Entity;
  * @property int $exam_type_id
  *
  * @property \App\Model\Entity\ExamType $exam_type
+ * @property \App\Model\Entity\CandidateSubject[] $candidate_subjects
+ * @property \App\Model\Entity\DisqualifiedCandidateSubject[] $disqualified_candidate_subjects
+ * @property \App\Model\Entity\Practical[] $practicals
  */
 class Subject extends Entity
 {
@@ -31,6 +34,9 @@ class Subject extends Entity
         'name' => true,
         'short_name' => true,
         'exam_type_id' => true,
-        'exam_type' => true
+        'exam_type' => true,
+        'candidate_subjects' => true,
+        'disqualified_candidate_subjects' => true,
+        'practicals' => true
     ];
 }

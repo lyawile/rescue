@@ -20,6 +20,10 @@ use Cake\ORM\Entity;
  * @property int $district_id
  *
  * @property \App\Model\Entity\District $district
+ * @property \App\Model\Entity\Candidate[] $candidates
+ * @property \App\Model\Entity\DisqualifiedCandidate[] $disqualified_candidates
+ * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
+ * @property \App\Model\Entity\Practical[] $practicals
  */
 class Centre extends Entity
 {
@@ -45,6 +49,10 @@ class Centre extends Entity
         'district_distance' => true,
         'centre_type' => true,
         'district_id' => true,
-        'district' => true
+        'district' => true,
+        'candidates' => true,
+        'disqualified_candidates' => true,
+        'group_district_region_school_users' => true,
+        'practicals' => true
     ];
 }

@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property int $region_id
  *
  * @property \App\Model\Entity\Region $region
+ * @property \App\Model\Entity\Centre[] $centres
+ * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
  */
 class District extends Entity
 {
@@ -31,6 +33,8 @@ class District extends Entity
         'name' => true,
         'detail' => true,
         'region_id' => true,
-        'region' => true
+        'region' => true,
+        'centres' => true,
+        'group_district_region_school_users' => true
     ];
 }

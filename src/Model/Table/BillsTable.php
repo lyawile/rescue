@@ -9,6 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Bills Model
  *
+ * @property \App\Model\Table\BillItemsTable|\Cake\ORM\Association\HasMany $BillItems
+ * @property \App\Model\Table\PaymentsTable|\Cake\ORM\Association\HasMany $Payments
+ *
  * @method \App\Model\Entity\Bill get($primaryKey, $options = [])
  * @method \App\Model\Entity\Bill newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Bill[] newEntities(array $data, array $options = [])
@@ -34,6 +37,13 @@ class BillsTable extends Table
         $this->setTable('bills');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('BillItems', [
+            'foreignKey' => 'bill_id'
+        ]);
+        $this->hasMany('Payments', [
+            'foreignKey' => 'bill_id'
+        ]);
     }
 
     /**
@@ -56,27 +66,27 @@ class BillsTable extends Table
         $validator
             ->decimal('amount')
             ->requirePresence('amount', 'create')
-            ->allowEmpty('amount');
+            ->notEmpty('amount');
 
         $validator
             ->decimal('equivalent_amount')
             ->requirePresence('equivalent_amount', 'create')
-            ->allowEmpty('equivalent_amount');
+            ->notEmpty('equivalent_amount');
 
         $validator
             ->decimal('misc_amount')
             ->requirePresence('misc_amount', 'create')
-            ->allowEmpty('misc_amount');
+            ->notEmpty('misc_amount');
 
         $validator
             ->dateTime('expire_date')
             ->requirePresence('expire_date', 'create')
-            ->allowEmpty('expire_date');
+            ->notEmpty('expire_date');
 
         $validator
             ->dateTime('generated_date')
             ->requirePresence('generated_date', 'create')
-            ->allowEmpty('generated_date');
+            ->notEmpty('generated_date');
 
         $validator
             ->integer('payer_idx')
@@ -85,7 +95,7 @@ class BillsTable extends Table
         $validator
             ->scalar('payer_name')
             ->maxLength('payer_name', 256)
-            ->notEmpty('payer_name');
+            ->allowEmpty('payer_name');
 
         $validator
             ->scalar('payer_mobile')
@@ -93,14 +103,15 @@ class BillsTable extends Table
             ->requirePresence('payer_mobile', 'create')
             ->notEmpty('payer_mobile');
 
-//        $validator
-//            ->scalar('payer_email')
-//            ->maxLength('payer_email', 128)
-//            ->allowEmpty('payer_email');
+        $validator
+            ->scalar('payer_email')
+            ->maxLength('payer_email', 128)
+            ->allowEmpty('payer_email');
 
-//        $validator
-//            ->requirePresence('has_reminder', 'create')
-//            ->notEmpty('has_reminder');
+        $validator
+            ->integer('has_reminder')
+            ->requirePresence('has_reminder', 'create')
+            ->notEmpty('has_reminder');
 
         $validator
             ->scalar('control_number')

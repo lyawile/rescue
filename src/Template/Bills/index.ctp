@@ -20,51 +20,51 @@
     <section class="content">
 
         <!-- Default box -->
-        <div class="box with-border">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="btn-group pull-right">
+                    <?= $this->Html->link(__('New Bill'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                </div>
+            </div>
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
-                    <tr>
-                                                    <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('reference') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('amount') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('equivalent_amount') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('misc_amount') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('expire_date') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('generated_date') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('payer_idx') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('payer_name') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('payer_mobile') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('payer_email') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('has_reminder') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('control_number') ?></th>
-                                                <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
-                    </tr>
+                        <tr>
+                            <th scope="col"><?= $this->Paginator->sort('reference') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('amount') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('equivalent_amount') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('expire_date') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('generated_date') ?></th>
+                            <!--<th scope="col"><?= $this->Paginator->sort('payer_idx') ?></th>-->
+                            <th scope="col"><?= $this->Paginator->sort('payer_name') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('payer_mobile') ?></th>
+                            <th scope="col"><?= $this->Paginator->sort('payer_email') ?></th>
+                            <!--<th scope="col"><?= $this->Paginator->sort('has_reminder') ?></th>-->
+                            <th scope="col"><?= $this->Paginator->sort('control_number') ?></th>
+                            <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($bills as $bill): ?>
-                    <tr>
-                                                                                                                                                                                                                <td><?= $this->Number->format($bill->id) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->reference) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($bill->amount) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($bill->equivalent_amount) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($bill->misc_amount) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->expire_date) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->generated_date) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($bill->payer_idx) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->payer_name) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->payer_mobile) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->payer_email) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($bill->has_reminder) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($bill->control_number) ?></td>
-                                                                                                                                    <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $bill->id], ['class' => 'btn btn-xs fa fa-eye']) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $bill->id], ['class' => 'btn btn-xs fa fa-pencil-square-o']) ?>
-                            <?= $this->Form->postLink('', ['action' => 'delete', $bill->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $bill->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red']) ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
+                        <?php foreach ($bills as $bill): ?>
+                            <tr>
+                                <td><?= h($bill->reference) ?></td>
+                                <td><?= $this->Number->format($bill->amount) ?></td>
+                                <td><?= $this->Number->format($bill->equivalent_amount) ?></td>
+                                <td><?= h($bill->expire_date) ?></td>
+                                <td><?= h($bill->generated_date) ?></td>
+                                <td><?= h($bill->payer_name) ?></td>
+                                <td><?= h($bill->payer_mobile) ?></td>
+                                <td><?= h($bill->payer_email) ?></td>
+                                <td><?= h($bill->control_number) ?></td>
+                                <td class="actions pull-right">
+                                    <?= $this->Html->link('', ['action' => 'view', $bill->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                                    <?= $this->Html->link('', ['action' => 'edit', $bill->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                                    <?= $this->Form->postLink('', ['action' => 'delete', $bill->id], ['confirm' =>
+                                        __('Are you sure you want to delete # {0}?', $bill->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')])
+                                    ?>
+                                </td>
+                            </tr>
+<?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -74,7 +74,7 @@
                     <?= $this->Paginator->prev('< ' . __('previous')) ?>
                     <?= $this->Paginator->numbers() ?>
                     <?= $this->Paginator->next(__('next') . ' >') ?>
-                    <?= $this->Paginator->last(__('last') . ' >>') ?>
+<?= $this->Paginator->last(__('last') . ' >>') ?>
                 </ul>
                 <p class="pull-right" style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}},
                     showing {{current}} record(s) out of {{count}} total')]) ?></p>

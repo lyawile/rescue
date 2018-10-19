@@ -19,6 +19,9 @@ use Cake\ORM\Entity;
  * @property string $payer_email
  * @property int $has_reminder
  * @property string $control_number
+ *
+ * @property \App\Model\Entity\BillItem[] $bill_items
+ * @property \App\Model\Entity\Payment[] $payments
  */
 class Bill extends Entity
 {
@@ -44,6 +47,8 @@ class Bill extends Entity
         'payer_mobile' => true,
         'payer_email' => true,
         'has_reminder' => true,
-        'control_number' => true
+        'control_number' => true,
+        'bill_items' => true,
+        'payments' => true
     ];
 }

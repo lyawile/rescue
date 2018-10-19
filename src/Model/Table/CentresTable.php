@@ -10,6 +10,10 @@ use Cake\Validation\Validator;
  * Centres Model
  *
  * @property \App\Model\Table\DistrictsTable|\Cake\ORM\Association\BelongsTo $Districts
+ * @property \App\Model\Table\CandidatesTable|\Cake\ORM\Association\HasMany $Candidates
+ * @property \App\Model\Table\DisqualifiedCandidatesTable|\Cake\ORM\Association\HasMany $DisqualifiedCandidates
+ * @property \App\Model\Table\GroupDistrictRegionSchoolUsersTable|\Cake\ORM\Association\HasMany $GroupDistrictRegionSchoolUsers
+ * @property \App\Model\Table\PracticalsTable|\Cake\ORM\Association\HasMany $Practicals
  *
  * @method \App\Model\Entity\Centre get($primaryKey, $options = [])
  * @method \App\Model\Entity\Centre newEntity($data = null, array $options = [])
@@ -40,6 +44,18 @@ class CentresTable extends Table
         $this->belongsTo('Districts', [
             'foreignKey' => 'district_id',
             'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Candidates', [
+            'foreignKey' => 'centre_id'
+        ]);
+        $this->hasMany('DisqualifiedCandidates', [
+            'foreignKey' => 'centre_id'
+        ]);
+        $this->hasMany('GroupDistrictRegionSchoolUsers', [
+            'foreignKey' => 'centre_id'
+        ]);
+        $this->hasMany('Practicals', [
+            'foreignKey' => 'centre_id'
         ]);
     }
 
