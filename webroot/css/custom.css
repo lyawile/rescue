@@ -10,15 +10,17 @@
 }
 
 .user-level {
-    padding-top: 8px;
+    padding-top: 9px;
     margin-left: 50px;
-    position: absolute;
-    width: 300px;
+    position: relative;
     height: 50px;
 }
 
 .chosen-container-single .chosen-single {
     border: none !important;
-    border-radius: 2px;
-    background: #FFFFFF;
+    border-radius: 4px;
+    background: #008046;
+    /*min-width: 400px;*/
+    /*color: #00e67e;*/
+    color: #00ff8c;
 }

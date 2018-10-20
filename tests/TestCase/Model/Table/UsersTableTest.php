@@ -25,8 +25,8 @@ class UsersTableTest extends TestCase
      */
     public $fixtures = [
         'app.users',
-        'app.aros',
-        'app.groups'
+        'app.groups',
+        'app.group_district_region_school_users'
     ];
 
     /**
@@ -69,6 +69,16 @@ class UsersTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test validationPassword method
+     *
+     * @return void
+     */
+    public function testValidationPassword()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

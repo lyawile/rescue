@@ -47,6 +47,12 @@ class UsersTable extends Table
         $this->hasMany('GroupDistrictRegionSchoolUsers', [
             'foreignKey' => 'user_id'
         ]);
+
+        $this->belongsToMany('Notifications', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'notification_id',
+            'joinTable' => 'notifications_users'
+        ]);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Entity;
 
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -16,8 +17,8 @@ use Cake\ORM\Entity;
  * @property string $mobile
  * @property int $group_id
  *
+ * @property \Acl\Model\Entity\Aro[] $aro
  * @property \App\Model\Entity\Group $group
- * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
  */
 class User extends Entity
 {
@@ -40,8 +41,8 @@ class User extends Entity
         'email' => true,
         'mobile' => true,
         'group_id' => true,
-        'group' => true,
-        'group_district_region_school_users' => true
+        'aro' => true,
+        'group' => true
     ];
 
     /**
@@ -52,4 +53,30 @@ class User extends Entity
     protected $_hidden = [
         'password'
     ];
+
+    protected function _setPassword($value)
+    {
+        if (strlen($value)) {
+            $hasher = new DefaultPasswordHasher();
+            return $hasher->hash($value);
+        }
+    }
+
+    public function parentNode()
+    {
+        if (!$this->id) {
+            return null;
+        }
+        if (isset($this->group_id)) {
+            $groupId = $this->group_id;
+        } else {
+            $Users = TableRegistry::get('Users');
+            $user = $Users->find('all', ['fields' => ['group_id']])->where(['id' => $this->id])->first();
+            $groupId = $user->group_id;
+        }
+        if (!$groupId) {
+            return null;
+        }
+        return ['Groups' => ['id' => $groupId]];
+    }
 }
