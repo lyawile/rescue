@@ -35,9 +35,9 @@ if (file_exists($file)) {
             <ul class="treeview-menu">
                 <li><a href="<?php echo $this->Url->build(['controller' => 'users']); ?>"><i
                             class="fa"></i><?= __('Users') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Groups']); ?>"><i
+                <li><a href="<?php echo $this->Url->build(['controller' => 'groups']); ?>"><i
                             class="fa"></i><?= __('Groups') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Permissions']); ?>"><i
+                <li><a href="<?php echo $this->Url->build(['controller' => 'permissions']); ?>"><i
                             class="fa"></i><?= __('Permissions') ?></a></li>
             </ul>
         </li>
