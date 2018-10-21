@@ -86,6 +86,7 @@
 <!-- AdminLTE for demo purposes -->
 <?php echo $this->fetch('script'); ?>
 <?php echo $this->fetch('scriptBottom'); ?>
+<?php echo $this->Html->script('bills'); ?>
 <?php echo $this->Html->script('eservices');?>
 </body>
 </html>

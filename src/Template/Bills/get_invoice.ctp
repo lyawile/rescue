@@ -1,14 +1,6 @@
 <?php
 
 foreach ($queryDetails as $customerDetails) {
-
-//    echo $payer_name = $customerDetails['payer_name'] . "<br/>";
-//    echo $payerReference = $customerDetails['reference'] . "<br/>";
-//    echo $totalAmount = $customerDetails['amount'] . "<br/>";
-//    echo $generatedDate = $customerDetails['generated_date'] . "<br/>";
-//    echo $expireDate = $customerDetails['expire_date'] . "<br/>";
-//    echo $mobile = $customerDetails['payer_mobile'] . "<br/>";
-//    echo $controlNumber = $customerDetails['control_number'] . "<br/>";
 }
 ?>
 
