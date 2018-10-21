@@ -19,6 +19,8 @@ use Cake\ORM\Entity;
  *
  * @property \Acl\Model\Entity\Aro[] $aro
  * @property \App\Model\Entity\Group $group
+ * @property \App\Model\Entity\GroupDistrictRegionSchoolUser[] $group_district_region_school_users
+ * @property \App\Model\Entity\Notification[] $notifications
  */
 class User extends Entity
 {
@@ -41,6 +43,9 @@ class User extends Entity
         'email' => true,
         'mobile' => true,
         'group_id' => true,
+        'group' => true,
+        'group_district_region_school_users' => true,
+        'notifications' => true,
         'aro' => true,
         'group' => true
     ];

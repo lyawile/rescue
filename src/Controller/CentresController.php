@@ -109,4 +109,13 @@ class CentresController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function listCentres($id = null)
+    {
+        $districtCentres = $this->Centres->find('list', [
+            'conditions' => ['Centres.district_id' => $id]
+        ]);
+
+        return $this->response->withType("application/json")->withStringBody(json_encode($districtCentres));
+    }
 }

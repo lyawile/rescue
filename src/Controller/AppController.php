@@ -15,6 +15,7 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\User;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -83,8 +84,16 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
         $this->loadModel('Regions');
+        $this->loadModel('Users');
+        $this->loadModel('Notifications');
+        $userId =  $this->request->getSession()->read('Auth.User.id');
+        if(isset($userId)){
+            $user = $this->Users->get($userId, ['contain' => ['Notifications']]);
+            $userNotifications = $user->notifications;
+        }
+
         $regions = $this->Regions->find('list');
-        $this->set(compact('regions'));
+        $this->set(compact('regions', 'userNotifications'));
     }
 
     public function beforeRender(Event $event)

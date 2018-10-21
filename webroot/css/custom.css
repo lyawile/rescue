@@ -11,7 +11,8 @@
 
 .user-level {
     padding-top: 9px;
-    margin-left: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
     position: relative;
     height: 50px;
 }

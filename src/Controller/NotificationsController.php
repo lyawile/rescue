@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -48,9 +49,24 @@ class NotificationsController extends AppController
      */
     public function add()
     {
+        $this->loadModel('Groups');
         $notification = $this->Notifications->newEntity();
+
         if ($this->request->is('post')) {
-            $notification = $this->Notifications->patchEntity($notification, $this->request->getData());
+            $this->loadModel('Users');
+
+            $groupUsers = $this->Users->find('all', [
+                'fields' => ['id'],
+                'conditions' => ['Users.group_id IN' => $this->request->getData('groups')]
+                ]
+            );
+
+            $data = $this->request->getData();
+            $groupUsers = $groupUsers->extract('id')->toArray();
+
+            $data['users'] = ['_ids' => $groupUsers];
+            $notification = $this->Notifications->patchEntity($notification, $data);
+
             if ($this->Notifications->save($notification)) {
                 $this->Flash->success(__('The notification has been saved.'));
 
@@ -58,8 +74,9 @@ class NotificationsController extends AppController
             }
             $this->Flash->error(__('The notification could not be saved. Please, try again.'));
         }
-        $users = $this->Notifications->Users->find('list', ['limit' => 200]);
-        $this->set(compact('notification', 'users'));
+//        $users = $this->Notifications->Users->find('list', ['limit' => 200]);
+        $groups = $this->Groups->find('list');
+        $this->set(compact('notification','groups'));
     }
 
     /**

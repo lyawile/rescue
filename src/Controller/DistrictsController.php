@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -108,5 +109,14 @@ class DistrictsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function listDistricts($id = null)
+    {
+        $regionDistricts = $this->Districts->find('list', [
+            'conditions' => ['Districts.region_id' => $id]
+            ]);
+
+        return $this->response->withType("application/json")->withStringBody(json_encode($regionDistricts));
     }
 }
