@@ -46,6 +46,10 @@ class NotificationsTable extends Table
             'targetForeignKey' => 'user_id',
             'joinTable' => 'notifications_users'
         ]);
+
+        $this->hasMany('NotificationsUsers', [
+           'foreignKey' => 'notification_id'
+        ]);
     }
 
     /**

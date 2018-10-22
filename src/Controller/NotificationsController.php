@@ -26,6 +26,16 @@ class NotificationsController extends AppController
         $this->set(compact('notifications'));
     }
 
+    public function inbox(){
+        $userId =  $this->request->getSession()->read('Auth.User.id');
+        if(isset($userId)){
+            $user = $this->Users->get($userId, ['contain' => ['Notifications']]);
+            $inboxNotifications = $user->notifications;
+        }
+
+        $this->set(compact('inboxNotifications'));
+    }
+
     /**
      * View method
      *

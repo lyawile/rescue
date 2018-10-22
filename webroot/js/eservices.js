@@ -5,17 +5,35 @@ $(document).ready(function () {
         size: "3px"
     }).css("width", "100%");
 
-    $(".region, .district, .centre").chosen({
-        max_selected_options: 1,
-        width: "200"
-    });
+    // $(".region, .district, .centre").chosen({
+    //     width: "200"
+    // });
 
-    $(".region").on('change', function () {
+    $('.region').chosen({
+        width: '150'
+    }).change(function () {
+        $('.centre').find('option').not(':first').remove();
+        $('.centre').trigger("chosen:updated");
         loadDistricts($(this).val());
     });
 
-    $(".district").on('change', function () {
+    $('.district').chosen({
+        width: '200',
+        allow_single_deselect: true
+    }).change(function () {
         loadCentres($(this).val());
+    });
+
+    $('.centre').chosen({
+        width: '250',
+        allow_single_deselect: true
+    }).change(function () {
+        // reloadPage();
+    });
+
+
+    $('.reload').on('click', function () {
+        reloadPage();
     });
 
     $('.multi').chosen({
@@ -34,7 +52,8 @@ function loadDistricts(regionId) {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            const district = $('.district').empty(); //Clear select options
+            const district = $('.district'); //Clear select options
+            district.find('option').not(':first').remove();
             $.each(data, function (key, value) {
                 district.append($('<option>').attr('value', key).text(value));
             });
@@ -50,12 +69,31 @@ function loadCentres(districtId) {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            const centre = $('.centre').empty(); //Clear select options
+            const centre = $('.centre'); //Clear select options
+            centre.find('option').not(':first').remove();
             $.each(data, function (key, value) {
-               centre.append($('<option>').attr('value', key).text(value));
+                centre.append($('<option>').attr('value', key).text(value));
             });
 
             centre.trigger("chosen:updated");
+        }
+    });
+}
+
+function reloadPage() {
+    $.ajax({
+        url: 'users/reload/?regionId=' + $('.region').val() + '&districtId=' + $('.district').val() + '&centreId=' + $('.centre').val(),
+        // data: {
+        //     regionId: $('.region').val(),
+        //     districtId: $('.district').val(),
+        //     centreId: $('.centre').val()
+        // },
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (data.response) {
+                location.reload(true);
+            }
         }
     });
 }

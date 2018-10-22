@@ -136,6 +136,10 @@ class UsersController extends AppController
     public function logout()
     {
         $this->Flash->success(__('Logged out successfully'));
+        $session = $this->getRequest()->getSession();
+        $session->delete('regionId');
+        $session->delete('districtId');
+        $session->delete('centreId');
         return $this->redirect($this->Auth->logout());
     }
 
@@ -156,7 +160,8 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-    public function changePassword($id = null){
+    public function changePassword($id = null)
+    {
 
         $user = $this->Users->get($id);
 
@@ -178,5 +183,13 @@ class UsersController extends AppController
             $this->Flash->error(__('Password could not be changed. Please, try again.'));
         }
         $this->set(compact('user'));
+    }
+
+    public function reload()
+    {
+        $this->getRequest()->getSession()->write('regionId', $this->request->getQuery('regionId'));
+        $this->getRequest()->getSession()->write('districtId', $this->request->getQuery('districtId'));
+        $this->getRequest()->getSession()->write('centreId', $this->request->getQuery('centreId'));
+        return $this->response->withType("application/json")->withStringBody(json_encode(['response' => true]));
     }
 }
