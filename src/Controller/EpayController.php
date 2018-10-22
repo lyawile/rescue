@@ -151,10 +151,10 @@ class EpayController extends AppController
 		}else echo '<h1>No Data Men</h1>';
 		exit;
 	}
-	public function paidcands()
-	{
-		$this->chapa($this->request->session()->read('candfee'));
-		exit;
+	
+	public function paidcands($reqid, $payid)
+	{ 
+		return true;
 	}
 	
 	private function chapa($dt)
