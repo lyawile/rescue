@@ -51,11 +51,11 @@ class BillsController extends AppController {
 
         $payerDetails = $this->request->session()->read('candfee');
         // grab the session values for the payer
-        $requestId = $payerDetails['reqid'];
-        $payer_name = $payerDetails['fullname'];
-        $payer_mobile = $payerDetails['phone'];
-        $payer_email = $payerDetails['email'];
-        $exam_type = $payerDetails['examid'];
+        $requestId = @$payerDetails['reqid'];
+        $payer_name = @$payerDetails['fullname'];
+        $payer_mobile = @$payerDetails['phone'];
+        $payer_email = @$payerDetails['email'];
+        $exam_type = @$payerDetails['examid'];
         $numberOfCands = $payerDetails['count']; // this is equal to the quantity in billing 
         $services = TableRegistry::getTableLocator()->get('collections');
         if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
@@ -77,10 +77,10 @@ class BillsController extends AppController {
 //           return $this->redirect(['action' => 'verifyBill']);
             $this->set(compact(['payer_name', 'payer_mobile', 'payer_email', 'amount', 'numberOfCands', 'switcher', 'amountForRequestedService', 'requestedServiceName', 'requestedServiceId', 'requestId']));
 // unset all the session values of the payer except the request id 
-//            $this->request->session()->delete('candfee')['examid'];
-//            $this->request->session()->delete('candfee')['fullname'];
-//            $this->request->session()->delete('candfee')['phone'];
-//            $this->request->session()->delete('candfee')['email'];
+            $this->request->session()->delete('candfee.examid');
+            $this->request->session()->delete('candfee.fullname');
+            $this->request->session()->delete('candfee.phone');
+            $this->request->session()->delete('candfee.email');
         }
         if ($this->request->is('post') && $exam_type <> 10) {
             // create bill
@@ -204,12 +204,9 @@ class BillsController extends AppController {
                 $this->request->session()->write('billItemId', $bill_item_id_last);
                 // instantiate the candidate object 
                 $candidates = new EpayController();
-                echo $billItemId = $this->request->session()->read('billItemId');
-                echo "<br/>";
-                echo $requestId = $this->request->session()->read('candfee')['reqid'];
-                echo "<br/>";
-                echo $candidates->paidcands($requestId, $billItemId);
-                exit();
+                $billItemId = $this->request->session()->read('billItemId');
+                $requestId = $this->request->session()->read('candfee')['reqid'];
+                $candidates->paidcands($requestId, $billItemId);
             }
             // Update the amount on Bills table
             $query = $this->Bills->query();
