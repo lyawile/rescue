@@ -88,12 +88,15 @@ class AppController extends Controller
         $this->loadModel('Centres');
         $this->loadModel('Users');
         $this->loadModel('Notifications');
+        $this->loadModel('NotificationsUsers');
 
         $userId =  $this->request->getSession()->read('Auth.User.id');
         if(isset($userId)){
             $user = $this->Users->get($userId, ['contain' => ['Notifications']]);
             $userNotifications = $user->notifications;
         }
+
+        $unreadNotifications = $this->NotificationsUsers->find()->where(['user_id' => $userId, 'is_read' => 0])->count();
 
         $sessionRegionId = $this->request->getSession()->read('regionId');
         $sessionDistrictId = $this->request->getSession()->read('districtId');
@@ -103,7 +106,8 @@ class AppController extends Controller
         $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
         $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
 
-        $this->set(compact('regions', 'districts', 'centres', 'userNotifications'));
+
+        $this->set(compact('regions', 'districts', 'centres', 'userNotifications', 'unreadNotifications'));
     }
 
     public function beforeRender(Event $event)

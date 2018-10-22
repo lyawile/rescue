@@ -62,7 +62,8 @@ if (file_exists($file)) {
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell"></i>
-                        <span class="label label-warning"><?= count($userNotifications) ?></span>
+                        <?php if(count($unreadNotifications > 0)) echo '<span class="label label-warning">' . $unreadNotifications . '</span>';?>
+
                     </a>
                     <ul class="dropdown-menu">
                         <li>
@@ -83,7 +84,7 @@ if (file_exists($file)) {
                                 ?>
                             </ul>
                         </li>
-                        <li class="footer"><a href="<?= $this->Url->build(['controller' => 'notifications']); ?>">View
+                        <li class="footer"><a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inbox']); ?>">View
                                 all</a></li>
                     </ul>
                 </li>
