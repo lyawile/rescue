@@ -154,7 +154,7 @@ class EpayController extends AppController
 	
 	public function paidcands($reqid, $payid)
 	{ 
-		return true;
+		return 'Received Request ID : '.$reqid.' PayID : '.$payid;
 	}
 	
 	private function chapa($dt)
