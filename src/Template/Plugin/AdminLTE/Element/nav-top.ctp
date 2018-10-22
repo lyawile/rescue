@@ -19,21 +19,42 @@ if (file_exists($file)) {
             <ul class="nav navbar-nav">
                 <li>
                     <div class="user-level float-right">
-                        <?= $this->Form->control('region_id', ['options' => $regions, 'class' => 'region', 'label' => false]); ?>
+                        <?= $this->Form->control('region_id', [
+                            'options' => $regions,
+                            'class' => 'region',
+                            'data-placeholder' => 'Choose a region...',
+                            'label' => false,
+                            'empty' => true,
+                            'default' => $this->request->getSession()->read('regionId')
+                        ]); ?>
                     </div>
                 </li>
                 <li>
                     <div class="user-level float-right">
-                        <?= $this->Form->control('district_id', ['options' => '', 'class' => 'district', 'label' => false]); ?>
+                        <?= $this->Form->control('district_id', [
+                            'options' => $districts,
+                            'class' => 'district',
+                            'data-placeholder' => 'Choose a district...',
+                            'label' => false,
+                            'empty' => true,
+                            'default' => $this->request->getSession()->read('districtId')
+                        ]); ?>
                     </div>
                 </li>
                 <li>
                     <div class="user-level float-right">
-                        <?= $this->Form->control('centre_id', ['options' => '', 'class' => 'centre', 'label' => false]); ?>
+                        <?= $this->Form->control('centre_id', [
+                            'options' => $centres,
+                            'class' => 'centre',
+                            'data-placeholder' => 'Choose a centre...',
+                            'label' => false,
+                            'empty' => true,
+                            'default' => $this->request->getSession()->read('centreId')
+                        ]); ?>
                     </div>
                 </li>
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown notifications-menu">
+                <li class="reload">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa  fa-repeat"></i>
                     </a>
