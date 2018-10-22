@@ -204,10 +204,12 @@ class BillsController extends AppController {
                 $this->request->session()->write('billItemId', $bill_item_id_last);
                 // instantiate the candidate object 
                 $candidates = new EpayController();
-                
-                echo $this->request->session()->read('billItemId');
+                echo $billItemId = $this->request->session()->read('billItemId');
                 echo "<br/>";
-                echo $this->request->session()->read('candfee')['reqid'];
+                echo $requestId = $this->request->session()->read('candfee')['reqid'];
+                echo "<br/>";
+                echo $candidates->paidcands($requestId, $billItemId);
+                exit();
             }
             // Update the amount on Bills table
             $query = $this->Bills->query();
