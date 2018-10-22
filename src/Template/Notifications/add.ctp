@@ -8,7 +8,6 @@
     <section class="content-header">
         <h1>
             <?= __('Notifications') ?>
-            <small>short description</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -29,8 +28,6 @@
                         <?php
                         echo $this->Form->control('title');
                         echo '<label for="groups">Groups</label>';
-//                        echo $this->Form->control('users._ids', ['options' => $users, 'multiple' => true, 'label' => false, 'class' => 'multi']);
-
                         echo $this->Form->control('groups', ['options' => $groups, 'multiple' => true, 'label' => false, 'class' => 'multi']);
                         echo $this->Form->control('body');
 
