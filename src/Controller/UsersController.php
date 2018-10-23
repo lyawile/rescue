@@ -160,10 +160,10 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-    public function changePassword($id = null)
+    public function changePassword()
     {
 
-        $user = $this->Users->get($id);
+        $user = $this->Users->get($this->request->getSession()->read('Auth.User.id'));
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, [

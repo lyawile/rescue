@@ -93,10 +93,10 @@ if (file_exists($file)) {
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                         <span
                             style="margin-right: 8px"><?php echo $this->Html->image('user2-160x160.jpg', array('class' => 'img-circle', 'alt' => 'User Image', 'height' => '20px')); ?></span>
-                        <span class="hidden-xs"><?= $this->request->session()->read('Auth.User.username') ?></span>
+                        <span class="hidden-xs"><?= $this->request->getSession()->read('Auth.User.username') ?></span>
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><?= $this->Html->link(__('Change password'), ['controller' => 'users', 'action' => 'changePassword', $this->request->session()->read('Auth.User.id')]) ?></li>
+                        <li><?= $this->Html->link(__('Change password'), ['controller' => 'users', 'action' => 'changePassword']) ?></li>
                         <li class="divider"></li>
                         <li> <?= $this->Html->link(__('Logout'), ['controller' => 'users', 'action' => 'logout']) ?></li>
                     </ul>
