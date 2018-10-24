@@ -25,3 +25,18 @@
     /*color: #00e67e;*/
     color: #00ff8c;
 }
+
+.notification-container {
+    padding-top: 30px !important;
+}
+
+.notification-time {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.notification-body {
+    clear: both;
+    background-color: #F9F9F9;
+    padding: 20px;
+}

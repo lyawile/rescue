@@ -52,6 +52,15 @@ class NotificationsController extends AppController
         $this->set('notification', $notification);
     }
 
+    public function inboxView($id = null)
+    {
+        $notification = $this->Notifications->get($id, [
+            'contain' => ['Users']
+        ]);
+
+        $this->set('notification', $notification);
+    }
+
     /**
      * Add method
      *

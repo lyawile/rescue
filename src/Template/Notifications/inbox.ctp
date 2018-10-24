@@ -8,7 +8,7 @@
     <section class="content-header">
         <h1>
             <?= __('Notifications') ?>
-            <small>short description</small>
+            <small>inbox</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -21,16 +21,10 @@
 
         <!-- Default box -->
         <div class="box">
-            <div class="box-header with-border">
-                <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Notification'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
-                </div>
-            </div>
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('title') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                         <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
@@ -39,12 +33,10 @@
                     <tbody>
                     <?php foreach ($inboxNotifications as $notification): ?>
                         <tr>
-                            <td><?= $this->Number->format($notification->id) ?></td>
                             <td><?= h($notification->title) ?></td>
                             <td><?= h($notification->created) ?></td>
                             <td class="actions pull-right">
                                 <?= $this->Html->link('', ['action' => 'view', $notification->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                                <?= $this->Html->link('', ['action' => 'edit', $notification->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                                 <?= $this->Form->postLink('', ['action' => 'delete', $notification->id], ['confirm' =>
                                     __('Are you sure you want to delete # {0}?', $notification->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                             </td>
