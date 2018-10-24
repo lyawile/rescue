@@ -112,6 +112,9 @@ class CentresController extends AppController
 
     public function listCentres($id = null)
     {
+        if ($this->request->is('ajax')) {
+            $this->response->withDisabledCache();
+        }
         $districtCentres = $this->Centres->find('list', [
             'conditions' => ['Centres.district_id' => $id]
         ]);
