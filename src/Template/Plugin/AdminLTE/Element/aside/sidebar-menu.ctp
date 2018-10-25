@@ -72,7 +72,11 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build('/'); ?>"><i class="fa"></i> <?= __('General') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Collections', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Collections') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'CollectionCategories', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Collection categories') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Centres', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Centres') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Subjects', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Subjects') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Settings', 'action' => 'general']); ?>"><i class="fa"></i> <?= __('General') ?></a></li>
             </ul>
         </li>
         <li><a href="<?php echo $this->Url->build('/pages/debug'); ?>"><i class="fa fa-bug"></i> Debug</a></li>

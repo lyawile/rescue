@@ -27,7 +27,6 @@
                     <fieldset>
                         <?php
                         echo $this->Form->control('title');
-//                        echo $this->Form->control('body');
                         echo $this->Form->textarea('body', ['class' => 'textarea', 'placeholder' => 'Enter notification']);
                         ?>
                     </fieldset>
