@@ -1,6 +1,3 @@
-<pre>
-    <?php // echo @$payer_name; ?>
-</pre>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
@@ -54,14 +51,13 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th scope="col">S/N</th>
                                     <th scope="col">Service Name</th>
                                     <th scope="col">Quantity</th>
+                                    <th scope="col">Service Cost</th>
                                     <th scope="col" class=" pull-right">Actions</th>
                                 </tr>
                                 <?php if (!isset($switcher) && empty($switcher)) { ?>
                                     <tr class="service">
-                                        <td>1</td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-lg-12">
@@ -72,12 +68,19 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <?= $this->Form->control('quantity[]', array('label' => false, 'type' => 'number')) ?>
+                                                    <?= $this->Form->control('quantity[]',   array('label' => false,'id'=>'quantity', 'type' => 'number')) ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p class="form-control"></p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="actions pull-right">
-                                            <a href="" class="btn btn-xs fa fa-plus "  data-placement="bottom" title="Add service"></a>                                                        
+                                            <a href="" class="btn btn-xs fa fa-minus "  data-placement="bottom" title="Add service"></a>                                                        
                                         </td>
                                     </tr>
                                 <?php } else { ?>
@@ -112,13 +115,12 @@
                 </div>
             </div>
             <div class="box-footer">
-                <button title="Add Service" type="button" class="btn btn-default btn-circle">
-                    <i class="fa fa-plus"> Add Service</i>
+                <button title="Add Service" type="button" class="btn btn-default btn-circle addService">
+                    <i class="fa fa-plus "> Add Service</i>
                 </button>
-                <?= $this->Form->button(__('Submit'), array('id'=>'btnSub')) ?>
+                <?= $this->Form->button(__('Submit'), array('id' => 'btnSub')) ?>
             </div>
-
-
             <?= $this->Form->end() ?>
-        </div>    </section>
+        </div>    
+    </section>
 </div>

@@ -66,7 +66,25 @@ class BillsController extends AppController {
                 $requestedServiceId = $serv->id;
             }
         } else {
-            $services = $services->find('list')->where(['exam_type_id in' => array(10)]);
+            $services = $services->find('list')
+                    ->where(['exam_type_id in' => array(10)]);
+            // Only for dubbugging, will be removed or adjusted later
+//            foreach ($services as $d){
+//                var_dump($d);
+//            }
+//            $this->loadModel('collections');
+//            echo "<br><br>";
+//             $serviceNew = $this->collections->find('all', array('fields' => array('amount', 'name', 'id')))
+//                    ->where(['exam_type_id in' => array(10)]);
+//            foreach ($serviceNew as $t){
+//                echo $t->name;
+//                echo "<br>";
+//                echo $t->id;
+//                echo "<br>";
+//                echo $t->amount;
+//                echo "<br>";
+//            }
+//            exit();
         }
 //        $services = $services->find('list')->select(['id', 'name', 'amount']);
 //        $bill = $this->Bills->newEntity();
@@ -94,10 +112,10 @@ class BillsController extends AppController {
         $this->set(compact('services'));
     }
 
-    public function getInvoice() {
-        // get the customer details 
-//        $billIdentification =  $this->request->query('bill_id');
-        $billIdentification = $this->request->session()->read('bill');
+    public function getBill() {
+        // get the customer details for a supplied bill id through the session
+        $billIdentification = $this->request->getSession()->read('bill');
+        $billGeneratedBy = $this->request->getSession()->read('Auth.User.first_name') . " " . $this->request->getSession()->read('Auth.User.surname');
         $queryDetails = $this->Bills->find();
         $queryDetails->innerJoinWith('BillItems', function($data) {
             $billIdentification = $this->request->session()->read('bill');
@@ -105,8 +123,10 @@ class BillsController extends AppController {
         });
         $this->loadModel('BillItems');
         $this->loadModel('Collections');
+        $this->loadModel('CollectionCategories');
+
         $billDetails = $this->BillItems->find('all', ['contain' => 'Collections'])
-                ->select(['BillItems.amount', 'BillItems.quantity', 'BillItems.unit', 'Collections.name', 'Collections.amount'])
+                ->select(['BillItems.amount', 'BillItems.quantity', 'BillItems.unit', 'Collections.name', 'Collections.amount', 'Collections.collection_categorie_id'])
                 ->where(['BillItems.bill_id' => $billIdentification]);
         // read total from the bill
         $queryTotal = $this->Bills->find()->select('amount')->where(['id' => $billIdentification]);
@@ -114,6 +134,85 @@ class BillsController extends AppController {
             $totalAmount = $queryT['amount'];
         }
         $this->set(compact('queryDetails', 'billDetails', 'totalAmount'));
+        // prepare data for adding into the XML file 
+        //Query bill details 
+        foreach ($queryDetails as $customerDetails) {
+            $billGeneratedDate = $customerDetails['generated_date'];
+            $billExpireDate = $customerDetails['expire_date'];
+            $payerMobileNumber = $customerDetails['payer_mobile'];
+            $payerName = $customerDetails['payer_name'];
+            $payerEmail = $customerDetails['payer_email'];
+        }
+        // query bill items into xml format for gepgBillSubReq 
+        $data = '';
+        foreach ($billDetails as $billData) {
+            $amount = $billData['collection']['amount'] * $billData['quantity'];
+            $collectionCategoryId = $billData['collection']['collection_categorie_id'];
+            $collectionsC = $this->CollectionCategories->find()->select(['gfscode'])->where(['id' => $collectionCategoryId]);
+            foreach ($collectionsC as $collectionCategoryRes) {
+                $gfsCode = $collectionCategoryRes->gfscode;
+            }
+            $data .= '<BillItem>'
+                    . '<BillItemRef>788578851</BillItemRef>'
+                    . '<UseItemRefOnPay>N</UseItemRefOnPay>'
+                    . '<BillItemAmt>' . $amount . '</BillItemAmt>'
+                    . ' <BillItemMiscAmt>' . $amount . '</BillItemMiscAmt>'
+                    . '<GfsCode>' . $gfsCode . '</GfsCode>'
+                    . '</BillItem>';
+        }
+
+
+//        echo $data;
+//        exit();
+        //xml request to GEPG 
+        $gepgBillSubReq = "<gepgBillSubReq>
+    <BillHdr>
+        <SpCode>SP110</SpCode> 
+        <RtrRespFlg>true</RtrRespFlg>
+    </BillHdr>
+    <BillTrxInf>
+        <BillId>$billIdentification</BillId>
+        <SubSpCode>1002</SubSpCode>
+        <SpSysId>tjv47</SpSysId>
+        <BillAmt>$totalAmount</BillAmt>
+        <MiscAmt>$totalAmount</MiscAmt>
+        <BillExprDt>$billExpireDate</BillExprDt>
+        <PyrId>Palapala</PyrId>
+        <PyrName>$payerName</PyrName>
+        <BillDesc>Bill Number 7885</BillDesc>
+        <BillGenDt>$billGeneratedDate</BillGenDt>
+        <BillGenBy>$billGeneratedBy</BillGenBy>
+        <BillApprBy>$billGeneratedBy</BillApprBy>
+        <PyrCellNum>$payerMobileNumber</PyrCellNum>
+        <PyrEmail>$payerEmail</PyrEmail>
+        <Ccy>TZS</Ccy>
+        <BillEqvAmt>$totalAmount</BillEqvAmt>
+        <RemFlag>true</RemFlag>
+        <BillPayOpt>1</BillPayOpt>
+        <BillItems>" . $data . " </BillItems>
+    </BillTrxInf>
+</gepgBillSubReq>";
+        //xml for acknowledgement 
+        // possible values for TrxStsCode = 7101 is successful, 7242 is failed - Bill content irregular, 
+        // 7201 is failed - General Error
+        $gepgBillSubReqAck = "<gepgBillSubReqAck>
+                                <TrxStsCode>7101</TrxStsCode>
+                              </gepgBillSubReqAck>";
+        // xml for response from GePG
+        // possible values for TrxSts are GF - GePG failure and GS - GePG Success
+        $gepgBillSubResp = "<gepgBillSubResp>
+                                <BillTrx>
+                                    <BillId>7885</BillId>
+                                    <TrxSts>GF</TrxSts>
+                                    <PayCntrNum>0</PayCntrNum>
+                                    <TrxStsCode>7242;7627</TrxStsCode >
+                                </BillTrx >
+                            </gepgBillSubResp>";
+        // xml for Bill Submission Response Acknowledgement 
+        $gepgBillSubRespAck = "<gepgBillSubRespAck>
+                                    <TrxStsCode>7101</TrxStsCode>
+                               </gepgBillSubRespAck>";
+        // send the request 
     }
 
     /**
@@ -159,7 +258,6 @@ class BillsController extends AppController {
     }
 
     private function createBill() {
-        // get collection id to determine the service cost 
         $postedData = $this->request->getData();
         $bill = $this->Bills->newEntity();
         $billItem = $this->loadModel('BillItems');
@@ -216,7 +314,7 @@ class BillsController extends AppController {
                     ->execute();
             $this->Flash->success(__('The bill has been saved.'));
             $this->request->session()->write('bill', $bill_id);
-            return $this->redirect(['action' => 'getInvoice']);
+            return $this->redirect(['action' => 'getBill']);
         } // end of the loop to iterate through each service added by the user
 
         $this->Flash->error(__('The bill could not be saved. Please, try again.'));
