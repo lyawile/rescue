@@ -75,14 +75,6 @@ if (file_exists($file)) {
                 <li><a href="<?php echo $this->Url->build('/'); ?>"><i class="fa"></i> <?= __('General') ?></a></li>
             </ul>
         </li>
-        <li>
-            <a href="<?php echo $this->Url->build('/pages/widgets'); ?>">
-                <i class="fa fa-th"></i> <span>Widgets</span>
-                <span class="pull-right-container">
-                <small class="label pull-right bg-green">new</small>
-            </span>
-            </a>
-        </li>
         <li><a href="<?php echo $this->Url->build('/pages/debug'); ?>"><i class="fa fa-bug"></i> Debug</a></li>
     </ul>
 <?php } ?>
