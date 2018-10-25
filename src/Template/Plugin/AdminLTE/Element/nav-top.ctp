@@ -62,7 +62,7 @@ if (file_exists($file)) {
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell"></i>
-                        <?php if(count($unreadNotifications > 0)) echo '<span class="label label-warning">' . $unreadNotifications . '</span>';?>
+                        <?php if($unreadNotifications > 0){ echo '<span class="label label-warning">' . $unreadNotifications . '</span>';}?>
 
                     </a>
                     <ul class="dropdown-menu">
