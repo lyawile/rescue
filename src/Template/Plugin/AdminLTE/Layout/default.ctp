@@ -18,6 +18,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
     <?php echo $this->Html->css('AdminLTE.skins/skin-' . Configure::read('Theme.skin') . '.min'); ?>
+    <?php echo $this->Html->css(['AdminLTE./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min',],['block' => 'css']);?>
     <?php echo $this->Html->css('chosen') ?>
     <?php echo $this->Html->css('custom'); ?>
 
@@ -80,11 +81,11 @@
 <?php echo $this->Html->script('AdminLTE./plugins/slimScroll/jquery.slimscroll.min'); ?>
 <!-- FastClick -->
 <?php echo $this->Html->script('AdminLTE./plugins/fastclick/fastclick'); ?>
+<?php echo $this->Html->script(['AdminLTE./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min',], ['block' => 'script']);?>
+
+
 <!-- AdminLTE App -->
 <?php echo $this->Html->script('AdminLTE./js/app.min'); ?>
-<stript type="text/javascript">
-    document.base_url = '<?= $this->Url->build('/', true) ?>';
-</stript>
 <?php echo $this->Html->script('chosen.jquery') ?>
 <!-- AdminLTE for demo purposes -->
 <?php echo $this->fetch('script'); ?>
@@ -139,6 +140,8 @@
         if (!a.parent().hasClass('treeview') && !a.parent().parent().hasClass('pagination')) {
             a.parent().addClass('active').parents('.treeview').addClass('active');
         }
+
+        $('.textarea').wysihtml5()
     });
 
     function loadDistricts(regionId) {
@@ -192,7 +195,6 @@
             }
         });
     }
-
-</script>
+ </script>
 </body>
 </html>

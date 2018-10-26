@@ -29,8 +29,7 @@
                         echo $this->Form->control('title');
                         echo '<label for="groups">Groups</label>';
                         echo $this->Form->control('groups', ['options' => $groups, 'multiple' => true, 'label' => false, 'class' => 'multi']);
-                        echo $this->Form->control('body');
-
+                        echo $this->Form->textarea('body', ['class' => 'textarea', 'placeholder' => 'Enter notification']);
                         ?>
                     </fieldset>
                 </div>

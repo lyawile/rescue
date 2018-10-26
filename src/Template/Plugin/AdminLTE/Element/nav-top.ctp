@@ -56,13 +56,19 @@ if (file_exists($file)) {
                 <!-- Notifications: style can be found in dropdown.less -->
                 <li class="reload">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span data-toggle="tooltip" data-placement="bottom" title="Reload">
                         <i class="fa  fa-repeat"></i>
+                        </span>
                     </a>
                 </li>
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bell"></i>
-                        <?php if($unreadNotifications > 0){ echo '<span class="label label-warning">' . $unreadNotifications . '</span>';}?>
+                        <span data-toggle="tooltip" data-placement="bottom" title="Unread">
+                            <i class="fa fa-bell"></i>
+                            </span>
+                        <?php if ($unreadNotifications > 0) {
+                            echo '<span class="label label-warning">' . $unreadNotifications . '</span>';
+                        } ?>
 
                     </a>
                     <ul class="dropdown-menu">
@@ -84,7 +90,8 @@ if (file_exists($file)) {
                                 ?>
                             </ul>
                         </li>
-                        <li class="footer"><a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inbox']); ?>">View
+                        <li class="footer"><a
+                                href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inbox']); ?>">View
                                 all</a></li>
                     </ul>
                 </li>
