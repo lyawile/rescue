@@ -24,7 +24,7 @@ $(document).ready(function () {
     });
     $(document).on('change', 'select', function () {
         var position = $('#serviceSelect option:selected').index();
-        amount = $('p.index' + position).text();
+        amount = $('span.index' + position).text();
         $('p.form-control').text(quantity * amount);
     });
     $(document).on('keyup mouseup', '#quantity', function () {
