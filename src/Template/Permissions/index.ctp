@@ -27,11 +27,69 @@
                     </fieldset>
                 </div>
             </div>
-            <div class="box-footer">
-                <?= $this->Form->button(__('Submit')) ?>
+            <?= $this->Form->end() ?>
+        </div>
+
+        <div class="column">
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><?= __('Add Notification') ?></h3>
+                    </div>
+                    <div class="box-body">
+                        <?= $this->Form->create() ?>
+                        <div class="col-sm-8">
+                            <fieldset>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <?= $this->Form->button(__('Submit')) ?>
+                    </div>
+
+                    <?= $this->Form->end() ?>
+                </div>
             </div>
 
-            <?= $this->Form->end() ?>
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><?= __('Add Notification') ?></h3>
+                    </div>
+                    <div class="box-body">
+                        <?= $this->Form->create() ?>
+                        <div class="col-sm-8">
+                            <fieldset>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <?= $this->Form->button(__('Submit')) ?>
+                    </div>
+
+                    <?= $this->Form->end() ?>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><?= __('Add Notification') ?></h3>
+                    </div>
+                    <div class="box-body">
+                        <?= $this->Form->create() ?>
+                        <div class="col-sm-8">
+                            <fieldset>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <?= $this->Form->button(__('Submit')) ?>
+                    </div>
+
+                    <?= $this->Form->end() ?>
+                </div>
+            </div>
         </div>
     </section>
 </div>
