@@ -69,22 +69,19 @@ class BillsController extends AppController {
             $services = $services->find('list')
                     ->where(['exam_type_id in' => array(10)]);
             // Only for dubbugging, will be removed or adjusted later
-//            foreach ($services as $d){
-//                var_dump($d);
-//            }
-//            $this->loadModel('collections');
+            foreach ($services as $d) {
+                $x[] = $d;
+            }
+            $this->loadModel('collections');
+            foreach ($x as $serviceName) {
+                $serviceNew = $this->collections->find('all', array('fields' => array('amount', 'name', 'id')))
+                        ->where(['exam_type_id in' => array(10), 'name' => $serviceName]);
+                foreach ($serviceNew as $t) {
+                    $serviceAmount[] =  $t->amount;
+                }
+            }
+            // get the exact amount for the collection 
 //            echo "<br><br>";
-//             $serviceNew = $this->collections->find('all', array('fields' => array('amount', 'name', 'id')))
-//                    ->where(['exam_type_id in' => array(10)]);
-//            foreach ($serviceNew as $t){
-//                echo $t->name;
-//                echo "<br>";
-//                echo $t->id;
-//                echo "<br>";
-//                echo $t->amount;
-//                echo "<br>";
-//            }
-//            exit();
         }
 //        $services = $services->find('list')->select(['id', 'name', 'amount']);
 //        $bill = $this->Bills->newEntity();
@@ -109,7 +106,7 @@ class BillsController extends AppController {
 // create bill
             $this->createBill();
         }
-        $this->set(compact('services'));
+        $this->set(compact('services','serviceAmount'));
     }
 
     public function getBill() {

@@ -73,6 +73,8 @@
 <?php echo $this->Html->script('AdminLTE./bootstrap/js/bootstrap.min'); ?>
 <!-- iCheck -->
 <?php echo $this->Html->script('AdminLTE./plugins/iCheck/icheck.min'); ?>
+<!--Mdobaji umezingua, yaani include ya scripts inapoint huku, narus js naona haziamki kumbe umebadilisha, rudisha default-->
+<?php echo $this->Html->script('bills'); ?>
 <script>
   $(function () {
     $('input').iCheck({

@@ -1,3 +1,11 @@
+<?php   
+        $index = 1;
+        echo  '<p class="index0">Test</p>';
+        foreach ($serviceAmount as $amount){
+            echo '<p class="index'.$index.'" style="">'.$amount.'</p>';
+            $index++;
+        }
+?>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
@@ -61,7 +69,7 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <?= $this->Form->control('collection_id[]', array('type' => 'select', 'options' => @$services, 'value' => 1, 'label' => false, 'empty' => 'Select service')); ?>
+                                                    <?= $this->Form->control('collection_id[]', array('type' => 'select', 'options' => @$services, 'value' => 1, 'label' => false, 'empty' => 'Select service', 'id'=>'serviceSelect')); ?>
                                                 </div>
                                             </div>
                                         </td>
