@@ -1,10 +1,13 @@
 <?php   
         $index = 1;
-        echo  '<p class="index0">Test</p>';
-        foreach ($serviceAmount as $amount){
-            echo '<p class="index'.$index.'" style="">'.$amount.'</p>';
+        echo  '<span class="index0" style="visibility: hidden; margin:0; padding: 0">Test</span>';
+        if(!empty($serviceAmount )){
+            foreach (@$serviceAmount as $amount){
+           echo  '<span class="index'.$index.'" style="visibility: hidden; margin:0; padding: 0">'.$amount.'</span>';
             $index++;
         }
+        }
+        
 ?>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
@@ -92,7 +95,7 @@
                                         </td>
                                     </tr>
                                 <?php } else { ?>
-                                <td>Test</td>
+                                <td>1</td>
                                 <td>
                                     <div class="row">
                                         <div class="col-lg-12">
