@@ -10,7 +10,7 @@ $(document).ready(function () {
             $(this).closest('tr').remove();
         }
         $('.service > .actions > a ').addClass("fa-minus");
-        console.log("current" + numberOfOptions);
+        getTotal();
     });
     // print bill
     $('.print').click(function (e) {
@@ -23,16 +23,44 @@ $(document).ready(function () {
         $('.table').append('<tr class="service">' + serviceBox + '</tr>');
     });
     $(document).on('change', 'select', function () {
-        var position = $('#serviceSelect option:selected').index();
+        var position = $(this).find('option:selected').index();
         amount = $('span.index' + position).text();
-        $('p.form-control').text(quantity * amount);
+//        alert(amount);
+        quantity = $(this).closest('tr').find('#quantity').val();
+        $(this).closest('tr').find('p').text(quantity * amount)
+//        $('p.form-control').text(quantity * amount);
+        if (position === 0) {
+            $(this).closest('tr').find('p').text('-')
+        }
+        getTotal();
     });
     $(document).on('keyup mouseup', '#quantity', function () {
-//        alert();
         quantity = $(this).val();
-        $('p.form-control').text(quantity * amount);
+        // update amount
+        var position = $(this).closest('tr').find('#serviceSelect option:selected').index();
+        amount = $('span.index' + position).text();
+        console.log(amount);
+        var maxInt = 222222;
+        var random = Math.floor(Math.random() * maxInt);
+        var addedClass = 'test' + random;
+        $(this).addClass(addedClass);
+        $(this).closest('tr').find('p').addClass(addedClass).text(quantity * amount);
+        getTotal();
     });
 
+
+
 });
+function getTotal() {
+     total = 0;
+    $('table tr.service p').each(function () {
+        $(this).each(function () {
+            total += parseInt($(this).text());
+        });
+        $('.total>span:last-child').text(total);
+        console.log("The total is:" + total);
+
+    });
+}
 
 

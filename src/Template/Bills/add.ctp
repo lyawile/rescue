@@ -1,13 +1,12 @@
-<?php   
-        $index = 1;
-        echo  '<span class="index0" style="visibility: hidden; margin:0; padding: 0">Test</span>';
-        if(!empty($serviceAmount )){
-            foreach (@$serviceAmount as $amount){
-           echo  '<span class="index'.$index.'" style="visibility: hidden; margin:0; padding: 0">'.$amount.'</span>';
-            $index++;
-        }
-        }
-        
+<?php
+$index = 1;
+echo '<span class="index0" style="visibility: hidden; margin:0; padding: 0">Test</span>';
+if (!empty($serviceAmount)) {
+    foreach (@$serviceAmount as $amount) {
+        echo '<span class="index' . $index . '" style="visibility: hidden; margin:0; padding: 0">' . $amount . '</span>';
+        $index++;
+    }
+}
 ?>
 <div class="bills index large-9 medium-8 columns content">
     <section class="content-header">
@@ -72,14 +71,14 @@
                                         <td>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <?= $this->Form->control('collection_id[]', array('type' => 'select', 'options' => @$services, 'value' => 1, 'label' => false, 'empty' => 'Select service', 'id'=>'serviceSelect')); ?>
+                                                    <?= $this->Form->control('collection_id[]', array('type' => 'select', 'options' => @$services, 'value' => 1, 'label' => false, 'empty' => 'Select service', 'id' => 'serviceSelect')); ?>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <?= $this->Form->control('quantity[]',   array('label' => false,'id'=>'quantity', 'type' => 'number')) ?>
+                                                    <?= $this->Form->control('quantity[]', array('label' => false, 'id' => 'quantity', 'type' => 'number')) ?>
                                                 </div>
                                             </div>
                                         </td>
@@ -94,6 +93,7 @@
                                             <a href="" class="btn btn-xs fa fa-minus "  data-placement="bottom" title="Add service"></a>                                                        
                                         </td>
                                     </tr>
+
                                 <?php } else { ?>
                                 <td>1</td>
                                 <td>
@@ -123,6 +123,13 @@
 
                     </fieldset>
 
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="total col-sm-8 callout callout-info">
+                    <!--<h4>Information!</h4>-->
+                    <span>If you submit this form, you will pay:  </span>
+                    <span style="font-weight: bold"><?php echo number_format(@$amountForRequestedService*@$numberOfCands, 2)  ?></span>
                 </div>
             </div>
             <div class="box-footer">
