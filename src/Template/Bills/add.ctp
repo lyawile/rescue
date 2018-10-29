@@ -60,13 +60,14 @@ if (!empty($serviceAmount)) {
                         </div>
                         <table class="table">
                             <tbody>
-                                <tr>
-                                    <th scope="col">Service Name</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Service Cost</th>
-                                    <th scope="col" class=" pull-right">Actions</th>
-                                </tr>
+
                                 <?php if (!isset($switcher) && empty($switcher)) { ?>
+                                    <tr>
+                                        <th scope="col">Service Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Service Cost</th>
+                                        <th scope="col" class=" pull-right">Actions</th>
+                                    </tr>
                                     <tr class="service">
                                         <td>
                                             <div class="row">
@@ -90,33 +91,45 @@ if (!empty($serviceAmount)) {
                                             </div>
                                         </td>
                                         <td class="actions pull-right">
-                                            <a href="" class="btn btn-xs fa fa-minus "  data-placement="bottom" title="Add service"></a>                                                        
+                                            <a href="" class="btn btn-xs fa fa-minus "  data-placement="bottom" title="Add service"></a>
                                         </td>
                                     </tr>
 
                                 <?php } else { ?>
-                                <td>1</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <?php echo $this->Form->control('', array('disabled' => true, 'label' => FALSE, 'default' => $requestedServiceName)); ?>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <?= $this->Form->control('quantity[]', array('disabled' => false, 'label' => FALSE, 'default' => $numberOfCands, 'readOnly' => true, 'id' => 'quantity')); ?>
-                                            <?php echo $this->Form->hidden('amount', array('disabled' => false, 'label' => FALSE, 'default' => $amountForRequestedService)); ?>
-                                            <?php echo $this->Form->hidden('collection_id[]', array('disabled' => false, 'label' => FALSE, 'default' => $requestedServiceId)); ?>
-                                            <?php echo $this->Form->hidden('eqid', array('disabled' => false, 'label' => FALSE, 'default' => $requestId)); ?>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="actions pull-right">
-                                    <a href=""   data-placement="bottom" title="Add service"></a>                                                        
-                                </td>
-                            <?php } ?>
+                                    <tr>
+                                        <th scope="col">Service Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Amount</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <?php echo $this->Form->control('', array('disabled' => true, 'label' => FALSE, 'default' => $requestedServiceName)); ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <?= $this->Form->control('quantity[]', array('disabled' => false, 'label' => FALSE, 'default' => $numberOfCands, 'readOnly' => true, 'id' => 'quantity')); ?>
+                                                    <?php echo $this->Form->hidden('amount', array('disabled' => false, 'label' => FALSE, 'default' => $amountForRequestedService)); ?>
+                                                    <?php echo $this->Form->hidden('collection_id[]', array('disabled' => false, 'label' => FALSE, 'default' => $requestedServiceId)); ?>
+                                                    <?php echo $this->Form->hidden('eqid', array('disabled' => false, 'label' => FALSE, 'default' => $requestId)); ?>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <?= $this->Form->control('', array('disabled' => false, 'label' => FALSE, 'default' => $numberOfCands*$amountForRequestedService, 'readOnly' => true, 'id' => 'quantity')); ?>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                <?php } ?>
 
                             </tbody>
                         </table>
@@ -129,7 +142,7 @@ if (!empty($serviceAmount)) {
                 <div class="total col-sm-8 callout callout-info">
                     <!--<h4>Information!</h4>-->
                     <span>If you submit this form, you will pay:  </span>
-                    <span style="font-weight: bold"><?php echo number_format(@$amountForRequestedService*@$numberOfCands, 2)  ?></span>
+                    <span style="font-weight: bold"><?php echo number_format(@$amountForRequestedService * @$numberOfCands, 2) ?></span>
                 </div>
             </div>
             <div class="box-footer">
@@ -139,6 +152,6 @@ if (!empty($serviceAmount)) {
                 <?= $this->Form->button(__('Submit'), array('id' => 'btnSub')) ?>
             </div>
             <?= $this->Form->end() ?>
-        </div>    
+        </div>
     </section>
 </div>
