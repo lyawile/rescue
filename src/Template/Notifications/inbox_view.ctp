@@ -22,10 +22,6 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Notification'), ['action' => 'add'], ['class' => 'btn btn
-                    btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Notification'), ['action' => 'edit', $notification->id],
-                        ['class' => 'btn btn-default']) ?>
                     <?= $this->Form->postLink(__('Delete Notification'), ['action' => 'delete', $notification->id
                     ],
                         ['confirm' => __('Are you sure you want to delete # {0}?', $notification->id), 'class' => 'btn
