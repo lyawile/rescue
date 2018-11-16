@@ -44,6 +44,8 @@ class GroupsTable extends Table
         $this->hasMany('Users', [
             'foreignKey' => 'group_id'
         ]);
+
+        $this->addBehavior('Acl.Acl', ['type' => 'requester']);
     }
 
     /**

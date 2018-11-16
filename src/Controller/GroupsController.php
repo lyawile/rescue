@@ -13,6 +13,13 @@ use App\Controller\AppController;
 class GroupsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+
+//        $this->Auth->allow();
+    }
+
     /**
      * Index method
      *
