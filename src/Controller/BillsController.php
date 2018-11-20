@@ -77,7 +77,7 @@ class BillsController extends AppController {
                 $serviceNew = $this->collections->find('all', array('fields' => array('amount', 'name', 'id')))
                         ->where(['exam_type_id in' => array(10), 'name' => $serviceName]);
                 foreach ($serviceNew as $t) {
-                    $serviceAmount[] =  $t->amount;
+                    $serviceAmount[] = $t->amount;
                 }
             }
             // get the exact amount for the collection 
@@ -103,10 +103,10 @@ class BillsController extends AppController {
         }
 
         if ($this->request->is('post')) {
-// create bill
+            // create bill
             $this->createBill();
         }
-        $this->set(compact('services','serviceAmount'));
+        $this->set(compact('services', 'serviceAmount'));
     }
 
     public function getBill() {
@@ -301,7 +301,9 @@ class BillsController extends AppController {
                 $candidates = new EpayController();
                 $billItemId = $this->request->session()->read('billItemId');
                 $requestId = $this->request->session()->read('candfee')['reqid'];
-                $candidates->paidcands($requestId, $billItemId);
+                if (!empty($requestId) && isset($requestId)) {
+                    $candidates->paidcands($requestId, $billItemId);
+                }
             }
             // Update the amount on Bills table
             $query = $this->Bills->query();
