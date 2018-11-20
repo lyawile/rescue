@@ -25,8 +25,10 @@ class EpayController extends AppController
 		//centres  
 		$this->loadModel('Centres');
 		
-		//candidates
+		//candidates 
 		$this->loadModel('Candidates');
+		//
+		$this->loadModel('BillItemCandidates');
 
     }
 
@@ -37,22 +39,63 @@ class EpayController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['ExamTypes', 'Centres']
-        ];
-        $candidates = $this->paginate($this->Candidates);
-
-        $this->set(compact('candidates'));
+        echo '<h2>Access Denied!</h2>';exit;
     }
 	
-	public function fees()
-	{
-		$cands = $this->request->data('put');
-		$carray = explode(',',$cands);
-		$getcand=array();
-		foreach($carray as $v)
+	public function feesall()
+    {
+		$err = '';
+		if(!empty($this->request->getSession()->read('centreId')))
 		{
-			if(is_numeric($v))$getcand[]=$v;
+			$centid = $this->request->getSession()->read('centreId');
+			$examid = 1;
+			$query = $this->Candidates->find('all',array('fields' => array('id')))->where(['centre_id' => $centid,'exam_type_id' => $examid]);
+			$data = $query->toArray();
+			if(!empty($data))
+			{
+				$dent = array(); 
+				foreach($data as $rw)$dent[] = $rw['id'];
+				$this->fees($dent);
+				return NULL ;
+			}
+			else
+			{
+				$err = 'No Candidates Registered in that Centre';
+			}
+		}
+		else
+		{
+			 $err = 'Please Select Centre';
+		}
+		$this->Flash->error(__($err));
+		return $this->redirect(['controller' => 'candidates','action' => 'index']);
+    }
+	
+	public function contolnumber()
+    {
+		'154.72.86.88/eservice/epay/contolnumber';
+		'154.72.86.88/eservice/epay/payment';
+		'154.72.86.88/eservice/epay/recoinciliation';
+    }
+	public function reconciliation()
+    {
+    }
+	public function payment()
+    {
+    }
+	
+	
+	public function fees($getcand = false)
+	{
+		if(!$getcand)
+		{
+			$cands = $this->request->data('put');
+			$carray = explode(',',$cands);
+			$getcand=array();
+			foreach($carray as $v)
+			{
+				if(is_numeric($v))$getcand[]=$v;
+			}
 		}
 		if(!empty($getcand))
 		{
@@ -76,13 +119,7 @@ class EpayController extends AppController
 				$sendpay['examid']=$candidate->exam_type_id;
 				$sendpay['count']=1;
 				
-				/*
-				$query = $this->Candidates->find('all')->where(['id IN' => $getcand]);
-				$data = $query->toArray();
-				$spc='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$a=1;
-				foreach($data as $candobject)
-				*/
+				
 			}
 			else
 			{
@@ -96,72 +133,205 @@ class EpayController extends AppController
 				$sendpay['count']=sizeof($getcand);
 			}
 			
-			/*echo '<h1>'.$msg.' UUID '.$sendpay['reqid'].' for '.$sendpay['fullname'].' mobil '.$sendpay['phone'].' email '.$sendpay['email'].'</h1>';
-			$this->chapa($sendpay);
-			exit;*/
+			foreach($getcand as $id)
+			{
+				$cand = $this->Candidates->get($id);
+				$cand->billhash = $billhash;
+				$this->Candidates->save($cand);
+			}
 			
-			$this->request->session()->write('candfee', $sendpay);
+			$this->request->getSession()->write('candfee', $sendpay);
 			return $this->redirect(['controller' => 'bills','action' => 'add']);
-			
-			
-				"<gepgBillSubReq>
-						<BillHdr>
-							<SpCode>S023</SpCode>
-							<RtrRespFlg>true</RtrRespFlg>
-						</BillHdr>
-						<BillTrxInf>
-							<BillId>7885</BillId>
-							<SubSpCode>2001</SubSpCode>
-							<SpSysId>tjv47</SpSysId>
-							<BillAmt>7885</BillAmt>
-							<MiscAmt>0</MiscAmt>
-							<BillExprDt>2017-05-30T10:00:01</BillExprDt>
-							<PyrId>Palapala</PyrId>
-							<PyrName>Charles Palapala</PyrName>
-							<BillDesc>Bill Number 7885</BillDesc>
-							<BillGenDt>2017-02-22T10:00:10</BillGenDt>
-							<BillGenBy>100</BillGenBy>
-							<BillApprBy>Hashim</BillApprBy>
-							<PyrCellNum>0699210053</PyrCellNum>
-							<PyrEmail>charlestp@yahoo.com</PyrEmail>
-							<Ccy>TZS</Ccy>
-							<BillEqvAmt>7885</BillEqvAmt>
-							<RemFlag>true</RemFlag>
-							<BillPayOpt>1</BillPayOpt>
-							<BillItems>
-										<BillItem>
-										<BillItemRef>788578851</BillItemRef>
-											<UseItemRefOnPay>N</UseItemRefOnPay>
-											<BillItemAmt>7885</BillItemAmt>
-											<BillItemEqvAmt>7885</BillItemEqvAmt>
-											<BillItemMiscAmt>0</BillItemMiscAmt>
-											<GfsCode>140206</GfsCode>
-										</BillItem>
-										<BillItem>
-										<BillItemRef>788578852</BillItemRef>
-											<UseItemRefOnPay>N</UseItemRefOnPay>
-											<BillItemAmt>7885</BillItemAmt>
-											<BillItemEqvAmt>7885</BillItemEqvAmt>
-											<BillItemMiscAmt>0</BillItemMiscAmt>
-											<GfsCode>140206</GfsCode>
-										</BillItem>
-							</BillItems>
-						</BillTrxInf>
-				</gepgBillSubReq>";
-		}else echo '<h1>No Data Men</h1>';
+		}
+		else
+		{
+			 $this->Flash->error(__('No Candidates Selected'));
+			 return $this->redirect(['controller' => 'candidates','action' => 'index']);
+		}
 		exit;
 	}
 	
 	public function paidcands($reqid, $payid)
-	{ 
+	{
+			$query = $this->Candidates->find('all',array('fields' => array('id')))->where(['billhash' => $reqid]);
+			$data = $query->toArray();
+			if(!empty($data))
+			{
+				foreach($data as $cid)
+				{
+					$bic = $this->BillItemCandidates->newEntity();
+					$bic->candidate_id = $cid['id'];
+					$bic->bill_item_id = $payid;
+					$this->BillItemCandidates->save($bic);
+					
+					$cand = $this->Candidates->get($cid['id']);
+					$cand->billhash = 'BL';
+					$this->Candidates->save($cand);
+				}
+			}
+		
 		return 'Received Request ID : '.$reqid.' PayID : '.$payid;
+		
+	}
+	
+	public function gepgrequest()
+	{
+		$Htagb = '<Gepg>';
+		$Htage = '</Gepg>';
+		$Sigtagb = '<gepgSignature>';
+		$Sigtage = '</gepgSignature>';
+		$data="<gepgBillSubReq>
+				<BillHdr>
+				<SpCode>SP110</SpCode>
+				<RtrRespFlg>true</RtrRespFlg>
+				</BillHdr>
+				<BillTrxInf>
+				<BillId>7885</BillId>
+				<SubSpCode>1002</SubSpCode>
+				<SpSysId>TNECTA001</SpSysId>
+				<BillAmt>7885</BillAmt>
+				<MiscAmt>0</MiscAmt>
+				<BillExprDt>2019-05-30T10:00:01</BillExprDt>
+				<PyrId>Samizi</PyrId>
+				<PyrName>Samizi Abdallah</PyrName>
+				<BillDesc>Bill Number 7885</BillDesc>
+				<BillGenDt>2018-11-19T10:00:10</BillGenDt>
+				<BillGenBy>100</BillGenBy>
+				<BillApprBy>Hashim</BillApprBy>
+				<PyrCellNum>0699210053</PyrCellNum>
+				<PyrEmail>Samizi@gmail.com</PyrEmail>
+				<Ccy>TZS</Ccy>
+				<BillEqvAmt>7885</BillEqvAmt>
+				<RemFlag>true</RemFlag>
+				<BillPayOpt>1</BillPayOpt>
+				<BillItems>
+				<BillItem>
+				<BillItemRef>788578851</BillItemRef>
+				<UseItemRefOnPay>N</UseItemRefOnPay>
+				<BillItemAmt>7885</BillItemAmt>
+				<BillItemEqvAmt>7885</BillItemEqvAmt>
+				<BillItemMiscAmt>0</BillItemMiscAmt>
+				<GfsCode>300103</GfsCode>
+				</BillItem>
+				</BillItems>
+				</BillTrxInf>
+				</gepgBillSubReq>";
+				
+			$resp =	$this->sign($data);
+			
+			if($resp[0] == 1)
+			{
+				$dataO = $Htagb.$data.$Sigtagb.$resp[1].$Sigtage.$Htage;
+				
+				$curl = curl_init();
+				curl_setopt_array($curl, array(
+				  CURLOPT_URL => "http://154.118.230.18/api/bill/sigqrequest",
+				  CURLOPT_RETURNTRANSFER => true,
+				  CURLOPT_ENCODING => "",
+				  CURLOPT_MAXREDIRS => 10,
+				  CURLOPT_TIMEOUT => 30,
+				  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				  CURLOPT_CUSTOMREQUEST => "POST",
+				  CURLOPT_POSTFIELDS => $dataO,
+				  CURLOPT_HTTPHEADER => array(
+					"Content-Type: application/xml",
+					"Gepg-Code: SP110",
+					"Gepg-Com: default.sp.in",
+					"cache-control: no-cache"
+				  ),
+				));
+
+				$response = curl_exec($curl);
+				$err = curl_error($curl);
+				
+				curl_close($curl);
+				
+				if ($err) {
+				  echo "cURL Error #:" . $err;
+				} else {
+					$fp=fopen(APP.'Resource'.DS.'resp.txt','w');
+					fwrite($fp,$response);
+					
+					$this->chapa($response);
+				}
+				 
+				/*
+				//$this->chapa($dataO);
+					//TO GePG
+					$url = '154.118.230.18/api/bill/sigqrequest';
+					$headers = array("Content-Type: application/xml","Gepg-Code: SP110","Gepg-Com: default.sp.in");
+					
+					$cSession = curl_init(); 
+					curl_setopt($cSession,CURLOPT_URL,$url);
+					curl_setopt($cSession,CURLOPT_RETURNTRANSFER,true);
+					curl_setopt($cSession,CURLOPT_HEADER, $headers); 
+					curl_setopt($cSession, CURLOPT_POSTFIELDS,"xmlRequest=" . $dataO);
+					$result=curl_exec($cSession);
+					curl_close($cSession);
+					
+					$fp=fopen(APP.'Resource'.DS.'resp.txt','w');
+					fwrite($fp,$result);
+					
+					$this->chapa($result);*/
+				
+			}
+			else 
+			echo '1) STATUS : '.$resp[0].'<BR>2) RESPONSE;<BR> '.$resp[1];
+			exit;
+	}
+	
+	private function sign($data)
+	{
+		//FILE PATH 
+		$readPath=APP.'Resource'.DS.'certs'.DS.'gepgclientprivatekey.pfx';
+		
+		// 1) Reading the pfx file
+		$cert_store = file_get_contents($readPath);
+		$status = openssl_pkcs12_read($cert_store, $cert_info, 'passpass');
+		
+		if (!$status) return array(0,'Invalid pasword');
+		
+		$public_key = $cert_info['cert'];
+		$private_key = $cert_info['pkey'];
+		
+		// 2) Reading the private key
+		$pkeyid = openssl_get_privatekey($private_key);
+		
+		if (!$pkeyid) return array(0,'Invalid private key');
+		
+		// 3) Computing the signature with SHA-1
+		$status = openssl_sign($data, $signature, $pkeyid, OPENSSL_ALGO_SHA1);
+			
+		// 4) Free the key from memory
+		openssl_free_key($pkeyid);
+			
+		if (!$status) return array(0,'Computing of the signature failed');
+			
+		$signature_value = base64_encode($signature);
+		return array(1,$signature_value);
+	}
+	private function verify($data, $signedData)
+	{
+		//FILE PATH 
+		$readPath=APP.'Resource'.DS.'certs'.DS.'gepgpubliccertificate.pfx';
+		
+		$cert_store = file_get_contents($readPath);
+		$ok = openssl_verify($data, $signedData, $cert_store);
+		if ($ok == 1) {
+			echo "good";
+		} elseif ($ok == 0) {
+			echo "bad";
+		} else {
+			echo "ugly, error checking signature";
+		}
+		exit;
 	}
 	
 	private function chapa($dt)
 	{
-		echo '<pre>';
+		echo '<xmp>';
 		var_dump($dt);
-		echo '</pre>';
+		echo '</xmp>';
 		die("<br>------------------------|-----------------<br>");
 	}
 }

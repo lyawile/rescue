@@ -9,7 +9,8 @@ use Cake\Validation\Validator;
 /**
  * CandidateCas Model
  *
- * @property \App\Model\Table\CandidateSubjectsTable|\Cake\ORM\Association\BelongsTo $CandidateSubjects
+ * @property \App\Model\Table\CandidatesTable|\Cake\ORM\Association\BelongsTo $Candidates
+ * @property \App\Model\Table\SubjectsTable|\Cake\ORM\Association\BelongsTo $Subjects
  *
  * @method \App\Model\Entity\CandidateCa get($primaryKey, $options = [])
  * @method \App\Model\Entity\CandidateCa newEntity($data = null, array $options = [])
@@ -37,8 +38,13 @@ class CandidateCasTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('CandidateSubjects', [
-            'foreignKey' => 'candidate_subject_id'
+        $this->belongsTo('Candidates', [
+            'foreignKey' => 'candidate_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Subjects', [
+            'foreignKey' => 'subject_id',
+            'joinType' => 'INNER'
         ]);
     }
 
@@ -102,7 +108,8 @@ class CandidateCasTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['candidate_subject_id'], 'CandidateSubjects'));
+        $rules->add($rules->existsIn(['candidate_id'], 'Candidates'));
+        $rules->add($rules->existsIn(['subject_id'], 'Subjects'));
 
         return $rules;
     }

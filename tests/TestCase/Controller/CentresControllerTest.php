@@ -17,7 +17,11 @@ class CentresControllerTest extends IntegrationTestCase
      */
     public $fixtures = [
         'app.centres',
-        'app.districts'
+        'app.districts',
+        'app.candidates',
+        'app.disqualified_candidates',
+        'app.group_district_region_school_users',
+        'app.practicals'
     ];
 
     /**

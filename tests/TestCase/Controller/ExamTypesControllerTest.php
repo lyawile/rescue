@@ -18,6 +18,7 @@ class ExamTypesControllerTest extends IntegrationTestCase
     public $fixtures = [
         'app.exam_types',
         'app.candidates',
+        'app.centre_exam_types',
         'app.collections',
         'app.disqualified_candidates',
         'app.subjects'

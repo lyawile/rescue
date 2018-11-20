@@ -49,7 +49,7 @@ class BillsController extends AppController {
      */
     public function add() {
 
-        $payerDetails = $this->request->session()->read('candfee');
+        $payerDetails = $this->request->getSession()->read('candfee');
         // grab the session values for the payer
         $requestId = @$payerDetails['reqid'];
         $payer_name = @$payerDetails['fullname'];
@@ -58,6 +58,7 @@ class BillsController extends AppController {
         $exam_type = @$payerDetails['examid'];
         $numberOfCands = $payerDetails['count']; // this is equal to the quantity in billing 
         $services = TableRegistry::getTableLocator()->get('collections');
+		//var_dump($payerDetails); exit;
         if (isset($payer_name) && !empty($payer_name) && isset($exam_type) && !empty($exam_type)) {
             $services = $services->find('all', array('fields' => array('amount', 'name', 'id')))->where(['exam_type_id' => $exam_type, 'is_current' => 1]);
             foreach ($services as $serv) {

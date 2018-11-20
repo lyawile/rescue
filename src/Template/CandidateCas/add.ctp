@@ -35,7 +35,8 @@
                         echo $this->Form->control('y2t1');
                         echo $this->Form->control('project');
                         echo $this->Form->control('btp');
-                     echo $this->Form->control('candidate_subject_id', ['options' => $candidateSubjects, 'empty' => true]);
+                    echo $this->Form->control('candidate_id', ['options' => $candidates]);
+                    echo $this->Form->control('subject_id', ['options' => $subjects]);
                 ?>
             </fieldset>
         </div>

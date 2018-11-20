@@ -1,7 +1,7 @@
 // JavaScript Document
-$(document).ready(function(){
-	$('#etype').change(function(){
-		var optionText = $("#etype option:selected").val().split('_');
+function getSubs(exm)
+{
+	var optionText = exm.split('_');
 		 //alert(optionText); 
 		  if(optionText[0]<1)
 		  {
@@ -17,95 +17,52 @@ $(document).ready(function(){
 					// $('#mxg').html(data);
 					$('#subs').html('');
 					var dump='';
+					$a=0;
 					$.each(JSON.parse(data), function (i, item) {
+						if($a%3==0)dump+='<div class="row"><div class="col-md-4">';
+						else dump+='</div><div class="col-md-4">';
 						//$('#myTable > tbody:last-child').append('<tr>...</tr><tr>...</tr>');
-						dump+='<input type="checkbox" name="chksub[]" value="'+item.value+'">'+item.text+'<br>';
+				dump+='<label class="container">'+item.text+'<input type="checkbox" name="chksub[]" value="'+item.value+'"><span class="checkmark"></span></label>';
+					//	dump+='<input type="checkbox" name="chksub[]" value="'+item.value+'">&nbsp;'+item.text+'<br>';
+						if($a%3==2)dump+='</div></div>';
+						//else dump+='</div>';
+						$a++;
 					});
+					$a--;
+					if($a%3!=2)dump+='</div></div>';
+					//alert(dump);
 					$('#subs').html(dump);
 				});
 		  }
 		//subs
+}
+$(document).ready(function(){
+	
+	$('.cls_exams').click(function(){
+		var exam = $(this).html();
+		if(exam != 'No Exams')
+		{
+			var cents = $('#centexm').html().split(' ');
+			$('#exam').prop('value',exam); //
+			$('#centexm').html(cents[0]+ ' ' +exam);
+			$('#hd_exam').html(exam);
+		}
 	});
 	
-	$('#centre').change(function(){
-		 var optionText = $("#centre option:selected").val().split('_');
-		 //alert(optionText);
-		   if(optionText[0]<1)
-		  {
-			  $('#etype').find('option').remove().end();
-			  $('#etype').append($('<option>', { value: '0',text : 'Select Centre' }));
-		  }
-		  else
-		  {
-			  var url=$('#urlx').prop('value');
-			  url=url+"candidate-cas/loadexams/"+optionText[0];
-			 //alert(url);
-			  $.get(url,
-				function(data, status){
-					// $('#mxg').html(data);
-					$('#etype').find('option').remove().end();
-					$.each(JSON.parse(data), function (i, item) {
-					$('#etype').append($('<option>', { value: item.value,text : item.text }));
-					});
-				});
-		  }
-		//subs
+	$('.ca_exams').click(function(){
+		var exam = $(this).html();
+		//alert('Here Today');
+		var exmid = $(this).prop('id');
+		if(exam != 'No Exams')
+		{
+			var cents = $('#centexm').html().split(' ');
+			$('#exam').prop('value',exmid); //
+			$('#centexm').html(cents[0]+ ' ' +exam);
+			$('#hd_exam').html(exam);
+			
+			getSubs(exmid);
+		}
 	});
-	
-	$('#region').change(function(){
-		  var optionText = $("#region option:selected").val();
-		  if(optionText<1)
-		  {
-			  $('#district').find('option').remove().end();
-			  $('#centre').find('option').remove().end();
-			  $('#etype').find('option').remove().end();
-			  $('#district').append($('<option>', { value: '0',text : 'Select Region' }));
-			  $('#centre').append($('<option>', { value: '0',text : 'Select District' }));
-			  $('#etype').append($('<option>', { value: '0',text : 'Select Centre' }));
-		  }
-		  else
-		  {
-			  var url=$('#urlx').prop('value');
-			  url=url+"candidate-cas/loaddistricts/"+optionText;
-			  $.get(url,
-				function(data, status){
-					// $('#mxg').html(data);
-					$('#district').find('option').remove().end();
-					$.each(JSON.parse(data), function (i, item) {
-					$('#district').append($('<option>', { value: item.value,text : item.text }));
-					});
-				});
-		  }
-		//subs
-	});
-	
-	$('#district').change(function(){
-		 var optionText = $("#district option:selected").val();
-		 //alert(optionText);
-		   if(optionText<1)
-		  {
-			  $('#centre').find('option').remove().end();
-			  $('#etype').find('option').remove().end();
-			  $('#centre').append($('<option>', { value: '0',text : 'Select District' }));
-			  $('#etype').append($('<option>', { value: '0',text : 'Select Centre' }));
-		  }
-		  else
-		  {
-			  var url=$('#urlx').prop('value');
-			  url=url+"candidate-cas/loadcentres/"+optionText;
-			 // alert(url);
-			  $.get(url,
-				function(data, status){
-					// $('#mxg').html(data);
-					$('#centre').find('option').remove().end();
-					$.each(JSON.parse(data), function (i, item) {
-					$('#centre').append($('<option>', { value: item.value,text : item.text }));
-					});
-				});
-		  }
-		//subs
-	});
-	
 	
 	
 });
