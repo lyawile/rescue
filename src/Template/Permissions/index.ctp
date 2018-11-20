@@ -1,9 +1,7 @@
-
 <div class="users index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
             <?= __('Permissions') ?>
-            <small>short description</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -16,16 +14,53 @@
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><?= __('Group permission') ?></h3>
+                <div class="btn-group pull-right">
+                    <?= $this->Html->link(__('Update permissions'), ['action' => 'index'], ['class' => 'btn btn btn-success']) ?>
+                </div>
             </div>
             <div class="box-body">
                 <form>
-                <div class="col-sm-8">
-                    <fieldset>
-                        <?php
-                        echo $this->Form->control('group_id', ['options' => $groups]);
-                        ?>
-                    </fieldset>
-                </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <?php
+                            echo $this->Form->control('group_id',[
+                                'options' => $groups,
+                                'class' => 'group-permissions'
+                                ]);
+                            ?>
+                        </div>
+                        <div class="col-sm-3">
+                            <?php
+                            echo $this->Form->control('region_id', [
+                                'options' => $permissionRegions,
+                                'class' => 'region-permissions',
+                                'data-placeholder' => 'Choose a region...',
+                                'empty' => true
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-sm-3">
+                            <?php
+                            echo $this->Form->control('district_id', [
+                                'class' => 'district-permissions',
+                                'data-placeholder' => 'Choose a district...',
+                                'empty' => true
+//                            'default' => $this->request->getSession()->read('centreId')
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-sm-3">
+                            <?php
+                            echo $this->Form->control('centre_id', [
+                                'class' => 'centre-permissions',
+                                'data-placeholder' => 'Choose a centre...',
+                                'empty' => true
+//                            'default' => $this->request->getSession()->read('centreId')
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+
             </div>
             <?= $this->Form->end() ?>
         </div>
@@ -34,7 +69,7 @@
             <div class="col-md-4">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?= __('Add Notification') ?></h3>
+                        <h3 class="box-title"><?= __('Dashboards') ?></h3>
                     </div>
                     <div class="box-body">
                         <?= $this->Form->create() ?>
@@ -43,8 +78,21 @@
                             </fieldset>
                         </div>
                     </div>
-                    <div class="box-footer">
-                        <?= $this->Form->button(__('Submit')) ?>
+                    <?= $this->Form->end() ?>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><?= __('Centres') ?></h3>
+                    </div>
+                    <div class="box-body">
+                        <?= $this->Form->create() ?>
+                        <div class="col-sm-8">
+                            <fieldset>
+                            </fieldset>
+                        </div>
                     </div>
 
                     <?= $this->Form->end() ?>
@@ -54,7 +102,7 @@
             <div class="col-md-4">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?= __('Add Notification') ?></h3>
+                        <h3 class="box-title"><?= __('Candidates') ?></h3>
                     </div>
                     <div class="box-body">
                         <?= $this->Form->create() ?>
@@ -62,29 +110,6 @@
                             <fieldset>
                             </fieldset>
                         </div>
-                    </div>
-                    <div class="box-footer">
-                        <?= $this->Form->button(__('Submit')) ?>
-                    </div>
-
-                    <?= $this->Form->end() ?>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title"><?= __('Add Notification') ?></h3>
-                    </div>
-                    <div class="box-body">
-                        <?= $this->Form->create() ?>
-                        <div class="col-sm-8">
-                            <fieldset>
-                            </fieldset>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <?= $this->Form->button(__('Submit')) ?>
                     </div>
 
                     <?= $this->Form->end() ?>

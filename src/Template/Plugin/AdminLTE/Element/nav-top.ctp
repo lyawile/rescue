@@ -21,7 +21,7 @@ if (file_exists($file)) {
                     <div class="user-level float-right">
                         <?= $this->Form->control('region_id', [
                             'options' => $regions,
-                            'class' => 'region',
+                            'class' => 'region nav-top',
                             'data-placeholder' => 'Choose a region...',
                             'label' => false,
                             'empty' => true,
@@ -33,7 +33,7 @@ if (file_exists($file)) {
                     <div class="user-level float-right">
                         <?= $this->Form->control('district_id', [
                             'options' => $districts,
-                            'class' => 'district',
+                            'class' => 'district nav-top',
                             'data-placeholder' => 'Choose a district...',
                             'label' => false,
                             'empty' => true,
@@ -45,7 +45,7 @@ if (file_exists($file)) {
                     <div class="user-level float-right">
                         <?= $this->Form->control('centre_id', [
                             'options' => $centres,
-                            'class' => 'centre',
+                            'class' => 'centre nav-top',
                             'data-placeholder' => 'Choose a centre...',
                             'label' => false,
                             'empty' => true,

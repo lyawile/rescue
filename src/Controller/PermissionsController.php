@@ -24,9 +24,14 @@ class PermissionsController extends AppController
     {
 
         $this->loadModel('Groups');
+        $this->loadModel('Regions');
+        $this->loadModel('Districts');
+        $this->loadModel('Centres');
 //        $permissions = $this->paginate($this->Permissions);
         $groups = $this->Groups->find('list');
+        $permissionRegions = $this->Regions->find('list');
         $this->set(compact('groups'));
+        $this->set(compact('permissionRegions'));
     }
 
     /**

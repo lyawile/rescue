@@ -110,14 +110,14 @@
         }).change(function () {
             $('.centre').find('option').not(':first').remove();
             $('.centre').trigger("chosen:updated");
-            loadDistricts($(this).val());
+            loadDistricts($(this).val(), $('.district'));
         });
 
         $('.district').chosen({
             width: '200',
             allow_single_deselect: true
         }).change(function () {
-            loadCentres($(this).val());
+            loadCentres($(this).val(), $('.centre'));
         });
 
         $('.centre').chosen({
@@ -127,6 +127,25 @@
             // reloadPage();
         });
 
+        $('.region-permissions').chosen({
+            width: '100%'
+        }).change(function () {
+            $('.centre-permissions').find('option').not(':first').remove();
+            $('.centre-permissions').trigger("chosen:updated");
+            loadDistricts($(this).val(), $('.district-permissions'));
+        });
+
+        $('.district-permissions').chosen({
+            width: '100%'
+        }).change(function () {
+            $('.centre-permissions').find('option').not(':first').remove();
+            $('.centre-permissions').trigger("chosen:updated");
+            loadCentres($(this).val(), $('.centre-permissions'));
+        });
+
+        $('.group-permissions, .centre-permissions').chosen({
+            width: '100%'
+        });
 
         $('.reload').on('click', function () {
             reloadPage();
@@ -144,13 +163,13 @@
         $('.textarea').wysihtml5()
     });
 
-    function loadDistricts(regionId) {
+    function loadDistricts(regionId, to) {
         $.ajax({
             url: '<?= $this->Url->build('/', true) ?>districts/list-districts/' + regionId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                const district = $('.district'); //Clear select options
+                const district = to; //Clear select options
                 district.find('option').not(':first').remove();
                 $.each(data, function (key, value) {
                     district.append($('<option>').attr('value', key).text(value));
@@ -161,13 +180,13 @@
         });
     }
 
-    function loadCentres(districtId) {
+    function loadCentres(districtId, to) {
         $.ajax({
             url: '<?= $this->Url->build('/', true) ?>centres/list-centres/' + districtId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                const centre = $('.centre'); //Clear select options
+                const centre = to; //Clear select options
                 centre.find('option').not(':first').remove();
                 $.each(data, function (key, value) {
                     centre.append($('<option>').attr('value', key).text(value));
