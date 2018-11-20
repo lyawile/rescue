@@ -136,7 +136,8 @@ class BillsController extends AppController {
         //Query bill details
         foreach ($queryDetails as $customerDetails) {
             $billGeneratedDate = $customerDetails['generated_date'];
-            $billExpireDate = $customerDetails['expire_date'];
+//            $billExpireDate = $customerDetails['expire_date'];
+            $billExpireDate = '2019-01-01';
             $payerMobileNumber = $customerDetails['payer_mobile'];
             $payerName = $customerDetails['payer_name'];
             $payerEmail = $customerDetails['payer_email'];
@@ -154,14 +155,16 @@ class BillsController extends AppController {
                     . '<BillItemRef>788578851</BillItemRef>'
                     . '<UseItemRefOnPay>N</UseItemRefOnPay>'
                     . '<BillItemAmt>' . $amount . '</BillItemAmt>'
+                    . '<BillItemEqvAmt>'.$amount.'</BillItemEqvAmt>'
                     . ' <BillItemMiscAmt>' . $amount . '</BillItemMiscAmt>'
-                    . '<GfsCode>'.trim($gfsCode).'</GfsCode>'
+                    . '<GfsCode>' . trim($gfsCode) . '</GfsCode>'
                     . '</BillItem>';
         }
 
-
-//        echo $data;
-//        exit();
+        $billGenDateObj = date_create($billGeneratedDate);
+        $billGeneratedDate = date_format($billGenDateObj, "c");
+        $billExpireDateObj = date_create($billExpireDate);
+        $billExpireDate = date_format($billExpireDateObj, "c");
         //xml request to GEPG
         $gepgBillSubReq = "<gepgBillSubReq>
     <BillHdr>
@@ -171,16 +174,16 @@ class BillsController extends AppController {
     <BillTrxInf>
         <BillId>$billIdentification</BillId>
         <SubSpCode>1002</SubSpCode>
-        <SpSysId>tjv47</SpSysId>
+        <SpSysId>TNECTA001</SpSysId>
         <BillAmt>$totalAmount</BillAmt>
         <MiscAmt>$totalAmount</MiscAmt>
         <BillExprDt>$billExpireDate</BillExprDt>
-        <PyrId>Palapala</PyrId>
+        <PyrId>Samizi</PyrId>
         <PyrName>$payerName</PyrName>
         <BillDesc>Bill Number 7885</BillDesc>
         <BillGenDt>$billGeneratedDate</BillGenDt>
         <BillGenBy>$billGeneratedBy</BillGenBy>
-        <BillApprBy>$billGeneratedBy</BillApprBy>
+        <BillApprBy>Hashim</BillApprBy>
         <PyrCellNum>$payerMobileNumber</PyrCellNum>
         <PyrEmail>$payerEmail</PyrEmail>
         <Ccy>TZS</Ccy>
@@ -190,8 +193,19 @@ class BillsController extends AppController {
         <BillItems>" . $data . " </BillItems>
     </BillTrxInf>
 </gepgBillSubReq>";
-        var_dump($gepgBillSubReq);
-        exit();
+//         instantiate the object for sending XML
+        $xmlSend = new EpayController();
+        $xmlSend->gepgrequest($gepgBillSubReq);
+//        FOR DEBUGGING, DON'T REMOVE COMMENTS BELOW FOR NOW
+//        var_dump($test) ;
+//
+//        echo '<xmp>';
+//        var_dump($test);
+//        echo '</xmp>';
+//         echo '<xmp>';
+//        var_dump($gepgBillSubReq);
+//        echo '</xmp>';
+//        exit();
         //xml for acknowledgement
         // possible values for TrxStsCode = 7101 is successful, 7242 is failed - Bill content irregular,
         // 7201 is failed - General Error
