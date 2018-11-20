@@ -10,12 +10,13 @@
         </ol>
     </section>
 
+    <?= $this->Form->create() ?>
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><?= __('Group permission') ?></h3>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('Update permissions'), ['action' => 'index'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Form->button(__('Update permissions')) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -26,7 +27,7 @@
                             echo $this->Form->control('group_id',[
                                 'options' => $groups,
                                 'class' => 'group-permissions'
-                                ]);
+                            ]);
                             ?>
                         </div>
                         <div class="col-sm-3">
@@ -72,13 +73,11 @@
                         <h3 class="box-title"><?= __('Dashboards') ?></h3>
                     </div>
                     <div class="box-body">
-                        <?= $this->Form->create() ?>
                         <div class="col-sm-8">
                             <fieldset>
                             </fieldset>
                         </div>
                     </div>
-                    <?= $this->Form->end() ?>
                 </div>
             </div>
 
@@ -88,14 +87,11 @@
                         <h3 class="box-title"><?= __('Centres') ?></h3>
                     </div>
                     <div class="box-body">
-                        <?= $this->Form->create() ?>
                         <div class="col-sm-8">
                             <fieldset>
                             </fieldset>
                         </div>
                     </div>
-
-                    <?= $this->Form->end() ?>
                 </div>
             </div>
 
@@ -105,16 +101,14 @@
                         <h3 class="box-title"><?= __('Candidates') ?></h3>
                     </div>
                     <div class="box-body">
-                        <?= $this->Form->create() ?>
                         <div class="col-sm-8">
                             <fieldset>
                             </fieldset>
                         </div>
                     </div>
-
-                    <?= $this->Form->end() ?>
                 </div>
             </div>
         </div>
     </section>
+    <?= $this->Form->end() ?>
 </div>

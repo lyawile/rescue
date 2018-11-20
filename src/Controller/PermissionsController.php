@@ -30,8 +30,22 @@ class PermissionsController extends AppController
 //        $permissions = $this->paginate($this->Permissions);
         $groups = $this->Groups->find('list');
         $permissionRegions = $this->Regions->find('list');
+
+        if ($this->request->is(['post'])) {
+
+            echo "Group id " . $this->request->getData('group_id');
+            echo "Region id " . $this->request->getData('region_id');
+            echo "District id " . $this->request->getData('district_id');
+            echo "Centre id " . $this->request->getData('centre_id');
+            exit;
+        }
+
         $this->set(compact('groups'));
         $this->set(compact('permissionRegions'));
+    }
+
+    public function save(){
+
     }
 
     /**
