@@ -96,10 +96,12 @@
                 </table>
             </div>
             <div class="box-footer">
-          		<div class="pull-right">
+          		<div class="btn-group pull-right">
+                Pay Fees
                 <?= $this->Form->create(null, ['url' => ['controller' => 'Epay', 'action' => 'fees']]);?>
                 <?= $this->Form->input('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
-				<?= $this->Form->button(__('Pay Fees')) ?>
+				<?= $this->Form->button(__('Selected')) ?>
+                <?= $this->Html->link(__('Whole Centre'), ['controller' => 'epay','action' => 'feesall'], ['class' => 'btn btn btn-success']) ?>
                 <?= $this->Form->end() ?>
                 </div>
             </div>

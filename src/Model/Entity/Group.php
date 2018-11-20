@@ -29,4 +29,9 @@ class Group extends Entity
         'group_district_region_school_users' => true,
         'users' => true
     ];
+
+    public function parentNode()
+    {
+        return null;
+    }
 }

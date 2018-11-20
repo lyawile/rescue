@@ -13,6 +13,13 @@ use App\Controller\AppController;
 class GroupsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+
+//        $this->Auth->allow();
+    }
+
     /**
      * Index method
      *
@@ -52,6 +59,8 @@ class GroupsController extends AppController
         if ($this->request->is('post')) {
             $group = $this->Groups->patchEntity($group, $this->request->getData());
             if ($this->Groups->save($group)) {
+                $this->Acl->allow($group, "controllers/Users/logout"); // Allow all users to logout
+                $this->Acl->allow($group, "controllers/Notifications", ['inbox', 'inboxView']);
                 $this->Flash->success(__('The group has been saved.'));
 
                 return $this->redirect(['action' => 'index']);

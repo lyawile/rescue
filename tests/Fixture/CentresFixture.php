@@ -28,13 +28,13 @@ class CentresFixture extends TestFixture
         'contact_two' => ['type' => 'string', 'length' => 64, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'district_distance' => ['type' => 'decimal', 'length' => 12, 'precision' => 2, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => ''],
         'centre_type' => ['type' => 'string', 'length' => 45, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'districts_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'district_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
-            'districts_id' => ['type' => 'index', 'columns' => ['districts_id'], 'length' => []],
+            'district_id' => ['type' => 'index', 'columns' => ['district_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-            'centres_ibfk_1' => ['type' => 'foreign', 'columns' => ['districts_id'], 'references' => ['districts', 'id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
+            'centres_ibfk_1' => ['type' => 'foreign', 'columns' => ['district_id'], 'references' => ['districts', 'id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -63,7 +63,7 @@ class CentresFixture extends TestFixture
                 'contact_two' => 'Lorem ipsum dolor sit amet',
                 'district_distance' => 1.5,
                 'centre_type' => 'Lorem ipsum dolor sit amet',
-                'districts_id' => 1
+                'district_id' => 1
             ],
         ];
         parent::init();

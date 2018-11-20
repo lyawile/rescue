@@ -7,7 +7,7 @@
 <div class="candidateCas index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
-            <?= __('Candidate CAs') ?>
+            <?= __('Candidate Registration') ?>
             <small>short description</small>
         </h1>
         <ol class="breadcrumb">
@@ -20,7 +20,7 @@
     <section class="content">  
         <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= __('Upload Continuous Assessment (CA) File') ?></h3>
+        <h3 class="box-title"><?= __('Upload Registration File') ?></h3>
         <div class="pull-right">
              <b><span id="centexm"><?php echo $centre; ?></span></b>
         </div>
@@ -32,7 +32,6 @@
               <?= $this->Form->create(null, ['type' => 'file','url' => ['action' => 'bulk']]) ?>
                                     <div class="input-group">
                                     <input type="file" id="file" name="file" class="form-control" aria-label="...">
-                                    <input type="hidden" name="centreid" value="<?php echo $centreid; ?>" />
                                     <input type="hidden" name="exam" id="exam" value="" />
                                       <div class="input-group-btn">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:120px;">
@@ -56,29 +55,19 @@
 		</div>
         <br />
 	    
-              <?php 
-			  if(isset($msgs))
-			  {
-				  $b=1;
-				  foreach($msgs as $one)
-				  {
-					  if($b%2==0) echo '<div class="col-md-6">';
-					  else echo '<div class="row"><div class="col-md-6">';
-					  
-					  $mtype = explode (';',$one[2]);
-					  $type=$mtype[0] == '0' ?'danger':($mtype[0] =='1'?'warning':'success');
-					  echo '<div class="callout callout-'.$type.'">';
-					  echo '<b>'.$b.' ) </b> FILE : '.$one[0].'  SHEET : '.$one[1].'<br>'.$mtype[1];
-					  echo '</div>';
-					  if($b%2==0) echo '</div></div>';
-					  else  echo '</div>';
-					  $b++;
-				  }
-			  }
-			  ?>
+         <?php 
+		 if(isset($comp))
+		{
+			echo '<div class="row"><div class="col-md-12"><div class="callout callout-warning"><h5>STUDENTS ALREADY REGISTERED</h5><br>'.$comp.'</div></div></div>';
+		}
+		if(isset($incomp))
+		{
+		echo '<div class="row"><div class="col-md-12"><div class="callout callout-warning"><h5>STUDENTS ALREADY DISQUALIFIED</h5><br>'.$incomp.'</div></div></div>';
+		}
+		?>
               
               
-    </div><!-- box body -->
+    </div><!-- box body --> 
     <div class="box-footer">
     </div>
 

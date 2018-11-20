@@ -15,9 +15,11 @@ use Cake\ORM\Entity;
  * @property float $y2t1
  * @property float $project
  * @property string $btp
- * @property int $candidate_subject_id
+ * @property int $candidate_id
+ * @property int $subject_id
  *
- * @property \App\Model\Entity\CandidateSubject $candidate_subject
+ * @property \App\Model\Entity\Candidate $candidate
+ * @property \App\Model\Entity\Subject $subject
  */
 class CandidateCa extends Entity
 {
@@ -40,7 +42,9 @@ class CandidateCa extends Entity
         'y2t1' => true,
         'project' => true,
         'btp' => true,
-        'candidate_subject_id' => true,
-        'candidate_subject' => true
+        'candidate_id' => true,
+        'subject_id' => true,
+        'candidate' => true,
+        'subject' => true
     ];
 }

@@ -53,12 +53,22 @@
                                     <td><?= h($candidateCa->btp) ?></td>
                                 </tr>
                                                                                                                                                 <tr>
-                                    <th scope="row"><?= __('Candidate Subject') ?></th>
-                                    <td><?= $candidateCa->has('candidate_subject') ?
+                                    <th scope="row"><?= __('Candidate') ?></th>
+                                    <td><?= $candidateCa->has('candidate') ?
                                         $this->Html->link($candidateCa
-                                        ->candidate_subject->id, ['controller' =>
-                                        'CandidateSubjects', 'action' => 'view', $candidateCa
-                                        ->candidate_subject
+                                        ->candidate->id, ['controller' =>
+                                        'Candidates', 'action' => 'view', $candidateCa
+                                        ->candidate
+                                        ->id]) : '' ?>
+                                    </td>
+                                </tr>
+                                                                                                                                                <tr>
+                                    <th scope="row"><?= __('Subject') ?></th>
+                                    <td><?= $candidateCa->has('subject') ?
+                                        $this->Html->link($candidateCa
+                                        ->subject->name, ['controller' =>
+                                        'Subjects', 'action' => 'view', $candidateCa
+                                        ->subject
                                         ->id]) : '' ?>
                                     </td>
                                 </tr>

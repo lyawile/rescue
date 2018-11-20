@@ -155,48 +155,98 @@ class CandidatesController extends AppController
 		 $allowedtypes=array('application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		 
         if ($this->request->is('post')) {
-            if(!empty($this->request->data['file']['name'])){
+			if(!empty($this->request->data['exam'])){
+            	if(!empty($this->request->data['file']['name'])){
                 $fileName = $this->request->data['file']['name'];
-				
-				if(in_array($this->request->data['file']['type'],$allowedtypes) )
-				{
-					$uploadPath = 'uploads/files/';
-					$uploadFile = $uploadPath.$fileName;
-					//$ftype = $this->request->data['file']['name'];
-					if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
-						$msg=$this->importExcelfile($uploadFile);
-						$msgs=explode(';',$msg);
-						if($msgs[0]==0)$this->Flash->error(__($msgs[1]));
-						else $this->Flash->success(__($msgs[1]));
-						
+				$exam = $this->request->data['exam'];
+								
+					if(in_array($this->request->data['file']['type'],$allowedtypes) )
+					{
+						$uploadPath = 'uploads'.DS.'files'.DS;
+						$uploadFile = $uploadPath.$fileName;
+						//$ftype = $this->request->data['file']['name'];
+							if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
+								$msg=$this->importExcelfile($uploadFile, $exam);
+								$msgs=explode(';',$msg);
+								if($msgs[0]==0)$this->Flash->error(__($msgs[1]));
+								else $this->Flash->success(__($msgs[1]));
+								//$this->chapa($msgs[2]);
+								if(isset($msgs[2]))
+								{
+									$cands = explode('+INCO',$msgs[2]);
+									if($cands[0]!='')$this->set('comp',$cands[0]);
+									if($cands[1]!='')$this->set('incomp',$cands[1]);
+								}
+								
+								
+							}else{
+								$this->Flash->error(__('Unable to upload file, please try again.'));
+							}
 					}else{
-						$this->Flash->error(__('Unable to upload file, please try again.'));
+							$this->Flash->error(__('Please Upload Only XLS,CSV and XLSX files'));
 					}
 				}else{
-						$this->Flash->error(__('Please Upload Only XLS,CSV and XLSX files'));
-					}
-            }else{
-                $this->Flash->error(__('Please choose a file to upload.'));
-            }
-            
-        }
+					$this->Flash->error(__('Please choose a file to upload.'));
+				}
+			  }else{
+				$this->Flash->error(__('Please Select Exam'));
+			  }
+        }//post
 		
-        $this->set('uploadData', $uploadData);
-         $this->set('cmx', 'HOlla');
-       // $files = $this->Files->find('all', ['order' => ['Files.created' => 'DESC']]);
-        $filesRowNum = 0; //$files->count();
-      //  $this->set('files',$files);
-        $this->set('filesRowNum',$filesRowNum);
+        $cent = $this->getcentres($this->request->getSession()->read('centreId'));
+		$centid = '';
+		if($cent!='Select Centre')
+		{
+			$c=explode('_',$cent);
+			$cent=$c[1];
+			$centid = $c[0].'_'.$c[1];
+		}
+        $this->set('centre', $cent);
+		$this->set('centreid', $centid);
+		$exams=$this->getexam();
+		$this->set('etypes',$exams);
     }
-	private function importExcelfile ($fname){
+	public function getcentres($centid)
+	{
+		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['id' => $centid]);
+		if(!$cnt->isEmpty())
+		{
+			$centres=$cnt->toArray();
+			$a=0;
+			foreach($centres as $k=>$v)
+			{
+				$centre=$v['id'].'_'.$v['number'].'_'.$v['name'];
+				$a++;
+			}
+			return $centre;
+		}
+		return 'Select Centre';
+	}
+	
+	private function getexam()
+	{
+		//echo $centid;exit;
+		$ety = $this->ExamTypes->find('all',array('fields' => array('id','short_name')));//
+		$ety->innerJoinWith('CentreExamTypes', function ($q) { return $q->where(['centre_id' => $this->request->getSession()->read('centreId')]);});
+		if(!$ety->isEmpty())
+		{
+			$etypes=$ety->toArray();
+			$etype=array();
+			foreach($etypes as $k=>$v)$etype[$v['id'].'_'.$v['short_name']]= $v['short_name'];
+			return $etype;
+		}
+		return array(-1=>'No Exams');
+	}
+	
+	private function importExcelfile ($fname, $exam){
 		ini_set('memory_limit', '512M');
 		$spreadsheet = IOFactory::load($fname);
-		$sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-		$ans=$this->fileprocess($sheetData);
+		$sheetData = $spreadsheet->getSheet(0)->toArray(null, true, true, true);
+		$ans=$this->fileprocess($sheetData, $exam);
 		return $ans;
 	}
 		
-	private function fileprocess($data)
+	private function fileprocess($data, $exam)
 	{
 		$alpha=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF');
 		//TEMPLATES SET
@@ -293,6 +343,11 @@ class CandidatesController extends AppController
 				$msg[]='Invalid Template : No Examination Type';
 				$keepRead=false;
 			}
+			else if($examTP!=$exam)
+			{
+				$msg[]='Selected Exam does not match Template Exam. Template : '.$examTP.' - Selected : '.$exam;
+				$keepRead=false;
+			}
 			else if($tWidth!=$exmWidth)
 			{
 				$thsmsg=($tWidth>$exmWidth)?'Exceeds':'is Less than';
@@ -326,6 +381,29 @@ class CandidatesController extends AppController
 			if($keepRead)
 			{
 				$metaDT=$templates[$examTP][2];
+				//EXAM ID
+				$dbexm = $this->ExamTypes->find()->where(['short_name' => $examTP])->first();
+				if(!empty($dbexm))
+				{
+					$dbexamid=$dbexm->id;
+				}else
+				{
+					$msg[]="Database Error";
+					 return '0;'.implode(', ',$msg);
+				}
+				
+				//GET CENTRE ID 
+				$dbcnt = $this->Centres->find()->where(['number' => $examCT])->first();
+				if(!empty($dbcnt))
+				{
+					$dbcentid=$dbcnt->id;
+					if($dbcentid != ($this->request->getSession()->read('centreId'))) return '0;'."Selected Centre does not match Template Centre";
+					
+				}else 
+				{
+					$msg[]="Template Exam Centre not recognised";
+					 return '0;'.implode(', ',$msg);
+				}
 				
 				
 				if($examTP=='CSoEE')
@@ -410,9 +488,12 @@ class CandidatesController extends AppController
 					echo ' <br><br> CENTRE '.$cent->id.'<br>';	
 				}
 				
-				//ARRAYS
-				$complete=array();
-				$incomplete=array();
+				//CHECKERS
+				$comp=0;
+				$incomp=0;
+				
+				$dupcomp=array();
+				$dupincomp=array();
 				
 								
 			for($rw=$dataStart; $rw<sizeof($data);$rw++)
@@ -429,9 +510,10 @@ class CandidatesController extends AppController
 				
 				$candname=implode('',$nem);
 				
-				if($candname!='')
+				if($nem[0]!='' && $nem[2]!='')
 				{
 					$bad=false;
+					$resn = array();
 					//1)NAMBA
 					$refNO=$data[$rw][$alpha[0]];
 					$ROW['ref']=$refNO;
@@ -463,7 +545,7 @@ class CandidatesController extends AppController
 					{
 						//$bad
 						$we=intval($data[$rw][$alpha[$metaDT['we']]]);
-						if($we>0)$bad=true;
+						if($we>0){ $bad=true; $resn[]='No work experience';}
 						$ROW['we']=$we;
 					}
 					else $ROW['we']=false;
@@ -476,7 +558,7 @@ class CandidatesController extends AppController
 					else $ROW['rep']=false;
 					//5)SEX
 					$sex=strtoupper(trim($data[$rw][$alpha[$metaDT['sex']]])); //sex
-					if($sex!='M' && $sex!='F')$bad=true;
+					if($sex!='M' && $sex!='F'){$bad=true; $resn[]='Unrecognised sex information';}
 					$ROW['sex']=$sex;
 					
 					//6) CANDIDADOS
@@ -486,7 +568,7 @@ class CandidatesController extends AppController
 					$nem[]= trim($data[$rw][$alpha[$c+1]]);
 					$nem[]= trim($data[$rw][$alpha[$c+2]]);
 					//Valid check
-					if($nem[0]=='' ||  $nem[2]=='' )$bad=true;
+					if($nem[0]=='' ||  $nem[2]=='' ){$bad=true; $resn[]='Required Surname and Firstname';}
 					$ROW['name']=$nem;
 					
 					
@@ -499,7 +581,7 @@ class CandidatesController extends AppController
 					
 					$dob=$Y.'-'.$m.'-'.$d;
 					//valid check
-					if(!checkdate($m,$d,$Y))$bad=true;
+					if(!checkdate($m,$d,$Y)){$bad=true; $resn[]='Date of birth not correct';}
 					
 					/*$date=DateTime :: createFromFormat('m/d/Y',$dob);
 					$date_errors= DateTime :: getLastErrors();
@@ -553,37 +635,66 @@ class CandidatesController extends AppController
 					}
 					else $ROW['cmb']=false;
 					
-					//TO ARRAY
-					if($bad)$incomplete[]=$ROW;
-					else $complete[]=$ROW;
+					//SAVE			
+					if(!$bad)
+					{
+						$in = $this->dataInsert(array($dbexamid,$dbcentid),$ROW);
+						if($in == 1)
+						{
+							$comp++;
+						}
+						else if($in == 2)
+						{
+							//SIFA DONT
+							$bad = true;
+							$resn[]='Candidate lacks required qualification';
+						}
+						else if($in == 3)
+						{
+							$dupcomp[] = implode(' ', $nem);
+						}
+					}
+					
+					if($bad)
+					{
+						$ROW['resn'] = implode(',',$resn);
+						$in = $this->dataInsertInc(array($dbexamid,$dbcentid),$ROW);
+						if($in == 1)
+						{
+							$incomp++;
+						}
+						else if($in == 3)
+						{
+							$dupincomp[] = implode(' ', $nem);
+						}
+					}
+					
 			
 				}//NO CANDIDATE NAME
 				
 			}//CANDS LOOP
 			
 			//FINALIZE READ
-			if(empty($complete) && empty($incomplete))return '0;'."Empty Template : No Candidates found";
+			if($incomp+$comp == 0)
+			{
+				if(empty($dupcomp) && empty($dupincomp))return '0;'."Empty Template : No Candidates found";
+				else return '0;'."0 Candidates Saved ;".(empty($dupcomp)?'':implode(',', $dupcomp)).'+INCO'.(empty($dupincomp)?'':implode(',', $dupincomp));
+			}
+			else if($comp == 0)
+			{
+				return '0;'.$incomp." Candidates Disqualified;".(empty($dupcomp)?'':implode(',', $dupcomp)).'+INCO'.(empty($dupincomp)?'':implode(',', $dupincomp));
+			}
+			else if($incomp == 0)
+			{
+				return '2;'.$comp." Candidates Saved;".(empty($dupcomp)?'':implode(',', $dupcomp)).'+INCO'.(empty($dupincomp)?'':implode(',', $dupincomp));
+			}
 			else
 			{
-				//$this->chapa($incomplete);
-				//HEADER
-				$dataHead=array();
-				$dataHead['exam']=$examTP;
-				$dataHead['centre']=$examCT;
-				
-				if(!empty($complete))
-				{
-					$feedback=$this->dataInsert($dataHead,$complete);
-				}
-				else
-				{
-					//
-					$feedback='Sorry, None of the Candidates Data met Registration Requirements. Please check the original Template Structure and Refer Registration Guidelines';
-					return '0;'.$feedback;
-				}
-				return '2;'.$feedback.';'.implode('_',$dataHead);
-				
+				return '2;'.$comp." Candidates Saved".$incomp." Candidates Disqualified
+				;".(empty($dupcomp)?'':implode(',', $dupcomp)).'+INCO'.(empty($dupincomp)?'':implode(',', $dupincomp));
 			}
+			//END FINALIZE
+				
 				
 			}//TEMPLATE CHECKS 
 			else return '0;'.implode(', ',$msg);
@@ -591,105 +702,140 @@ class CandidatesController extends AppController
 		}//ARRAY CHECK
 		else return '0;'."Empty File : Could not Read Data";
 	}
-	private function dataInsert($dataHead,$dataBody)
+	
+	
+	private function dataInsert($head,$data)
 	{
-		//'sft'=>false,'sfb'=>false,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>20,'dis'=>21,'gp'=>23,'7n'=>false,'7y'=>false,'cmb'=>false
+		 // 1 - ins, 2 - sifa , 3- duplicate
 		
-		//1) CHECK SIFA
-		
-		//echo $dataHead['exam'].'      '.$dataHead['centre'].'<br>'.str_repeat('*',110).'<br>';
-		//foreach($data as $line)
-		//echo implode(',',$line).'<br>';
-		
-		//$this->chapa($data);
-	//	exit;
-		
-		if(is_array($dataBody))
+		if(!empty($data))
 		{	$a=0;
-			foreach($dataBody as $data)
-			{
-				$cent = $this->Centres->findByNumber($dataHead['centre'])->first();
-				$exam = $this->ExamTypes->findByShortName($dataHead['exam'])->first();		
-				//INSERT CANDIDATE
-				$cand=$this->Candidates->newEntity();
-				$cand->number=$data['ref'];
-				$cand->sex=$data['sex'];
-				$cand->first_name=$data['name'][0];
-				$cand->other_name=$data['name'][1];
-				$cand->surname=$data['name'][2];
-				$cand->guardian_phone=$data['gp'];
-				
-				$cand->date_of_birth=$data['dob'];
-				$cand->work_experience=$data['we']?$data['we']:'NULL';
-				$cand->combination=$data['cmb']?$data['cmb']:'NULL';
-				$cand->PSLE_number=$data['psle']?$data['psle']:'NULL';
-				$cand->PSLE_year=$data['psley']?$data['psley']:'NULL';
-				$cand->is_repeater=$data['rep']?$data['rep']:'0';
-				
-				$cand->centre_id=$cent->id; 
-				$cand->exam_type_id=$exam->id; 
-				$this->Candidates->save($cand);
-				//  $sqllog = $this->Candidates->getDataSource()->getLog(false, false);       
- 				 //debug($sqllog);
+				$exist = array();
+				//GET CANDIDATE
+			$where=array('first_name'=>$data['name'][0],'other_name'=>$data['name'][1],'surname'=>$data['name'][2],'centre_id'=>$head[1],'exam_type_id'=>$head[0]);
+			$cands = $this->Candidates->find()->select(array('id', 'exam_type_id'))->where($where)->first();
+					if(empty($cands))
+					{ 
+						//INSERT CANDIDATE
+						$cand=$this->Candidates->newEntity();
+						$cand->number=$data['ref'];
+						$cand->sex=$data['sex'];
+						$cand->first_name=$data['name'][0];
+						$cand->other_name=$data['name'][1];
+						$cand->surname=$data['name'][2]; 
+						$cand->guardian_phone=$data['gp'];
 						
-				//INSERT DISABILITIES
-				if($data['dis'])
-				{
-					$replace=array(' ','.');
-					$dis=str_replace($replace,'',strtoupper(trim($data['dis'])));
-					$dis=$dis=='OTHERS'?ucfirst(strtolower($dis)):$dis;
-					
-					$disob= $this->Disabilities->findByShortname($dis)->first();
-					$disab=$this->CandidateDisabilities->newEntity();
-					$disab->disability_id=$disob->id;
-				 	$disab->candidate_id=$cand->id;
-					$this->CandidateDisabilities->save($disab);
-					
-				}
-				
+						$cand->date_of_birth=$data['dob'];
+						$cand->work_experience=$data['we']?$data['we']:'NULL';
+						$cand->combination=$data['cmb']?$data['cmb']:'NULL';
+						$cand->PSLE_number=$data['psle']?$data['psle']:'NULL';
+						$cand->PSLE_year=$data['psley']?$data['psley']:'NULL';
+						$cand->is_repeater=$data['rep']?$data['rep']:'0';
 						
-				//INSERT QUALIFICATIONS
-				if($data['sifa'])
-				{
-				//	$this->chapa($data['sifa']);
-					foreach($data['sifa'] as $sifa)
-					{
-						if(trim($sifa)!='')
+						$cand->centre_id=$head[1]; 
+						$cand->exam_type_id=$head[0]; 
+						$this->Candidates->save($cand);
+						//  $sqllog = $this->Candidates->getDataSource()->getLog(false, false);       
+						 //debug($sqllog);
+								
+						//INSERT DISABILITIES
+						if($data['dis'])
 						{
-							$sf=explode('/',$sifa);
-							$candQ=$this->CandidateQualifications->newEntity();
-							$candQ->centre_number=$sf[0];
-							$candQ->candidate_number=$sf[1];
-							$candQ->exam_year=$sf[2];
-							$candQ->candidate_id=$cand->id;
-							$this->CandidateQualifications->save($candQ);
+							$replace=array(' ','.');
+							$dis=str_replace($replace,'',strtoupper(trim($data['dis'])));
+							$dis=$dis=='OTHERS'?ucfirst(strtolower($dis)):$dis;
+							
+							$disob= $this->Disabilities->findByShortname($dis)->first();
+							$disab=$this->CandidateDisabilities->newEntity();
+							$disab->disability_id=$disob->id;
+							$disab->candidate_id=$cand->id;
+							$this->CandidateDisabilities->save($disab);
+							
 						}
-					}
-				}
 						
-				//INSERT SUBJECTS  
-				foreach($data['subs'] as $sbj)
-				{
-					if($sbj!='' && $sbj!='00')
-					{
-					$subo = $this->Subjects->findByCode(intval($sbj))->first();
-					if($subo!=NULL)
-					{
-						//SUBJECT FOUND
-						$candsub = $this->CandidateSubjects->newEntity();
-						$candsub->candidate_id=$cand->id;
-						$candsub->subject_id=$subo->id;
-						$this->CandidateSubjects->save($candsub);
+								
+						//INSERT QUALIFICATIONS
+						if($data['sifa'])
+						{
+						//	$this->chapa($data['sifa']);
+							foreach($data['sifa'] as $sifa)
+							{
+								if(trim($sifa)!='')
+								{
+									$sf=explode('/',$sifa);
+									$candQ=$this->CandidateQualifications->newEntity();
+									$candQ->centre_number=$sf[0];
+									$candQ->candidate_number=$sf[1];
+									$candQ->exam_year=$sf[2];
+									$candQ->candidate_id=$cand->id;
+									$this->CandidateQualifications->save($candQ);
+								}
+							}
+						}
+								
+						//INSERT SUBJECTS  
+						foreach($data['subs'] as $sbj)
+						{
+							if($sbj!='' && $sbj!='00')
+							{
+							$subo = $this->Subjects->findByCode(intval($sbj))->first();
+							if($subo!=NULL)
+							{
+								//SUBJECT FOUND
+								$candsub = $this->CandidateSubjects->newEntity();
+								$candsub->candidate_id=$cand->id;
+								$candsub->subject_id=$subo->id;
+								$this->CandidateSubjects->save($candsub);
+							}
+							}
+						}//FOREACH SUBS
+						return 1;
 					}
-					}
-				}//FOREACH SUBS
-				
-				$a++;
-			}//FOREACH
-			return $a.' - Candidates Data Inserted';
+					else return 3;
 		} //DATA CHECK
 		
 	}
+	
+	private function dataInsertInc($head,$data)
+	{
+		if(!empty($data))
+		{	$a=0;
+				//GET CANDIDATE
+			$where=array('first_name'=>$data['name'][0],'other_name'=>$data['name'][1],'surname'=>$data['name'][2],'centre_id'=>$head[1],'exam_type_id'=>$head[0]);
+					$cands = $this->DisqualifiedCandidates->find()->select(array('id', 'exam_type_id'))->where($where)->first();
+					if(empty($cands))
+					{ 
+						//INSERT CANDIDATE
+						$cand=$this->DisqualifiedCandidates->newEntity();
+						$cand->number=$data['ref'];
+						$cand->sex = $data['sex'];
+						$cand->first_name = $data['name'][0];
+						$cand->other_name = $data['name'][1];
+						$cand->surname = $data['name'][2];
+						$cand->guardian_phone=$data['gp'];
+						
+						$cand->date_of_birth = $data['dob'];
+						$cand->work_experience = $data['we']?$data['we']:'NULL';
+						$cand->combination = $data['cmb']?$data['cmb']:'NULL';
+						$cand->PSLE_number = $data['psle']?$data['psle']:'NULL';
+						$cand->PSLE_year = $data['psley']?$data['psley']:'NULL';
+						$cand->is_repeater = $data['rep']?$data['rep']:'0';
+						
+						$cand->reason = $data['resn'];
+						$cand->disabilities = $data['dis'];
+						$cand->subjects = implode(';',$data['subs']);
+						if($data['sifa'])$cand->sifa = implode(';',$data['sifa']);
+						
+						$cand->centre_id=$cent->id; 
+						$cand->exam_type_id=$exam->id; 
+						$this->DisqualifiedCandidates->save($cand);
+						return 1;
+					}
+					else return 3;
+		} //DATA CHECK
+		
+	}
+	
 	private function chapa($dt)
 	{
 		echo '<pre>';

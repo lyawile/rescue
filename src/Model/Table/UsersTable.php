@@ -5,6 +5,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 use Cake\Auth\DefaultPasswordHasher;
 
@@ -53,6 +54,8 @@ class UsersTable extends Table
             'targetForeignKey' => 'notification_id',
             'joinTable' => 'notifications_users'
         ]);
+
+        $this->addBehavior('Acl.Acl', ['type' => 'requester']);
     }
 
     /**
@@ -114,17 +117,17 @@ class UsersTable extends Table
     public function validationPassword(Validator $validator)
     {
         $validator->add('old_password', 'custom', [
-                'rule' => function ($value, $context) {
-                    $user = $this->get($context['data']['id']);
-                    if ($user) {
-                        if ((new DefaultPasswordHasher)->check($value, $user->password)) {
-                            return true;
-                        }
+            'rule' => function ($value, $context) {
+                $user = $this->get($context['data']['id']);
+                if ($user) {
+                    if ((new DefaultPasswordHasher)->check($value, $user->password)) {
+                        return true;
                     }
-                    return false;
-                },
-                'message' => 'The old password is not correct!',
-            ])
+                }
+                return false;
+            },
+            'message' => 'The old password is not correct!',
+        ])
             ->notEmpty('old_password');
 
         $validator
@@ -143,11 +146,11 @@ class UsersTable extends Table
             ->notEmpty('password1');
 
         $validator->add('password2', [
-                'length' => [
-                    'rule' => ['minLength', 5],
-                    'message' => 'Password must be atleast 5 characters long',
-                ]
-            ])
+            'length' => [
+                'rule' => ['minLength', 5],
+                'message' => 'Password must be atleast 5 characters long',
+            ]
+        ])
             ->add('password2', [
                 'match' => [
                     'rule' => ['compareWith', 'password1'],

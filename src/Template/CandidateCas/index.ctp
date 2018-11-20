@@ -22,11 +22,10 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-           		<div class="btn-group pull-right">
+                <div class="btn-group pull-right">
                     <?= $this->Html->link(__('Download CA Template'), ['action' => 'templatedown'], ['class' => 'btn btn btn-info']) ?>
                     <?= $this->Html->link(__('Upload CA file'), ['action' => 'bulk'], ['class' => 'btn btn btn-info']) ?>
                     <?= $this->Html->link(__('New Candidate CA'), ['action' => 'add'], ['class' => 'btn btn btn-info']) ?>
-                </div>
             </div>
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
@@ -41,7 +40,8 @@
                                                     <th scope="col"><?= $this->Paginator->sort('y2t1') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('project') ?></th>
                                                     <th scope="col"><?= $this->Paginator->sort('btp') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('candidate_subject_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('candidate_id') ?></th>
+                                                    <th scope="col"><?= $this->Paginator->sort('subject_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
@@ -57,11 +57,18 @@
                                                                                                                                                                                                                                                                                                                                         <td><?= $this->Number->format($candidateCa->y2t1) ?></td>
                                                                                                                                                                                                                                                                                                                                         <td><?= $this->Number->format($candidateCa->project) ?></td>
                                                                                                                                                                                                                                                                                                                                         <td><?= h($candidateCa->btp) ?></td>
-                                                                                                                                                                                                                                                    <td><?= $candidateCa->has('candidate_subject') ?
+                                                                                                                                                                                                                                                    <td><?= $candidateCa->has('candidate') ?
                                         $this->Html->link($candidateCa
-                                        ->candidate_subject->id, ['controller' =>
-                                        'CandidateSubjects', 'action' => 'view', $candidateCa
-                                        ->candidate_subject
+                                        ->candidate->number, ['controller' =>
+                                        'Candidates', 'action' => 'view', $candidateCa
+                                        ->candidate
+                                        ->id]) : '' ?>
+                                    </td>
+                                                                                                                                                                                                                                                                                <td><?= $candidateCa->has('subject') ?
+                                        $this->Html->link($candidateCa
+                                        ->subject->name, ['controller' =>
+                                        'Subjects', 'action' => 'view', $candidateCa
+                                        ->subject
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">

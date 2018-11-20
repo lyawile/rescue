@@ -80,7 +80,7 @@ if (file_exists($file)) {
                                 foreach ($userNotifications as $userNotification) {
                                     ?>
                                     <li>
-                                        <a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'view', $userNotification->id]); ?>">
+                                        <a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inboxView', $userNotification->id]); ?>">
                                             <?= h($userNotification->title) ?>
                                         </a>
                                     </li>

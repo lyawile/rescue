@@ -56,6 +56,7 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
             'authorize' => [
+//                'Acl.Crud' => ['actionPath' => 'controllers/']
                 'Acl.Actions' => ['actionPath' => 'controllers/']
             ],
             'authenticate' => [

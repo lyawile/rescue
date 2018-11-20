@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Core\Configure;
+$group_id = $this->request->getSession()->read('Auth.User.group_id ');
 
 $file = Configure::read('Theme.folder') . DS . 'src' . DS . 'Template' . DS . 'Element' . DS . 'aside' . DS . 'sidebar-menu.ctp';
 if (file_exists($file)) {
@@ -30,7 +31,9 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Practicals']); ?>"><i class="fa"></i><?= __('Practicals') ?></a></li>
+<!--                --><?php //if($this->Acl->check(['model' => 'Group', 'foreign_key' => $group_id], 'Practicals/add')) { ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'Practicals']); ?>"><i class="fa"></i><?= __('Practicals') ?></a></li>
+<!--                --><?php //} ?>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'CentreExamTypes']); ?>"><i class="fa"></i><?= __('Exam types') ?></a></li>
             </ul>
         </li>

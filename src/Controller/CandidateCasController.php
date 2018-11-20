@@ -21,7 +21,7 @@ require ROOT.DS.'vendor' .DS. 'phpoffice/phpspreadsheet/src/Bootstrap.php';
 class CandidateCasController extends AppController
 {
 	var $centreID;
-	 public function initialize(){
+	public function initialize(){
         parent::initialize();
         
         // Include the FlashComponent  
@@ -33,6 +33,7 @@ class CandidateCasController extends AppController
 		$this->loadModel('Districts');
 		$this->loadModel('Regions');
 		$this->loadModel('Candidates');
+		$this->loadModel('CandidateCas');
 		$this->loadModel('CentreExamTypes');
     }
 
@@ -44,7 +45,7 @@ class CandidateCasController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['CandidateSubjects']
+            'contain' => ['Candidates', 'Subjects']
         ];
         $candidateCas = $this->paginate($this->CandidateCas);
 
@@ -61,7 +62,7 @@ class CandidateCasController extends AppController
     public function view($id = null)
     {
         $candidateCa = $this->CandidateCas->get($id, [
-            'contain' => ['CandidateSubjects']
+            'contain' => ['Candidates', 'Subjects']
         ]);
 
         $this->set('candidateCa', $candidateCa);
@@ -84,8 +85,9 @@ class CandidateCasController extends AppController
             }
             $this->Flash->error(__('The candidate ca could not be saved. Please, try again.'));
         }
-        $candidateSubjects = $this->CandidateCas->CandidateSubjects->find('list', ['limit' => 200]);
-        $this->set(compact('candidateCa', 'candidateSubjects'));
+        $candidates = $this->CandidateCas->Candidates->find('list', ['limit' => 200]);
+        $subjects = $this->CandidateCas->Subjects->find('list', ['limit' => 200]);
+        $this->set(compact('candidateCa', 'candidates', 'subjects'));
     }
 
     /**
@@ -109,8 +111,9 @@ class CandidateCasController extends AppController
             }
             $this->Flash->error(__('The candidate ca could not be saved. Please, try again.'));
         }
-        $candidateSubjects = $this->CandidateCas->CandidateSubjects->find('list', ['limit' => 200]);
-        $this->set(compact('candidateCa', 'candidateSubjects'));
+        $candidates = $this->CandidateCas->Candidates->find('list', ['limit' => 200]);
+        $subjects = $this->CandidateCas->Subjects->find('list', ['limit' => 200]);
+        $this->set(compact('candidateCa', 'candidates', 'subjects'));
     }
 
     /**
@@ -137,8 +140,8 @@ class CandidateCasController extends AppController
     {	 
         if ($this->request->is('post')) 
 		{
-			$etype =  explode('_',$this->request->data['etype']);
-			$cent = explode('_',$this->request->data['centre']);
+			$etype =  explode('_',$this->request->data['exam']);
+			$cent = $this->getcentres($this->request->getSession()->read('centreId'));
 			$subs = $this->request->data['chksub'];
 			if($cent[0]<1 )$this->Flash->error(__('Please Select Centre'));
 			else if($etype[0]<1)$this->Flash->error(__('Please Select Exam'));
@@ -148,55 +151,21 @@ class CandidateCasController extends AppController
 			}
 			
 		}
-        else 
+        $cent = $this->getcentres($this->request->getSession()->read('centreId'));
+		$centid = '';
+		if($cent!='Select Centre')
 		{
-			 $this->Flash->set(__('Please Enter Only Marks/Grades in the Template, 
-			 Do not alter the Template in anyway, add or remove any Sheet or Candidates or Row or Column. Use only downloaded Template, do not make yours!'));
+			$c=explode('_',$cent);
+			$cent=$c[1];
+			$centid = $c[0].'_'.$c[1];
 		}
+        $this->set('centre', $cent);
 		
-		$reg=$this->getregions();//
-		$this->set('burl',$this->base);
-		$this->set('regions',$reg);
-		$this->set('districts', array('Select Region'));
-		$this->set('etypes',array('Select Centre'));
-		$this->set('centres', array('Select District'));		
-		
-		if(isset($reg[-1]))$this->Flash->error(__('No Regions Available'));
+		$exams=$this->getexam();
+		$this->set('etypes',$exams);
     }
 	
-	public function loaddistricts($reg)
-	{
-		$dsts=$this->getdistricts($reg);
-		$a=1;
-		$out='{"option0":{"value":"0","text":"District"}';
-		foreach($dsts as $k=>$v)
-		{
-			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
-			$a++;
-		}
-		$out.='}';
-		echo $out;
-		exit();
-	}
-	public function loadcentres($dist)
-	{
-		
-		$cnts=$this->getcentres($dist);
-		
-		$a=1;
-		$out='{"option0":{"value":"0","text":"Centre"}';
-		foreach($cnts as $k=>$v)
-		{
-			$k=str_replace('"',"'",$k);
-			$v=str_replace('"',"'",$v);
-			
-			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
-			$a++;
-		}
-		$out.='}';
-		echo $out;
-		exit();
-	}
+	
 	
 	public function loadexams($cent)
 	{
@@ -220,14 +189,16 @@ class CandidateCasController extends AppController
 	public function loadsubjects($exam)
 	{
 		$cnts=$this->getsubjects($exam);
-		$a=1;
-		$out='{"option0":{"value":"0","text":"Exams"}';
+		$a=0;
+		//$out='{"option0":{"value":"0","text":"Exams"}';
 		foreach($cnts as $k=>$v)
 		{
 			$k=str_replace('"',"'",$k);
 			$v=str_replace('"',"'",$v);
+			if($a!=0)$out.=',';
+			else $out='{';
 			
-			$out.=',"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
+			$out.='"option'.$a.'":{"value":"'.$k.'","text":"'.$v.'"}';
 			$a++;
 		}
 		$out.='}';
@@ -235,11 +206,11 @@ class CandidateCasController extends AppController
 		exit();
 	}
 		
-	private function getexam($centid)
+	private function getexam()
 	{
 		//echo $centid;exit;
 		$ety = $this->ExamTypes->find('all',array('fields' => array('id','short_name')))->where(['has_ca' => 1]);//
-		$ety->innerJoinWith('CentreExamTypes', function ($q) { return $q->where(['centre_id' => $this->centreID]);});
+		$ety->innerJoinWith('CentreExamTypes', function ($q) { return $q->where(['centre_id' => $this->request->getSession()->read('centreId')]);});
 		if(!$ety->isEmpty())
 		{
 			$etypes=$ety->toArray();
@@ -258,147 +229,115 @@ class CandidateCasController extends AppController
 		foreach($subjects as $k=>$v)$subject[$v['id'].'_'.$v['code'].'_'.$v['name']]= $v['name'];
 		return $subject;
 	}
-	
-	public function getcentres($distid)
+	public function getcentres($centid)
 	{
-		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['district_id' => $distid]);
-		//$cnt->innerJoinWith('Candidates', function ($q) { return $q->where(['1' => '1']);});
+		$cnt = $this->Centres->find('all',array('fields' => array('id','number','name')))->where(['id' => $centid]);
 		if(!$cnt->isEmpty())
 		{
 			$centres=$cnt->toArray();
-			$centre=array();
 			$a=0;
 			foreach($centres as $k=>$v)
 			{
-				$centre[$v['id'].'_'.$v['number'].'_'.$v['name']]=$v['number'].' - '.$v['name'];
+				$centre=$v['id'].'_'.$v['number'].'_'.$v['name'];
 				$a++;
 			}
 			return $centre;
 		}
-		return array(-1=>'No Centres');
+		return 'Select Centre';
 	}
 	
-	public function getdistricts($regid)
-	{
-		$dst = $this->Districts->find('all',array('fields' => array('id','number','name')))->where(['region_id' => $regid]);
-		if(!$dst->isEmpty())
-		{
-			$dists=$dst->toArray();
-			$dist=array();
-			$a=0;
-			foreach($dists as $k=>$v)
-			{
-				$dist[$v['id']]=$v['number'].' - '.$v['name'];
-				$a++;
-			}
-			return $dist;
-		}
-		return array(-1=>'No Districts');
-	}
 	
-	public function getregions()
-	{
-		$reg = $this->Regions->find('all',array('fields' => array('id','number','name')));
-		if(!$reg->isEmpty())
-		{
-			$regs=$reg->toArray();
-			$region=array();
-			$a=0;
-			$region[0]='Region';
-			foreach($regs as $k=>$v)
-			{
-				if($a==0)$getexm=$v['id'];
-				$region[$v['id']]=$v['number'].' - '.$v['name'];
-				$a++;
-			}
-			return $region;
-		}
-		return array(-1=>'No Regions');
-	}
 	public function bulk()
     {
 		 $uploadData = '';
 		 $allowedtypes=array('application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		 
         if ($this->request->is('post')) {
-            if(!empty($this->request->data['file']['name'])){
-                $fileName = $this->request->data['file']['name'];
-				
-				if(in_array($this->request->data['file']['type'],$allowedtypes) )
-				{
-					$uploadPath = 'uploads/cas/';
-					$uploadFile = $uploadPath.$fileName;
-					//$ftype = $this->request->data['file']['name'];
-					if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
-						$msg=$this->importExcelfile($uploadFile);
-						$msgs=explode(';',$msg);
-						if($msgs[0]==0)$this->Flash->error(__($msgs[1]));
-						else $this->Flash->success(__($msgs[1]));
-						
+			if(!empty($this->request->data['exam']))
+				if(!empty($this->request->data['file']['name'])){
+					$fileName = $this->request->data['file']['name'];
+					$exam = $this->request->data['exam'];
+					
+					if(in_array($this->request->data['file']['type'],$allowedtypes) )
+					{
+						$uploadPath = 'uploads'.DS.'cas'.DS;
+						$uploadFile = $uploadPath.$fileName;
+						//$ftype = $this->request->data['file']['name'];
+						if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
+							$msg=$this->importExcelfile($uploadFile, $exam);
+							//$this->chapa($msg);
+							$this->set('msgs',$msg);
+							
+						}else{
+							$this->Flash->error(__('Unable to upload file, please try again.'));
+						}
 					}else{
-						$this->Flash->error(__('Unable to upload file, please try again.'));
-					}
+							$this->Flash->error(__('Please Upload Only XLS,CSV and XLSX files'));
+						}
 				}else{
-						$this->Flash->error(__('Please Upload Only XLS,CSV and XLSX files'));
-					}
-            }else{
-                $this->Flash->error(__('Please choose a file to upload.'));
-            }
-            
+					$this->Flash->error(__('Please choose a file to upload.'));
+           }else{
+					$this->Flash->error(__('Please Select Exam'));
+				} 
         }
-		
-        $this->set('uploadData', $uploadData);
-         $this->set('cmx', 'HOlla');
-       // $files = $this->Files->find('all', ['order' => ['Files.created' => 'DESC']]);
-        $filesRowNum = 0; //$files->count();
-      //  $this->set('files',$files);
-        $this->set('filesRowNum',$filesRowNum);
+		$cent = $this->getcentres($this->request->getSession()->read('centreId'));
+		$centid = '';
+		if($cent!='Select Centre')
+		{
+			$c=explode('_',$cent);
+			$cent=$c[1];
+			$centid = $c[0].'_'.$c[1];
+		}
+        $this->set('centre', $cent);
+		$this->set('centreid', $centid);
+		$exams=$this->getexam();
+		$this->set('etypes',$exams);
     }
-	private function importExcelfile ($fname){
+	
+	
+	private function importExcelfile ($fname, $exam){
 		ini_set('memory_limit', '512M');
 		$spreadsheet = IOFactory::load($fname);
-		$sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-		$ans=$this->fileprocess($sheetData);
-		return $ans;
+		//
+		$scount = $spreadsheet->getSheetCount();
+		$allsheets = $spreadsheet->getSheetNames();
+		$file = explode(DS,$fname);
+		$filename = $file[sizeof($file)-1];
+		$ansArr=array();
+		for($a=0;$a<$scount;$a++)
+		{
+			$sheetData = $spreadsheet->getSheet($a)->toArray(null, true, true, true);
+			$ans = $this->fileprocess($sheetData,$exam);
+			$ansArr[]=array($filename,$allsheets[$a],$ans);
+		}
+		return $ansArr;
 	}
 		
-	private function fileprocess($data)
+	private function fileprocess($data,$exam)
 	{
 		$alpha=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF');
-		//TEMPLATES SET
-		//-ID-KEYWORDS-DATA WIDTH-DATA CELLS
-		/*************
-		KEY: SIFA //0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	
-			sft- Sifa Type, sfb - Begining Column of Sifa, we- Work Experience, rep - Repeater, cmb - Combination
-			subs - Beginning Column fo subjects, sube- ending column for subjects, pg - Parent/Guardian
-		
-		************/
-	//CONTINUOUS ASSESSMENT FORM FOR SECONDARY  SCHOOLS									
+	//TEMPLATES SET
+									
 	//CONTINUOUS ASSESSMENT FORM FOR TEACHER TRAINING COLLEGES								
 
-	$templates=array(
-	'CSEE'=>array(array('IV'),25
-	,array('sft'=>1,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>20,'dis'=>21,'gp'=>23,'7n'=>false,'7y'=>false,'cmb'=>false)),
-	'ACSEE'=>array(array('VI'),22
-	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>16,'dis'=>17,'gp'=>20,'7n'=>false,'7y'=>false,'cmb'=>18)),
-	'DSEE'=>array(array('DIPLOMA IN SECONDARY EDUCATION EXAMINATION'),26
-	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>22,'dis'=>23,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)),
-	'DTE'=>array(array('DIPLOMA IN TECHNICAL EDUCATION EXAMINATION'),26
-	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>22,'dis'=>23,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)),
-	'GATCE'=>array(array("GRADE 'A' TEACHER CERTIFICATE  EXAMINATION"),27
-	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>23,'dis'=>24,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)),
-	'GATSCCE'=>array(array("GRADE 'A' TEACHER SPECIAL COURSE CERTIFICATE  EXAMINATION"),25
-	,array('sft'=>3,'sfb'=>1,'we'=>2,'rep'=>false,'sex'=>3,'nem'=>4,'dob'=>7,'subs'=>10,'sube'=>20,'dis'=>21,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)));
-	
-		$csee=array('31','32','33');
-		$disabs=array('BR', 'LV', 'HI', 'II', 'Others');
+		$templates=array(
+		'CSEE'=>array(array('CSEE'),8,array('proj'=>true,'begn'=>4,'btp'=>false)),
+		'ACSEE'=>array(array('ACSEE'),8,array('proj'=>true,'begn'=>4,'btp'=>false)),
+		'DSEE'=>array(array('DSEE'),8,array('proj'=>false,'begn'=>4,'btp'=>false)),
+		'DTE'=>array(array('DTE'),8,array('proj'=>false,'begn'=>4,'btp'=>false)),
+		'GATCE'=>array(array("GATCE"),8,array('proj'=>false,'begn'=>4,'btp'=>false)),
+		'GATSCCE'=>array(array("GATSCCE"),8,array('proj'=>false,'begn'=>4,'btp'=>false)));
+		
 		
 		//DATA START INDICATORS
-		$dataIC=array('INDEX NO','IDENTIFICATION NO','EXAM INDEX NO');
+		$dataIC=array('INDEX NO.');
+		$subBTP=array(array("BTP"),7,array('proj'=>true,'begn'=>4,'btp'=>true));
 		
 		$checkET=false;
 		$checkCT=false;
 		$checkDT=false;
+		$checkSB=false;
+		$checkBTP=false;
 		$dataStart=0;
 		$tWidth=sizeof($data[1]);
 		$exmWidth=0;
@@ -409,13 +348,14 @@ class CandidateCasController extends AppController
 		{
 			// 1) RECONCILIATE EXAM TYPES and CENTRE number
 					$tempLength=sizeof($data);
-					$endcheck=19;
+					$endcheck=9;
 					$bAT=($endcheck<$tempLength)?$endcheck:$tempLength;
-					for($j=1;$j<19;$j++)
+					for($j=1;$j<$endcheck;$j++)
 					{
 						if($j>$bAT)break;
-						foreach($data[$j] as $cell)
+						foreach($data[$j] as $key=>$cell)
 						{
+							
 							if($j<7)
 							{
 								foreach($templates as $k=>$ext)
@@ -439,25 +379,48 @@ class CandidateCasController extends AppController
 									$checkCT=true;
 									$examCT=$cent[0].substr('0'.substr($cent,1,strlen($cent)),-4);
 								}
+								
+								//SUBJECT
+								if(preg_match("/^[0-9]{2,3}/i", trim($cell)))
+								{
+									$checkSB=true;
+									$subNo=substr('00'.(trim($cell)),-3);
+									//egeshea $data[$j]
+									$key2=$key;
+									$key2++;
+									$key2++;
+									$subName = $data[$j][$key2];
+								}
 							}
-							else if($j>11)
+							else
 							{
 								foreach($dataIC as $st)
 								{
 									//exam type
 										if (strpos(strtoupper($cell),$st) !== false)
-										{
-											$checkDT=true;
-											$dataStart=$j+2;
+										{ 
+											$checkDT = true;
+											$dataStart = $j+1;
 										}
 								}
 							}
-						}
-					}
+							if(trim(strtoupper($cell)) == 'BTP')
+							{
+								$checkBTP=true;
+								$subNo='000';
+								$subName = 'BTP';
+							}
+						}//foreach
+					}//for
 			//exam type and template width		
 			if(!$checkET)
 			{
 				$msg[]='Invalid Template : No Examination Type';
+				$keepRead=false;
+			}
+			else if($examTP!=$exam)
+			{
+				$msg[]='Selected Exam does not match Template Exam. Template : '.$examTP.' - Selected : '.$exam;
 				$keepRead=false;
 			}
 			else if($tWidth!=$exmWidth)
@@ -465,6 +428,13 @@ class CandidateCasController extends AppController
 				$thsmsg=($tWidth>$exmWidth)?'Exceeds':'is Less than';
 				$msg[]='WARNING: Template Issue: Column Count '.$thsmsg.' Count expected for '.$examTP.' Template';
 				//$keepRead=false;
+			}
+			
+			//Exam Subject
+			if(!$checkSB)
+			{
+				$msg[]='Subject Code Not Found in the Template';
+				$keepRead=false;
 			}
 			
 			//Exam Centre
@@ -492,409 +462,198 @@ class CandidateCasController extends AppController
 			
 			if($keepRead)
 			{
-				$metaDT=$templates[$examTP][2];
-				if($examTP=='CSoEE')
-				{				
-					//AREAS
-					$reg = $data[2]['F'];
-					$dist = $data[2]['M'];
-					$scho = $data[4]['H'];
-					$schoNo = $data[4]['F'];
-					echo 'MKOA : '.$reg.', WILAYA : '.$dist.', SHULE : '.$scho.' NAMBA : '.$schoNo; echo '<br>';
-					
-					//CENTRE
-					$phone1 = $data[6]['C'];
-					$phone2 = $data[6]['C'];
-					echo 'PHONE 1 : '.$phone1.', PHONE 2 : '.$phone2; echo '<br>';
-					
-					$phys_practA = $data[7]['P'];
-					$phys_practB = $data[7]['Q'];
-					$phys_practC = $data[7]['R'];
-					$phys_practTotal = $data[7]['S'];
-					//alt 2, live -1.
-					$phys_practType = trim($data[7]['G'])=='√'?2:(trim($data[7]['I'])=='√'?1:0);
-					
-					$chem_practA = $data[8]['P'];
-					$chem_practB = $data[8]['Q'];
-					$chem_practC = $data[8]['R'];
-					$chem_practTotal = $data[8]['S'];
-					$chem_practType = trim($data[8]['G'])=='√'?2:(trim($data[8]['I'])=='√'?1:0);
-					
-					$bio_practA = $data[9]['P'];
-					$bio_practB = $data[9]['Q'];
-					$bio_practC = $data[9]['R'];
-					$bio_practTotal = $data[9]['S'];
-					$bio_practType = trim($data[9]['G'])=='√'?2:(trim($data[9]['I'])=='√'?1:0);
-					
-					
-					echo 'A : '.$phys_practA.', B : '.$phys_practB.', C : '.$phys_practC.' T : '.$phys_practTotal.' PRACTICAL Physics : '.$phys_practType; echo '<br>';
-					echo 'A : '.$chem_practA.', B : '.$chem_practB.', C : '.$chem_practC.' T : '.$chem_practTotal.' PRACTICAL Chemistry : '.$chem_practType; echo '<br>';
-					echo 'A : '.$bio_practA.', B : '.$bio_practB.', C : '.$bio_practC.' T : '.$bio_practTotal.' PRACTICAL Biology : '.$bio_practType; echo '<br>';
-					
-					//CENTRE AND ASSOCIATIONS TO DB //$this->Centres->newEntity(); 
-					
-					$cent = $this->Centres->findByNumber($schoNo)->first();
-					$exam = $this->ExamTypes->findByShortName('CSEE')->first();
-					
-					//PRACTICALS
-					
-					$sub_phy= $this->Subjects->findByCode($csee[0])->first();
-					$pract_phy=$this->Practicals->newEntity();
-					$pract_phy->subjects_id=$sub_phy->id; 
-					$pract_phy->centres_id=$cent->id;
-
-
-					$pract_phy->practical_type=$phys_practType;
-					$pract_phy->group_A=$phys_practA;
-					$pract_phy->group_B=$phys_practB;
-					$pract_phy->group_C=$phys_practC;
-					$pract_phy->total=$phys_practTotal;
-					$this->Practicals->save($pract_phy);
-					
-					$sub_chem= $this->Subjects->findByCode($csee[1])->first();
-					$pract_chem=$this->Practicals->newEntity();
-					$pract_chem->subjects_id=$sub_chem->id; 
-					$pract_chem->centres_id=$cent->id;
-					$pract_chem->practical_type=$chem_practType;
-					$pract_chem->group_A=$chem_practA;
-					$pract_chem->group_B=$chem_practB;
-					$pract_chem->group_C=$chem_practC;
-					$pract_chem->total=$chem_practTotal;
-					$this->Practicals->save($pract_chem);
-					
-					$sub_bio= $this->Subjects->findByCode($csee[2])->first();
-					$pract_bio=$this->Practicals->newEntity();
-					$pract_bio->subjects_id=$sub_bio->id; 
-					$pract_bio->centres_id=$cent->id;
-					$pract_bio->practical_type=$bio_practType;
-					$pract_bio->group_A=$bio_practA;
-					$pract_bio->group_B=$bio_practB;
-					$pract_bio->group_C=$bio_practC;
-					$pract_bio->total=$bio_practTotal;
-					$this->Practicals->save($pract_bio);
-					
-					echo ' <br><br> CENTRE '.$cent->id.'<br>';	
-				}
-				
 				//ARRAYS
-				$complete=array();
+				$metaDT=$checkBTP?$subBTP[2]:$templates[$examTP][2];	
+				
 				$incomplete=array();
 				
-								
+				//EXAM ID
+				$dbexm = $this->ExamTypes->find()->where(['short_name' => $examTP])->first();
+				if(!empty($dbexm))
+				{
+					$dbexamid=$dbexm->id;
+				}else
+				{
+					$msg[]="Database Error";
+					 return '0;'.implode(', ',$msg);
+				}
+				
+				//GET SUBJECT ID
+				$dbsub = $this->Subjects->find()->where(["right(concat('00',code),3)" => $subNo])->first();
+				if(!empty($dbsub))
+				{
+					$dbsubid=$dbsub->id;
+				}else
+				{
+					$msg[]="Database Error";
+					 return '0;'.implode(', ',$msg);
+				}
+				
+				//GET CENTRE ID 
+				$dbcnt = $this->Centres->find()->where(['number' => $examCT])->first();
+				if(!empty($dbcnt))
+				{
+					$dbcentid=$dbcnt->id;
+					if($dbcentid != ($this->request->getSession()->read('centreId'))) return '0;'."Selected Centre does not match Template Centre";
+					
+				}else 
+				{
+					$msg[]="Template Exam Centre not recognised";
+					 return '0;'.implode(', ',$msg);
+				}
+				
+				
+			//	echo 'EXAM '.$examTP.' vs '.$exam.' : CENTRE '.$dbcentid.' vs '.($this->request->getSession()->read('centreId')).' : SUBJECT '. $dbsubid; exit;
+			//return '99;'."SUBJECT NAME ".$subName.' : SUBJECT NO '.$subNo.' : SUBJECT ID '. $dbsubid;
+					$b=0;
+					$d=0;			
 			for($rw=$dataStart; $rw<sizeof($data);$rw++)
 			{
 				
 				//BEGIN
-				$ROW=array();
-				//6) CANDIDADOS
-				$c=$metaDT['nem'];
+				//CANDIDADOS
+				$c=1;
 				$nem=array();
 				$nem[]= trim($data[$rw][$alpha[$c]]);
 				$nem[]= trim($data[$rw][$alpha[$c+1]]);
 				$nem[]= trim($data[$rw][$alpha[$c+2]]);
 				
-				$candname=implode('',$nem);
-				
-				if($candname!='')
+				if($nem[0]!='' && $nem[2]!='')
 				{
-					$bad=false;
 					//1)NAMBA
-					$refNO=$data[$rw][$alpha[0]];
-					$ROW['ref']=$refNO;
+					$refNO=substr('00'.$data[$rw][$alpha[0]],-4);	
 					
-					//2)SIFA
+					//3) MARKS begn
+					$c=$metaDT['begn'];
+					//'proj'=>true,'begn'=>5,'btp'=>false
+						if($metaDT['btp'])
+						{
+							$grade = trim($data[$rw][$alpha[$c]]);
+							$btp = preg_match("/^[A-Z]/i",$grade)?$grade:'NULL';
+							$proj=intval(trim($data[$rw][$alpha[$c+1]]));
+							$remks=trim($data[$rw][$alpha[$c+2]]);
+							$onem = false;$twom = false;$threem = false;
+						}
+						else
+						{
+							
+							$onem=intval(trim($data[$rw][$alpha[$c]]));
+							$twom=intval(trim($data[$rw][$alpha[$c+1]]));
+							$threem=intval(trim($data[$rw][$alpha[$c+2]]));
+							if($metaDT['proj'])
+							{
+								$proj=intval(trim($data[$rw][$alpha[$c+3]]));
+								$remks = false;
+							}
+							else
+							{
+								$remks = trim($data[$rw][$alpha[$c+3]]);
+								$proj = false;
+							}
+							
+							$btp = false;
+							
+						}
 					
-					$sifa=array();
-					//0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	 
-					switch($metaDT['sft'])
-					{
-						case 1: $c=$metaDT['sfb'];
-								$sifa[]= $data[$rw][$alpha[$c++]].'/'.$data[$rw][$alpha[$c++]].'/'.$data[$rw][$alpha[$c++]];
-						break;
-						case 2: $c=$metaDT['sfb'];
-								$sifa[]= $data[$rw][$alpha[$c++]];
-								$sifa[]= $data[$rw][$alpha[$c++]];
-								$sifa[]= $data[$rw][$alpha[$c++]];
-						break;
-						case 3: $c=$metaDT['sfb'];
-								$sifa[]= $data[$rw][$alpha[$c++]];
-						break;
-						default: $sifa=false;							
-						break;
-					} 
-					$ROW['sifa']=$sifa;
-					
-					//3) WORK EXPERIENCE integer
-					if($metaDT['we'])
-					{
-						//$bad
-						$we=intval($data[$rw][$alpha[$metaDT['we']]]);
-						if($we>0)$bad=true;
-						$ROW['we']=$we;
+					//GET CANDIDATE
+					$where = array(
+									"right(concat('00',number),3)" => $refNO
+									,'first_name' => $nem[0]
+									,'other_name' => $nem[1]
+									,'surname' => $nem[2]
+									,'centre_id' => $dbcentid
+									,'exam_type_id' => $dbexamid);
+									
+					$cands = $this->Candidates->find()->select(array('id', 'exam_type_id'))->where($where)->first();
+					if(!empty($cands))
+					{ 
+						$twhere=array('subject_id' => $dbsubid,'candidate_id' => $cands->id);
+						
+						$caob = $this->CandidateCas->find()->where($twhere)->first();
+						if(empty($caob))
+						{
+							$ca =$this->CandidateCas->newEntity();
+							$b++;
+						}
+						else
+						{
+							$ca = $caob;
+							$d++;
+						}
+						
+						if($onem)$ca->y1t1=$onem;
+						if($twom)$ca->y1t2=$twom;
+						if($threem)$ca->y2t1=$threem;
+						if($proj)$ca->project=$proj;
+						if($remks)$ca->remarks=$remks;
+						if($btp)$ca->btp=$btp;
+						
+						$ca->candidate_id=$cands->id;
+						$ca->subject_id=$dbsubid; 
+						$this->CandidateCas->save($ca);
+						//CandidateCas*/
+						
 					}
-					else $ROW['we']=false;
-					
-					//4) REPEATER integer
-					if($metaDT['rep'])
-					{
-						$ROW['rep']=intval($data[$rw][$alpha[$metaDT['rep']]]);
-					}
-					else $ROW['rep']=false;
-					//5)SEX
-					$sex=strtoupper(trim($data[$rw][$alpha[$metaDT['sex']]])); //sex
-					if($sex!='M' && $sex!='F')$bad=true;
-					$ROW['sex']=$sex;
-					
-					//6) CANDIDADOS
-					$c=$metaDT['nem'];
-					$nem=array();
-					$nem[]= trim($data[$rw][$alpha[$c]]);
-					$nem[]= trim($data[$rw][$alpha[$c+1]]);
-					$nem[]= trim($data[$rw][$alpha[$c+2]]);
-					//Valid check
-					if($nem[0]=='' ||  $nem[2]=='' )$bad=true;
-					$ROW['name']=$nem;
-					
-					
-					//7) DATE OF BIRTH
-					$c=$metaDT['dob'];
-					$d=intval($data[$rw][$alpha[$c]]);
-					$m=intval($data[$rw][$alpha[$c+1]]);
-					$Y=intval($data[$rw][$alpha[$c+2]]);
-					
-					
-					$dob=$Y.'-'.$m.'-'.$d;
-					//valid check
-					if(!checkdate($m,$d,$Y))$bad=true;
-					
-					/*$date=DateTime :: createFromFormat('m/d/Y',$dob);
-					$date_errors= DateTime :: getLastErrors();
-					
-					if($date_errors['warning_count'] + $date_errors['error_count']>0) $bad=true;*/
-					
-					$ROW['dob']=$dob;
-					
-					//8) SUBJECTS
-					$subar=array();
-					$substart=intval($metaDT['subs']);
-					$substop=intval($metaDT['sube']);
-					for($a=$substart;$a<=$substop;$a++)
-					{
-						$subar[]=substr('00'.trim($data[$rw][$alpha[$a]]),-3);
-					}
-					
-					$ROW['subs']=$subar;
-					//9) DISABILITY
-					if(trim($data[$rw][$alpha[$metaDT['dis']]])!='')
-					{
-						$ROW['dis']=trim($data[$rw][$alpha[$metaDT['dis']]]);
-					}
-					else $ROW['dis']=false;
-					
-					//10) PARENT / GUARDIAN
-					if($metaDT['gp'])
-					{
-						$ROW['gp']=trim($data[$rw][$alpha[$metaDT['gp']]]);
-					}
-					else $ROW['gp']=false;
-					
-					//11) PSLE NUMBER
-					if($metaDT['7n'])
-					{
-						$ROW['psle']=$data[$rw][$alpha[$metaDT['7n']]];
-					}
-					else $ROW['psle']=false;
-					
-					//12) PSLE YEAR
-					if($metaDT['7y'])
-					{
-						$ROW['psley']=$data[$rw][$alpha[$metaDT['7y']]];
-					}
-					else $ROW['psley']=false;
-					
-					//13) COMBINATION
-					if($metaDT['cmb'])
-					{
-						$ROW['cmb']=$data[$rw][$alpha[$metaDT['cmb']]];
-					}
-					else $ROW['cmb']=false;
-					
-					//TO ARRAY
-					if($bad)$incomplete[]=$ROW;
-					else $complete[]=$ROW;
 			
 				}//NO CANDIDATE NAME
 				
 			}//CANDS LOOP
+			//finish
+			$ret = empty($msg)?'2':'1';
 			
-			//FINALIZE READ
-			if(empty($complete) && empty($incomplete))return '0;'."Empty Template : No Candidates found";
-			else
-			{
-				//$this->chapa($incomplete);
-				//HEADER
-				$dataHead=array();
-				$dataHead['exam']=$examTP;
-				$dataHead['centre']=$examCT;
-				
-				if(!empty($complete))
-				{
-					$feedback=$this->dataInsert($dataHead,$complete);
-				}
-				else
-				{
-					//
-					$feedback='Sorry, None of the Candidates Data met Registration Requirements. Please check the original Template Structure and Refer Registration Guidelines';
-					return '0;'.$feedback;
-				}
-				return '2;'.$feedback.';'.implode('_',$dataHead);
-				
-			}
-				
+			$msg[]=$subName.' ('.$subNo.') : '.($d+$b).' - Candidates, '.$b.' - Inserted, '.$d.' - Changed';
+			return $ret.';'.implode('<br> ',$msg);
+			
 			}//TEMPLATE CHECKS 
-			else return '0;'.implode(', ',$msg);
+			else return '0;'.implode('<br> ',$msg);
 
 		}//ARRAY CHECK
 		else return '0;'."Empty File : Could not Read Data";
 	}
-	private function dataInsert($dataHead,$dataBody)
-	{
-		//'sft'=>false,'sfb'=>false,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>20,'dis'=>21,'gp'=>23,'7n'=>false,'7y'=>false,'cmb'=>false
 		
-		//1) CHECK SIFA
-		
-		//echo $dataHead['exam'].'      '.$dataHead['centre'].'<br>'.str_repeat('*',110).'<br>';
-		//foreach($data as $line)
-		//echo implode(',',$line).'<br>';
-		
-		//$this->chapa($data);
-	//	exit;
-		
-		if(is_array($dataBody))
-		{	$a=0;
-			foreach($dataBody as $data)
-			{
-				$cent = $this->Centres->findByNumber($dataHead['centre'])->first();
-				$exam = $this->ExamTypes->findByShortName($dataHead['exam'])->first();		
-				//INSERT CANDIDATE
-				$cand=$this->Candidates->newEntity();
-				$cand->number=$data['ref'];
-				$cand->sex=$data['sex'];
-				$cand->first_name=$data['name'][0];
-				$cand->other_name=$data['name'][1];
-				$cand->surname=$data['name'][2];
-				$cand->guardian_phone=$data['gp'];
-				
-				$cand->date_of_birth=$data['dob'];
-				$cand->work_experience=$data['we']?$data['we']:'NULL';
-				$cand->combination=$data['cmb']?$data['cmb']:'NULL';
-				$cand->PSLE_number=$data['psle']?$data['psle']:'NULL';
-				$cand->PSLE_year=$data['psley']?$data['psley']:'NULL';
-				$cand->is_repeater=$data['rep']?$data['rep']:'0';
-				
-				$cand->centre_id=$cent->id; 
-				$cand->exam_type_id=$exam->id; 
-				$this->Candidates->save($cand);
-				//  $sqllog = $this->Candidates->getDataSource()->getLog(false, false);       
- 				 //debug($sqllog);
-						
-				//INSERT DISABILITIES
-				if($data['dis'])
-				{
-					$replace=array(' ','.');
-					$dis=str_replace($replace,'',strtoupper(trim($data['dis'])));
-					$dis=$dis=='OTHERS'?ucfirst(strtolower($dis)):$dis;
-					
-					$disob= $this->Disabilities->findByShortname($dis)->first();
-					$disab=$this->CandidateDisabilities->newEntity();
-					$disab->disability_id=$disob->id;
-				 	$disab->candidate_id=$cand->id;
-					$this->CandidateDisabilities->save($disab);
-					
-				}
-				
-						
-				//INSERT QUALIFICATIONS
-				if($data['sifa'])
-				{
-				//	$this->chapa($data['sifa']);
-					foreach($data['sifa'] as $sifa)
-					{
-						if(trim($sifa)!='')
-						{
-							$sf=explode('/',$sifa);
-							$candQ=$this->CandidateQualifications->newEntity();
-							$candQ->centre_number=$sf[0];
-							$candQ->candidate_number=$sf[1];
-							$candQ->exam_year=$sf[2];
-							$candQ->candidate_id=$cand->id;
-							$this->CandidateQualifications->save($candQ);
-						}
-					}
-				}
-						
-				//INSERT SUBJECTS  
-				foreach($data['subs'] as $sbj)
-				{
-					if($sbj!='' && $sbj!='00')
-					{
-					$subo = $this->Subjects->findByCode(intval($sbj))->first();
-					if($subo!=NULL)
-					{
-						//SUBJECT FOUND
-						$candsub = $this->CandidateSubjects->newEntity();
-						$candsub->candidate_id=$cand->id;
-						$candsub->subject_id=$subo->id;
-						$this->CandidateSubjects->save($candsub);
-					}
-					}
-				}//FOREACH SUBS
-				
-				$a++;
-			}//FOREACH
-			return $a.' - Candidates Data Inserted';
-		} //DATA CHECK
-		
-	}
-	public function cadown()
-	{
-		$this->write();
-	}
-	
 	private function write($exam, $centid, $centre, $subs)
 	{
 		$cands = $this->Candidates->find('all',array('fields' => array('id','first_name','other_name','surname','number')))->where(['centre_id' => $centid]);
 		
+		$templates=array(
+		'CSEE'=>array('C3'=>'FORM CA 1','E5'=>'FORM','F5'=>'IV','E6'=>'F-3','G6'=>'F-4'),
+		'ACSEE'=>array('C3'=>'FORM CA 1','E5'=>'FORM','F5'=>'VI','E6'=>'F-5','G6'=>'F-6'),
+		'DSEE'=>array('C3'=>'FORM CA 1','E5'=>'','F5'=>'','E6'=>'1st yr','G6'=>'2nd yr'),
+		'DTE'=>array('C3'=>'FORM CA 1','E5'=>'','F5'=>'','E6'=>'1st yr','G6'=>'2nd yr'),
+		'GATCE'=>array('C3'=>'FORM CA 1','E5'=>'','F5'=>'','E6'=>'1st yr','G6'=>'2nd yr'),
+		'GATSCCE'=>array('C3'=>'FORM CA 1','E5'=>'','F5'=>'','E6'=>'1st yr','G6'=>'2nd yr')
+		);
 		
-		//$subs= array('031'=>'PHYSICS','032'=>'CHEMISRTY','033'=>'BIOLOGY','040'=>'MATHEMATICS','013'=>'GEOGRAPHY');
-		$dwnpath='downloads/ca/';
+		$shead=$templates[$exam];
+		$DIFFetype=array('CSEE','ACSEE');
+		$dwnpath='downloads'.DS.'ca'.DS;
 		$head=array();
 		$head['A1']='THE NATIONAL EXAMINATIONS COUNCIL OF TANZANIA';
 		$head['A2']='CONTINUOUS ASSESSMENT FORM FOR SECONDARY  SCHOOLS';
 		
 		//ROW3
-		$head['A3']=$exam;		$head['B3']='FORM C.A. 1';		$head['C3']='Phone No:';		$head['D3']='766232987';
+		$head['A3']='Exam';		$head['B3']=$exam;		$head['E3']='Phone No:';		$head['F3']='';
 		
 		//ROW4		
 		$cent=explode('_', $centre);		
 		$head['A4']='CENTRE NUMBER:';	$head['B4']=$cent[1];	$head['C4']='NAME:';	$head['D4']=$cent[0];	$head['E4']='YEAR:'; $head['F4']=date('Y');
 		
 		//ROW5
-		$head['A5']='SUBJECT CODE:';/*$head['B5']=$ksb;*/	$head['C5']='NAME:'; /*$head['D5']=$sub;*/	$head['E5']='FORM:';	$head['F5']='VI';
+		$head['A5']='SUBJECT CODE:';/*$head['B5']=$ksb;*/	$head['C5']='NAME:'; /*$head['D5']=$sub;	$head['E5']='FORM:';	$head['F5']='VI';*/
 		
 		//ROW6
-		$head['A6']="STUDENT'S";	$head['B6']='NAME OF STUDENT';	$head['C6']='F-3/5';	$head['D6']='F-3/5';	$head['E6']='PROJECT %';
+		$head['A6']="STUDENT'S";	$head['B6']='NAME OF STUDENT';	/*$head['C6']='F-3/5';	$head['D6']='F-3/5';*/	
+		
+		$head['H6']=in_array($exam,$DIFFetype)?'PROJECT %':'REMARKS';
 		
 		//ROW7
 		$head['A7']='INDEX No.';/*$head['B7']='FORM II EXAM No.';*/	$head['B7']='FIRST NAME'; $head['C7']='MIDDLE NAME'; $head['D7']='SURNAME'; $head['E7']='T1 %';
-		$head['F7']='T2 %';		$head['G7']='T1 %'; $head['H7']='PR %';
+		$head['F7']='T2 %';		$head['G7']='T1 %'; 
 		
-		$spreadsheet = new Spreadsheet();
-		$helper = new Helper\Sample();
-		$helper ->log( 'Create new Spreadsheet object' );
+		
 		$spreadsheet  = new Spreadsheet();
+		
 		//Set document properties 
-		$helper ->log('Set document properties');
 		$user=$this->Auth->user('first_name').' '.$this->Auth->user('other_name').' '.$this->Auth->user('surname');
 		$spreadsheet ->getProperties()
 		->setCreator($user)
@@ -908,27 +667,66 @@ class CandidateCasController extends AppController
 		//
 		$spreadsheet->getSecurity()->setLockStructure(true);
 		$spreadsheet->getSecurity()->setWorkbookPassword("BARAZA");
+		
 		// Add some data 
-		$helper ->log('Add some data');
 		$a=0;
 		foreach($subs as $val)
 		{
 			//53_121_KISWAHILI
 			$somo=explode('_',$val);
 			$ksb = $somo[1];
-			$sub = $somo[2];
+			$sub = ucfirst(strtolower(trim($somo[2])));
 			
 			$head['B5']=$ksb;
-			$head['D5']=ucfirst(strtolower($sub));
+			$head['D5']=$sub;
 			if($a>0)$spreadsheet ->createSheet();
+			
+			//WRITE HEADER
 			foreach($head as $k=>$v)
 			{
 				$spreadsheet ->setActiveSheetIndex($a)->setCellValue($k, $v);
 			}
-			$spreadsheet->getActiveSheet()->mergeCells('$A1:$G1');
-			$spreadsheet->getActiveSheet()->mergeCells('$A2:$G2');		
+			//WRITE SELECTIVE HEADER
+			foreach($shead as $k=>$v)
+			{
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue($k, $v);
+			}
 			
-			//CANDIDATES
+			//MERGE CELLS IN HEADER
+			$spreadsheet->getActiveSheet()->mergeCells('$A1:$G1');
+			$spreadsheet->getActiveSheet()->mergeCells('$A2:$G2');
+			//names
+			$spreadsheet->getActiveSheet()->mergeCells('$B6:$D6');
+			
+			//PROVISION FOR BTP
+			if($sub=='Btp')
+			{
+				foreach(range('A','G') as $colm)$spreadsheet ->setActiveSheetIndex($a)->setCellValue($colm.'5', '');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('B5', 'BTP');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('E6', 'BTP');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('F6', 'PROJECT');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('G6', '');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('H6', '');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('E7', 'Grade');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('F7', 'Marks %');
+				$spreadsheet ->setActiveSheetIndex($a)->setCellValue('G7', 'REMARKS');
+				$endcol='G';
+				$valRange=array('F');
+			}
+			else
+			{
+				$endcol='H';
+				//ca
+				$spreadsheet->getActiveSheet()->mergeCells('$E6:$F6');
+				//validation range
+				$valRange=in_array($exam,$DIFFetype)?range('E','H'):range('E','G');	
+			}
+			
+			
+			
+				
+			
+			//WRITE CANDIDATES
 			$rw=8;
 				if(!$cands->isEmpty())
 				{
@@ -961,15 +759,14 @@ class CandidateCasController extends AppController
 			$spreadsheet->getActiveSheet()->getProtection()->setInsertRows(true);
 			$spreadsheet->getActiveSheet()->getProtection()->setInsertColumns(true);
 			$spreadsheet->getActiveSheet()->getProtection()->setFormatCells(true);
-			//$spreadsheet->getActiveSheet()->getProtection()->setSheet(true);
-			$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+
+			//INPUT CELLS
+		$spreadsheet->getActiveSheet()->getStyle('E8:'.$endcol.($rw-1))->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
 			
-			//$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1))->getFill()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
-			$fill=array('fill' => array('type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,'color' => array('rgb' => 'FF0000')));
-			$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1))->applyFromArray($fill);
-			
-			$validation = $spreadsheet->getActiveSheet()->getCell('E8') ->getDataValidation();
-			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_WHOLE );
+			//INPUT CELLS VALIDATION
+			//$spreadsheet->getActiveSheet()->getStyle('E8:H'.($rw-1))->getNumberFormat()->setFormatCode('#.##'); 
+			$validation = $spreadsheet->getActiveSheet()->getCell('F8') ->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_DECIMAL);
 			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
 			$validation->setAllowBlank(true);
 			$validation->setShowInputMessage(true);
@@ -978,11 +775,20 @@ class CandidateCasController extends AppController
 			$validation->setError('Marks not allowed!');
 			$validation->setPromptTitle('Allowed Marks');
 			$validation->setPrompt('Only numbers between 0 and 100 are allowed.');
-			$validation->setFormula1(0.00);
-			$validation->setFormula2(100.00);
+			$validation->setFormula1(0);
+			$validation->setFormula2(100);
+			
 			//
-			$spreadsheet->getActiveSheet()->getCell('B8')->setDataValidation(clone $validation);
-
+			//$RANGE=in_array($exam,$DIFFetype)?range('E','H'):range('E','G');
+			foreach($valRange as $columnID) 
+			{
+				for($i=7;$i<$rw;$i++)
+				{
+					$spreadsheet->getActiveSheet()->getCell($columnID.$i)->setDataValidation(clone $validation);
+				}
+			}
+			
+			//styling
 			//STYLE HEAD 1
 			$h1=array( 'font' => array('bold' => true,'size' => 16)
 			,'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
@@ -995,11 +801,11 @@ class CandidateCasController extends AppController
 		
 			$spreadsheet->getActiveSheet()->getStyle('A1')->applyFromArray($h1);
 			$spreadsheet->getActiveSheet()->getStyle('A2')->applyFromArray($h2);
-			$spreadsheet->getActiveSheet()->getStyle('A3')->applyFromArray($h3);
+			$spreadsheet->getActiveSheet()->getStyle('B3')->applyFromArray($h3);
 			
 			//SET BORDERS			
-			$bod=array( 'borders' => array('outline' =>  array('borderStyle'=>\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,'outline' =>array('color' => ['argb' => 'FFFF0000']))));
-			foreach(range('A','H') as $columnID) 
+$bod=array('borders'=>array('outline'=>array('borderStyle'=>\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,'outline'=>array('color' =>['argb'=> 'FFFF0000']))));
+			foreach(range('A',$endcol) as $columnID) 
 			{
 				for($i=7;$i<$rw;$i++)
 				{
@@ -1015,24 +821,27 @@ class CandidateCasController extends AppController
 			///****/
 			
 			//FOOTER
-				/*I certify that the information given in this form is correct						
-				Name and signature of subject teacher     .    						
-				WYCLIFFE OTENYO			Date	20.03.2018		
-				Name and signature of Head of department     .    						
-				WYCLIFFE OTENYO			Date	20.03.2018		*/
-
-			//******//
+			
 			$ft=array();
 			$ft['B'.$rw]='I certify that the information given in this form is correct';
 			$ft['B'.($rw+1)]='Name and signature of subject teacher';
-			$ft['B'.($rw+2)]='WYCLIFFE OTENYO';	$ft['E'.($rw+2)]='Date';	$ft['F'.($rw+2)]='20.03.2018';
+			$ft['B'.($rw+2)]='';	$ft['E'.($rw+2)]='Date';	$ft['F'.($rw+2)]='';
 			$ft['B'.($rw+3)]='Name and signature of Head of department ';
-			$ft['B'.($rw+4)]='WYCLIFFE OTENYO';	$ft['E'.($rw+4)]='Date';	$ft['F'.($rw+4)]='20.03.2018';
+			$ft['B'.($rw+4)]='';	$ft['E'.($rw+4)]='Date';	$ft['F'.($rw+4)]=''; 
+			
+			//IN HEADER
+			$spreadsheet->getActiveSheet()->getStyle('F3') ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			//IN FOOTER
+			$spreadsheet->getActiveSheet()->getStyle('B'.($rw+2)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			$spreadsheet->getActiveSheet()->getStyle('F'.($rw+2)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			$spreadsheet->getActiveSheet()->getStyle('B'.($rw+4)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			$spreadsheet->getActiveSheet()->getStyle('F'.($rw+4)) ->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+			
 			foreach($ft as $kf=>$vf)
 			{
-				//echo $kf.'||';
 				$spreadsheet ->setActiveSheetIndex($a)->setCellValue($kf, $vf);
-			}//exit;
+			}
+			
 			$spreadsheet->getActiveSheet()->mergeCells('$B'.$rw.':H$'.$rw);
 			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+1).':H$'.($rw+1));
 			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+3).':H$'.($rw+3));
@@ -1040,6 +849,7 @@ class CandidateCasController extends AppController
 			$spreadsheet->getActiveSheet()->mergeCells('$F'.($rw+2).':H$'.($rw+2));
 			$spreadsheet->getActiveSheet()->mergeCells('$B'.($rw+4).':D$'.($rw+4));
 			$spreadsheet->getActiveSheet()->mergeCells('$F'.($rw+4).':H$'.($rw+4));
+			
 			//STYLE FOOTER
 			$SF1=array( 'font' => array('bold' => true,'italic' => true)
 			,'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
@@ -1050,14 +860,28 @@ class CandidateCasController extends AppController
 			foreach($f2 as $cell) $spreadsheet->getActiveSheet()->getStyle($cell)->applyFromArray($SF2);
 			
 			//finishing SHEET
-			$spreadsheet ->getActiveSheet()->setTitle($ksb.'-'.$sub);
+			$spreadsheet ->getActiveSheet()->setTitle($ksb);
 			
 			$a++;	
 		}
+		$filepath=WWW_ROOT.$dwnpath.'CA'.date('Y').'.xlsx';
 		$writer = new Xlsx($spreadsheet);
-		$writer ->save($dwnpath.'CA'.date('Y').'.xlsx');
-		die;
+		$writer ->save($filepath);
+		$this->sendFile($filepath);
+		//$this->response->withFile($filepath, array( 'download' => true,'name' => 'file_name.xlsx'));
+		//$response = $this->response->file($filepath,array('download' => true, 'name' => 'template.xlsx'));
+		exit;
+	//	return $response;
 		
+	}
+	
+	public function sendFile($id)
+	{
+		//echo $id; exit;
+		$file = $this->Attachments->getFile('C:\xampp\htdocs\eservice\webroot\downloads\ca\CA2018.xlsx');
+		$response = $this->response->withFile($file['path'],array( 'download' => true,'name' => 'file_name.xlsx'));
+	   
+		return $response;
 	}
 	
 	private function chapa($dt)
