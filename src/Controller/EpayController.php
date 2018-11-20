@@ -159,10 +159,16 @@ class EpayController extends AppController
 			{
 				foreach($data as $cid)
 				{
-					$bic = $this->BillItemCandidates->newEntity();
-					$bic->candidate_id = $cid['id'];
-					$bic->bill_item_id = $payid;
-					$this->BillItemCandidates->save($bic);
+					$qr = $this->BillItemCandidates->find()->where(['candidate_id' => $cid['id'],'bill_item_id' => $payid]);
+				
+					$dt = $qr->toArray();
+					if(empty($dt))
+					{
+						$bic = $this->BillItemCandidates->newEntity();
+						$bic->candidate_id = $cid['id'];
+						$bic->bill_item_id = $payid;
+						$this->BillItemCandidates->save($bic);
+					}
 					
 					$cand = $this->Candidates->get($cid['id']);
 					$cand->billhash = 'BL';
@@ -174,13 +180,13 @@ class EpayController extends AppController
 		
 	}
 	
-	public function gepgrequest()
+	public function gepgrequest($data)
 	{
 		$Htagb = '<Gepg>';
 		$Htage = '</Gepg>';
 		$Sigtagb = '<gepgSignature>';
 		$Sigtage = '</gepgSignature>';
-		$data="<gepgBillSubReq>
+		/*$data="<gepgBillSubReq>
 				<BillHdr>
 				<SpCode>SP110</SpCode>
 				<RtrRespFlg>true</RtrRespFlg>
@@ -215,7 +221,7 @@ class EpayController extends AppController
 				</BillItem>
 				</BillItems>
 				</BillTrxInf>
-				</gepgBillSubReq>";
+				</gepgBillSubReq>";*/
 				
 			$resp =	$this->sign($data);
 			
@@ -247,37 +253,18 @@ class EpayController extends AppController
 				curl_close($curl);
 				
 				if ($err) {
-				  echo "cURL Error #:" . $err;
+					return 'cURL error';
+				 // echo "cURL Error #:" . $err;
 				} else {
-					$fp=fopen(APP.'Resource'.DS.'resp.txt','w');
+					$fp=fopen(APP.'Resource'.DS.'respBill.txt','w');
 					fwrite($fp,$response);
-					
-					$this->chapa($response);
+					return $response;
 				}
-				 
-				/*
-				//$this->chapa($dataO);
-					//TO GePG
-					$url = '154.118.230.18/api/bill/sigqrequest';
-					$headers = array("Content-Type: application/xml","Gepg-Code: SP110","Gepg-Com: default.sp.in");
-					
-					$cSession = curl_init(); 
-					curl_setopt($cSession,CURLOPT_URL,$url);
-					curl_setopt($cSession,CURLOPT_RETURNTRANSFER,true);
-					curl_setopt($cSession,CURLOPT_HEADER, $headers); 
-					curl_setopt($cSession, CURLOPT_POSTFIELDS,"xmlRequest=" . $dataO);
-					$result=curl_exec($cSession);
-					curl_close($cSession);
-					
-					$fp=fopen(APP.'Resource'.DS.'resp.txt','w');
-					fwrite($fp,$result);
-					
-					$this->chapa($result);*/
 				
 			}
 			else 
-			echo '1) STATUS : '.$resp[0].'<BR>2) RESPONSE;<BR> '.$resp[1];
-			exit;
+			//echo '1) STATUS : '.$resp[0].'<BR>2) RESPONSE;<BR> '.$resp[1];
+			return false;
 	}
 	
 	private function sign($data)
