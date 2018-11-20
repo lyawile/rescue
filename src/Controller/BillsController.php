@@ -237,8 +237,8 @@ class BillsController extends AppController {
                                     </gepgPmtSpInfo>";
         // GePG Payment Information posting Acknowledgement
         $gepgPmtSpInfoAck = "<gepgPmtSpInfoAck>
-                    <TrxStsCode>7101</TrxStsCode>
-              </gepgPmtSpInfoAck>";
+                                 <TrxStsCode>7101</TrxStsCode>
+                            </gepgPmtSpInfoAck>";
 
         // send the request
     }
