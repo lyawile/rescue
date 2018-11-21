@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -120,5 +121,29 @@ class CentresController extends AppController
         ]);
 
         return $this->response->withType("application/json")->withStringBody(json_encode($districtCentres));
+    }
+
+    public function listExamTypes($id = null)
+    {
+        $centresType = $this->Centres->get($id, [
+            'contain' => ['ExamTypes' => [
+//                'fields' => ['ExamTypes.id', 'ExamTypes.name']
+                'queryBuilder' => function ($q) {
+                    return $q
+                        ->select([
+                            'ExamTypes.id',
+                            'ExamTypes.name'
+                        ]);
+                }
+            ]]
+        ]);
+
+        debug($centresType->exam_types);
+        exit;
+//
+//        $centreExamTypes = $centresTypes->ExamTypes->toArray();
+
+
+        return $this->response->withType("application/json")->withStringBody(json_encode($centreExamTypes));
     }
 }

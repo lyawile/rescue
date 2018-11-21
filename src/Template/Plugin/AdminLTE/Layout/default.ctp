@@ -127,6 +127,10 @@
             // reloadPage();
         });
 
+        $('.exam-type').chosen({
+            width: '150'
+        });
+
         $('.region-permissions').chosen({
             width: '100%'
         }).change(function () {
@@ -193,6 +197,23 @@
                 });
 
                 centre.trigger("chosen:updated");
+            }
+        });
+    }
+
+    function loadExamType(centreId, to) {
+        $.ajax({
+            url: '<?= $this->Url->build('/', true) ?>centres/list-exam-types/' + centreId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                const examType = to; //Clear select options
+                examType.find('option').not(':first').remove();
+                $.each(data, function (key, value) {
+                    examType.append($('<option>').attr('value', key).text(value));
+                });
+
+                examType.trigger("chosen:updated");
             }
         });
     }

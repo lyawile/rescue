@@ -53,6 +53,18 @@ if (file_exists($file)) {
                         ]); ?>
                     </div>
                 </li>
+                <li>
+                    <div class="user-level float-right">
+                        <?= $this->Form->control('exam_type_id', [
+                            'options' => $exam_types,
+                            'class' => 'exam-type nav-top',
+                            'data-placeholder' => 'Choose a exam type...',
+                            'label' => false,
+                            'empty' => true,
+                            'default' => $this->request->getSession()->read('examTypeId')
+                        ]); ?>
+                    </div>
+                </li>
                 <!-- Notifications: style can be found in dropdown.less -->
                 <li class="reload">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

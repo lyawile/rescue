@@ -56,6 +56,11 @@ class ExamTypesTable extends Table
         $this->hasMany('Subjects', [
             'foreignKey' => 'exam_type_id'
         ]);
+        $this->belongsToMany('Centres', [
+            'foreignKey' => 'exam_type_id',
+            'targetForeignKey' => 'centre_id',
+            'joinTable' => 'centre_exam_types'
+        ]);
     }
 
     /**
