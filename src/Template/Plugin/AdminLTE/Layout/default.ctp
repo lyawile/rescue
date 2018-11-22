@@ -201,7 +201,7 @@
         });
     }
 
-    function loadExamType(centreId, to) {
+    function loadExamTypeS(centreId, to) {
         $.ajax({
             url: '<?= $this->Url->build('/', true) ?>centres/list-exam-types/' + centreId,
             type: 'GET',

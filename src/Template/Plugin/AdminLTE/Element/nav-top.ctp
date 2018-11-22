@@ -56,9 +56,9 @@ if (file_exists($file)) {
                 <li>
                     <div class="user-level float-right">
                         <?= $this->Form->control('exam_type_id', [
-                            'options' => $exam_types,
+                            'options' => $examTypes,
                             'class' => 'exam-type nav-top',
-                            'data-placeholder' => 'Choose a exam type...',
+                            'data-placeholder' => 'Choose exam type...',
                             'label' => false,
                             'empty' => true,
                             'default' => $this->request->getSession()->read('examTypeId')

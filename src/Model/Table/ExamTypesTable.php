@@ -113,4 +113,14 @@ class ExamTypesTable extends Table
 
         return $rules;
     }
+
+    public function findExamTypesByCentre($centreId){
+        $query = $this->find()->contain('Centres', function ($q) use ($centreId) {
+            return $q
+//                ->select(['body', 'author_id'])
+                ->where(['Centres.id' => $centreId]);
+        });
+
+        return $query;
+    }
 }
