@@ -108,10 +108,9 @@ class AppController extends Controller
         $regions = $this->Regions->find('list');
         $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
         $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
-        $examTypes = $this->ExamTypes->findExamTypesByCentre($sessionRegionId);
 
-        $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionRegionId);
-        $examTypes = $centreExamTypes->find('list');
+        $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
+        $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
 
         $this->set(compact('regions', 'districts', 'centres', 'userNotifications', 'unreadNotifications', 'examTypes'));
     }

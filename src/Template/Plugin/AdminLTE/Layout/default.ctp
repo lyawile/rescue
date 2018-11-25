@@ -110,13 +110,17 @@
         }).change(function () {
             $('.centre').find('option').not(':first').remove();
             $('.centre').trigger("chosen:updated");
+            $('.exam-type').find('option').not(':first').remove();
+            $('.exam-type').trigger("chosen:updated");
             loadDistricts($(this).val(), $('.district'));
         });
 
         $('.district').chosen({
-            width: '200',
+            width: '150',
             allow_single_deselect: true
         }).change(function () {
+            $(".exam-type").find('option').not(':first').remove();
+            $('.exam-type').trigger("chosen:updated");
             loadCentres($(this).val(), $('.centre'));
         });
 
@@ -124,7 +128,7 @@
             width: '250',
             allow_single_deselect: true
         }).change(function () {
-            // reloadPage();
+            loadExamTypes($(this).val(), $('.exam-type'));
         });
 
         $('.exam-type').chosen({
@@ -201,7 +205,7 @@
         });
     }
 
-    function loadExamTypeS(centreId, to) {
+    function loadExamTypes(centreId, to) {
         $.ajax({
             url: '<?= $this->Url->build('/', true) ?>centres/list-exam-types/' + centreId,
             type: 'GET',
@@ -220,7 +224,9 @@
 
     function reloadPage() {
         $.ajax({
-            url: '<?= $this->Url->build('/', true) ?>users/reload/?regionId=' + $('.region').val() + '&districtId=' + $('.district').val() + '&centreId=' + $('.centre').val(),
+            url: '<?= $this->Url->build('/', true) ?>users/reload/?regionId=' + $('.region').val()
+            + '&districtId=' + $('.district').val() + '&centreId=' + $('.centre').val()
+            + '&examTypeId=' + $('.exam-type').val(),
             // data: {
             //     regionId: $('.region').val(),
             //     districtId: $('.district').val(),
