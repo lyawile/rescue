@@ -104,4 +104,12 @@ class RegionsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function loadRegionsByUserGroup($id = null){
+        $regionDistricts = $this->Districts->find('list', [
+            'conditions' => ['Districts.region_id' => $id]
+        ]);
+
+        return $this->response->withType("application/json")->withStringBody(json_encode($regionDistricts));
+    }
 }

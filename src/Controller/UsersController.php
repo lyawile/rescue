@@ -187,9 +187,11 @@ class UsersController extends AppController
 
     public function reload()
     {
-        $this->getRequest()->getSession()->write('regionId', $this->request->getQuery('regionId'));
-        $this->getRequest()->getSession()->write('districtId', $this->request->getQuery('districtId'));
-        $this->getRequest()->getSession()->write('centreId', $this->request->getQuery('centreId'));
+        $session = $this->getRequest()->getSession();
+        $session->write('regionId', $this->request->getQuery('regionId'));
+        $session->write('districtId', $this->request->getQuery('districtId'));
+        $session->write('centreId', $this->request->getQuery('centreId'));
+        $session->write('examTypeId', $this->request->getQuery('examTypeId'));
         return $this->response->withType("application/json")->withStringBody(json_encode(['response' => true]));
     }
 }

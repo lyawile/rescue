@@ -17,7 +17,7 @@
     height: 50px;
 }
 
-.chosen-container-single .chosen-single {
+.nav-top ~ .chosen-container-single .chosen-single {
     border: none !important;
     border-radius: 4px;
     background: #008046;

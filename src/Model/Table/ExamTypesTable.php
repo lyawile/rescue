@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -56,6 +57,11 @@ class ExamTypesTable extends Table
         $this->hasMany('Subjects', [
             'foreignKey' => 'exam_type_id'
         ]);
+        $this->belongsToMany('Centres', [
+            'foreignKey' => 'exam_type_id',
+            'targetForeignKey' => 'centre_id',
+            'joinTable' => 'centre_exam_types'
+        ]);
     }
 
     /**
@@ -107,5 +113,14 @@ class ExamTypesTable extends Table
         $rules->add($rules->isUnique(['code']));
 
         return $rules;
+    }
+
+    public function findExamTypesByCentre($centreId)
+    {
+        $query = $this->find()->contain('centres')->matching('centres', function ($q) use ($centreId) {
+                return $q->where(['Centres.id' => $centreId]);
+            });
+
+        return $query;
     }
 }

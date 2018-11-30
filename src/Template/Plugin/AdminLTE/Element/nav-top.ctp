@@ -21,7 +21,7 @@ if (file_exists($file)) {
                     <div class="user-level float-right">
                         <?= $this->Form->control('region_id', [
                             'options' => $regions,
-                            'class' => 'region',
+                            'class' => 'region nav-top',
                             'data-placeholder' => 'Choose a region...',
                             'label' => false,
                             'empty' => true,
@@ -33,7 +33,7 @@ if (file_exists($file)) {
                     <div class="user-level float-right">
                         <?= $this->Form->control('district_id', [
                             'options' => $districts,
-                            'class' => 'district',
+                            'class' => 'district nav-top',
                             'data-placeholder' => 'Choose a district...',
                             'label' => false,
                             'empty' => true,
@@ -45,11 +45,23 @@ if (file_exists($file)) {
                     <div class="user-level float-right">
                         <?= $this->Form->control('centre_id', [
                             'options' => $centres,
-                            'class' => 'centre',
+                            'class' => 'centre nav-top',
                             'data-placeholder' => 'Choose a centre...',
                             'label' => false,
                             'empty' => true,
                             'default' => $this->request->getSession()->read('centreId')
+                        ]); ?>
+                    </div>
+                </li>
+                <li>
+                    <div class="user-level float-right">
+                        <?= $this->Form->control('exam_type_id', [
+                            'options' => $examTypes,
+                            'class' => 'exam-type nav-top',
+                            'data-placeholder' => 'Choose exam type...',
+                            'label' => false,
+                            'empty' => true,
+                            'default' => $this->request->getSession()->read('examTypeId')
                         ]); ?>
                     </div>
                 </li>

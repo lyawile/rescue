@@ -17,6 +17,7 @@ namespace App\Controller;
 
 use App\Model\Entity\User;
 use Cake\Controller\Controller;
+use Cake\Core\App;
 use Cake\Event\Event;
 
 /**
@@ -90,6 +91,7 @@ class AppController extends Controller
         $this->loadModel('Users');
         $this->loadModel('Notifications');
         $this->loadModel('NotificationsUsers');
+        $this->loadModel('ExamTypes');
 
         $userId =  $this->request->getSession()->read('Auth.User.id');
         if(isset($userId)){
@@ -107,8 +109,10 @@ class AppController extends Controller
         $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
         $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
 
+        $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
+        $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
 
-        $this->set(compact('regions', 'districts', 'centres', 'userNotifications', 'unreadNotifications'));
+        $this->set(compact('regions', 'districts', 'centres', 'userNotifications', 'unreadNotifications', 'examTypes'));
     }
 
     public function beforeRender(Event $event)
