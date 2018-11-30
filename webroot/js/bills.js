@@ -48,17 +48,21 @@ $(document).ready(function () {
         getTotal();
     });
 
-
+$('.total').hide();
 
 });
 function getTotal() {
-     total = 0;
+    total = 0;
     $('table tr.service p').each(function () {
         $(this).each(function () {
             total += parseInt($(this).text());
         });
-        $('.total>span:last-child').text(total);
-        console.log("The total is:" + total);
+        if (total > 0) {
+             $('.total').show();
+            $('.total>span:last-child').text(total);
+        }  else{
+            $('.total').hide();
+        }
 
     });
 }
