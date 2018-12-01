@@ -519,7 +519,7 @@ $this->Html->css([
 
 $this->Html->script([
   'jquery-ui.min',
-  'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
+  'raphael-min.js',
   'AdminLTE./plugins/morris/morris.min',
   'AdminLTE./plugins/sparkline/jquery.sparkline.min',
   'AdminLTE./plugins/jvectormap/jquery-jvectormap-1.2.2.min',
