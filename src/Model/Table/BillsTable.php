@@ -95,13 +95,14 @@ class BillsTable extends Table
         $validator
             ->scalar('payer_name')
             ->maxLength('payer_name', 256)
-            ->allowEmpty('payer_name');
+            ->notEmpty('payer_name', 'Please enter payer name', 'create');
+        
 
         $validator
             ->scalar('payer_mobile')
             ->maxLength('payer_mobile', 182)
             ->requirePresence('payer_mobile', 'create')
-            ->notEmpty('payer_mobile');
+            ->notEmpty('payer_mobile','Please enter payer mobile', 'create');
 
         $validator
             ->scalar('payer_email')

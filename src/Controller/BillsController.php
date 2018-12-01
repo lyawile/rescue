@@ -356,12 +356,13 @@ class BillsController extends AppController {
                     ->set(['amount' => $totalAmount, 'equivalent_amount' => $totalAmount, 'misc_amount' => $totalAmount])
                     ->where(['id' => $bill_id])
                     ->execute();
-            $this->Flash->success(__('The bill has been saved.'));
+//            $this->Flash->success(__('The bill has been saved.'));
             $this->request->session()->write('bill', $bill_id);
             return $this->redirect(['action' => 'getBill']);
         } // end of the loop to iterate through each service added by the user
-
-        $this->Flash->error(__('The bill could not be saved. Please, try again.'));
+                $errors = $bill->getErrors();
+                $this->set(compact('errors'));
+//        $this->Flash->error(__('The bill could not be saved. Please, try again.'));
     }
 
 }
