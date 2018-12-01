@@ -48,7 +48,7 @@
                        <!--     <th scope="col"><?= $this->Paginator->sort('is_repeater') ?></th> -->
                        <th scope="col"><?= $this->Paginator->sort('exam_type_id') ?></th>
                        <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th>
-                       <th scope="col"><?= $this->Form->input('Select All', array('type'=>'checkbox','class'=>'chkhd')) ?></th>
+                       <th scope="col"><?= $this->Form->control('Select All', array('type'=>'checkbox','class'=>'chkhd')) ?></th>
                        <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
@@ -83,7 +83,7 @@
                                         ->centre
                                         ->id]) : '' ?>
                         </td>
-                        <td><?= $this->Form->input('', array('type'=>'checkbox','class'=>'chk','value'=>$candidate->id)) ?></td>
+                        <td><?= $this->Form->control('', array('type'=>'checkbox','class'=>'chk','value'=>$candidate->id)) ?></td>
                         <td class="actions pull-right">
                             <?= $this->Html->link('', ['action' => 'view', $candidate->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
                             <?= $this->Html->link('', ['action' => 'edit', $candidate->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
@@ -99,7 +99,7 @@
           		<div class="btn-group pull-right">
                 Pay Fees
                 <?= $this->Form->create(null, ['url' => ['controller' => 'Epay', 'action' => 'fees']]);?>
-                <?= $this->Form->input('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
+                <?= $this->Form->control('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
 				<?= $this->Form->button(__('Selected')) ?>
                 <?= $this->Html->link(__('Whole Centre'), ['controller' => 'epay','action' => 'feesall'], ['class' => 'btn btn btn-success']) ?>
                 <?= $this->Form->end() ?>

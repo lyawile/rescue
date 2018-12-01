@@ -836,6 +836,23 @@ class CandidatesController extends AppController
 		
 	}
 	
+	private function sifaVerify($sifa,$exam)
+	{
+		if(is_array($sifa)&&!empty($sifa))
+		{
+			switch($exam)
+			{
+				case 'CSEE':
+				break;
+				case 'ACSEE':
+								
+				break;
+				case 'ACSEE':
+				break;
+			}
+		}
+	}
+	
 	private function chapa($dt)
 	{
 		echo '<pre>';

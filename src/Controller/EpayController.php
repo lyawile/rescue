@@ -73,9 +73,12 @@ class EpayController extends AppController
 	
 	public function contolnumber()
     {
-		'154.72.86.88/eservice/epay/contolnumber';
+		$data = $this->request->input('Cake\Utility\Xml::build', ['return' => 'domdocument']);
+		$fp=fopen(APP.'Resource'.DS.'contNo'.time().'.txt','w'); fwrite($fp,$data);
+		
+		/*'154.72.86.88/eservice/epay/contolnumber';
 		'154.72.86.88/eservice/epay/payment';
-		'154.72.86.88/eservice/epay/recoinciliation';
+		'154.72.86.88/eservice/epay/recoinciliation';*/
     }
 	public function reconciliation()
     {
@@ -89,7 +92,7 @@ class EpayController extends AppController
 	{
 		if(!$getcand)
 		{
-			$cands = $this->request->data('put');
+			$cands = $this->request->getData('put');
 			$carray = explode(',',$cands);
 			$getcand=array();
 			foreach($carray as $v)

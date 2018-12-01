@@ -151,7 +151,7 @@ class CandidatesController extends AppController
 	
 	public function fees()
 	{
-		$cands = $this->request->data('put');
+		$cands = $this->request->getData('put');
 		$carray = explode(',',$cands);
 		$getcand=array();
 		foreach($carray as $v)
@@ -220,12 +220,12 @@ class CandidatesController extends AppController
     {
 		 $uploadData = '';
         if ($this->request->is('post')) {
-            if(!empty($this->request->data['file']['name'])){
-                $fileName = $this->request->data['file']['name'];
+            if(!empty($this->request->getData['file']['name'])){
+                $fileName = $this->request->getData['file']['name'];
                 $uploadPath = 'uploads/files/';
                 $uploadFile = $uploadPath.$fileName;
-				//$ftype = $this->request->data['file']['name'];
-                if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
+				//$ftype = $this->request->getData['file']['name'];
+                if(move_uploaded_file($this->request->getData['file']['tmp_name'],$uploadFile)){
 					$msg=$this->importExcelfile($uploadFile);
 					$msgs=explode(';',$msg);
 					if($msgs[0]==0)$this->Flash->error(__($msgs[1]));

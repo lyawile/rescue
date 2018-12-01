@@ -24,27 +24,33 @@
     </div>
     <div class="box-body">
         <?= $this->Form->create($candidate) ?>
-        <div class="col-sm-8">
-            <fieldset>
-                <?php
-                        echo $this->Form->control('number');
-                        echo $this->Form->control('first_name');
-                        echo $this->Form->control('other_name');
-                        echo $this->Form->control('surname');
-                        echo $this->Form->control('sex');
-                        echo $this->Form->control('PSLE_number');
-                        echo $this->Form->control('PSLE_year');
-                        echo $this->Form->control('ID_number');
-                        echo $this->Form->control('date_of_birth', ['empty' => true]);
-                        echo $this->Form->control('guardian_phone');
-                        echo $this->Form->control('work_experience');
-                        echo $this->Form->control('combination');
-                        echo $this->Form->control('is_repeater');
-                    echo $this->Form->control('exam_type_id', ['options' => $examTypes]);
-                    echo $this->Form->control('centre_id', ['options' => $centres]);
-                ?>
-            </fieldset>
+        <div class="row">
+        		 <div class="col-sm-4"><?php echo $this->Form->control('first_name');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('other_name');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('surname');?></div>
         </div>
+        <div class="row">
+        		 <div class="col-sm-4"><?php echo $this->Form->control('number');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('date_of_birth', ['empty' => true]);?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('sex');?></div>
+        </div>
+        
+        <div class="row">
+        		 <div class="col-sm-4"><?php echo $this->Form->control('PSLE_number');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('PSLE_year');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('ID_number');?></div>
+        </div>
+        <div class="row">
+        		 <div class="col-sm-4"><?php echo $this->Form->control('guardian_phone');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('work_experience');?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('combination');?></div>
+        </div>
+        <div class="row">
+        		 <div class="col-sm-4"><?php echo $this->Form->control('is_repeater');?></div>
+                 <div class="col-sm-4"><?php  echo $this->Form->control('exam_type_id', ['options' => $examTypes]); ?></div>
+                 <div class="col-sm-4"><?php echo $this->Form->control('centre_id', ['options' => $centres]);?></div>
+        </div>
+        
     </div>
     <div class="box-footer">
         <?= $this->Form->button(__('Submit')) ?>
