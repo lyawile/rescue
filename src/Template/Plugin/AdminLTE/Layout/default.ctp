@@ -10,9 +10,9 @@
     <!-- Bootstrap 3.3.5 -->
     <?php echo $this->Html->css('AdminLTE./bootstrap/css/bootstrap.min'); ?>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <?= $this->Html->css('font-awesome.min') ?>
     <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <?= $this->Html->css('ionicons.min') ?>
     <!-- Theme style -->
     <?php echo $this->Html->css('AdminLTE.AdminLTE.min'); ?>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -27,8 +27,8 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <?= $this->Html->script('html5shiv.min') ?>
+    <?= $this->Html->script('respond.min') ?>
     <![endif]-->
 </head>
 <body class="hold-transition skin-<?php echo Configure::read('Theme.skin'); ?> fixed sidebar-mini">
@@ -110,23 +110,50 @@
         }).change(function () {
             $('.centre').find('option').not(':first').remove();
             $('.centre').trigger("chosen:updated");
-            loadDistricts($(this).val());
+            $('.exam-type').find('option').not(':first').remove();
+            $('.exam-type').trigger("chosen:updated");
+            loadDistricts($(this).val(), $('.district'));
         });
 
         $('.district').chosen({
-            width: '200',
+            width: '150',
             allow_single_deselect: true
         }).change(function () {
-            loadCentres($(this).val());
+            $(".exam-type").find('option').not(':first').remove();
+            $('.exam-type').trigger("chosen:updated");
+            loadCentres($(this).val(), $('.centre'));
         });
 
         $('.centre').chosen({
             width: '250',
             allow_single_deselect: true
         }).change(function () {
-            // reloadPage();
+            loadExamTypes($(this).val(), $('.exam-type'));
         });
 
+        $('.exam-type').chosen({
+            width: '150'
+        });
+
+        $('.region-permissions').chosen({
+            width: '100%'
+        }).change(function () {
+            $('.centre-permissions').find('option').not(':first').remove();
+            $('.centre-permissions').trigger("chosen:updated");
+            loadDistricts($(this).val(), $('.district-permissions'));
+        });
+
+        $('.district-permissions').chosen({
+            width: '100%'
+        }).change(function () {
+            $('.centre-permissions').find('option').not(':first').remove();
+            $('.centre-permissions').trigger("chosen:updated");
+            loadCentres($(this).val(), $('.centre-permissions'));
+        });
+
+        $('.group-permissions, .centre-permissions').chosen({
+            width: '100%'
+        });
 
         $('.reload').on('click', function () {
             reloadPage();
@@ -144,13 +171,13 @@
         $('.textarea').wysihtml5()
     });
 
-    function loadDistricts(regionId) {
+    function loadDistricts(regionId, to) {
         $.ajax({
             url: '<?= $this->Url->build('/', true) ?>districts/list-districts/' + regionId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                const district = $('.district'); //Clear select options
+                const district = to; //Clear select options
                 district.find('option').not(':first').remove();
                 $.each(data, function (key, value) {
                     district.append($('<option>').attr('value', key).text(value));
@@ -161,13 +188,13 @@
         });
     }
 
-    function loadCentres(districtId) {
+    function loadCentres(districtId, to) {
         $.ajax({
             url: '<?= $this->Url->build('/', true) ?>centres/list-centres/' + districtId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                const centre = $('.centre'); //Clear select options
+                const centre = to; //Clear select options
                 centre.find('option').not(':first').remove();
                 $.each(data, function (key, value) {
                     centre.append($('<option>').attr('value', key).text(value));
@@ -178,9 +205,28 @@
         });
     }
 
+    function loadExamTypes(centreId, to) {
+        $.ajax({
+            url: '<?= $this->Url->build('/', true) ?>centres/list-exam-types/' + centreId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                const examType = to; //Clear select options
+                examType.find('option').not(':first').remove();
+                $.each(data, function (key, value) {
+                    examType.append($('<option>').attr('value', key).text(value));
+                });
+
+                examType.trigger("chosen:updated");
+            }
+        });
+    }
+
     function reloadPage() {
         $.ajax({
-            url: '<?= $this->Url->build('/', true) ?>users/reload/?regionId=' + $('.region').val() + '&districtId=' + $('.district').val() + '&centreId=' + $('.centre').val(),
+            url: '<?= $this->Url->build('/', true) ?>users/reload/?regionId=' + $('.region').val()
+            + '&districtId=' + $('.district').val() + '&centreId=' + $('.centre').val()
+            + '&examTypeId=' + $('.exam-type').val(),
             // data: {
             //     regionId: $('.region').val(),
             //     districtId: $('.district').val(),

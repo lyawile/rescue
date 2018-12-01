@@ -518,14 +518,14 @@ $this->Html->css([
   ['block' => 'css']);
 
 $this->Html->script([
-  'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
+  'jquery-ui.min',
+  'raphael-min.js',
   'AdminLTE./plugins/morris/morris.min',
   'AdminLTE./plugins/sparkline/jquery.sparkline.min',
   'AdminLTE./plugins/jvectormap/jquery-jvectormap-1.2.2.min',
   'AdminLTE./plugins/jvectormap/jquery-jvectormap-world-mill-en',
   'AdminLTE./plugins/knob/jquery.knob',
-  'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js',
+  'moment.min',
   'AdminLTE./plugins/daterangepicker/daterangepicker',
   'AdminLTE./plugins/datepicker/bootstrap-datepicker',
   'AdminLTE./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min',

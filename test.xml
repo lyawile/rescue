@@ -1,0 +1,73 @@
+<gepgBillSubReq>
+    <BillHdr>
+        <SpCode>SP110</SpCode>
+        <RtrRespFlg>true</RtrRespFlg>
+    </BillHdr>
+    <BillTrxInf>
+        <BillId>199</BillId>
+        <SubSpCode>1002</SubSpCode>
+        <SpSysId>TNECTA001</SpSysId>
+        <BillAmt>30000</BillAmt>
+        <MiscAmt>30000</MiscAmt>
+        <BillExprDt>2019-05-30T10:00:01</BillExprDt>
+        <PyrId>Samizi</PyrId>
+        <PyrName>Administrator eServices NECTA</PyrName>
+        <BillDesc>Bill Number 7885</BillDesc>
+        <BillGenDt>2018-11-20T10:00:10</BillGenDt>
+        <BillGenBy>Administrator NECTA</BillGenBy>
+        <BillApprBy>Administrator NECTA</BillApprBy>
+        <PyrCellNum>0715897436</PyrCellNum>
+        <PyrEmail>eservices@necta.go.tz</PyrEmail>
+        <Ccy>TZS</Ccy>
+        <BillEqvAmt>30000</BillEqvAmt>
+        <RemFlag>true</RemFlag>
+        <BillPayOpt>1</BillPayOpt>
+        <BillItems>
+            <BillItem>
+                <BillItemRef>788578851</BillItemRef>
+                <UseItemRefOnPay>N</UseItemRefOnPay>
+                <BillItemAmt>30000</BillItemAmt> 
+                <BillItemMiscAmt>30000</BillItemMiscAmt>
+                <GfsCode>140308</GfsCode>
+            </BillItem> 
+        </BillItems>
+    </BillTrxInf>
+</gepgBillSubReq>
+
+============
+<gepgBillSubReq>
+    <BillHdr>
+        <SpCode>SP110</SpCode>
+        <RtrRespFlg>true</RtrRespFlg>
+    </BillHdr>
+    <BillTrxInf>
+        <BillId>7885</BillId>
+        <SubSpCode>1002</SubSpCode>
+        <SpSysId>TNECTA001</SpSysId>
+        <BillAmt>7885</BillAmt>
+        <MiscAmt>0</MiscAmt>
+        <BillExprDt>2019-05-30T10:00:01</BillExprDt>
+        <PyrId>Samizi</PyrId>
+        <PyrName>Samizi Abdallah</PyrName>
+        <BillDesc>Bill Number 7885</BillDesc>
+        <BillGenDt>2018-11-19T10:00:10</BillGenDt>
+        <BillGenBy>100</BillGenBy>
+        <BillApprBy>Hashim</BillApprBy>
+        <PyrCellNum>0699210053</PyrCellNum>
+        <PyrEmail>Samizi@gmail.com</PyrEmail>
+        <Ccy>TZS</Ccy>
+        <BillEqvAmt>7885</BillEqvAmt>
+        <RemFlag>true</RemFlag>
+        <BillPayOpt>1</BillPayOpt>
+        <BillItems>
+            <BillItem>
+                <BillItemRef>788578851</BillItemRef>
+                <UseItemRefOnPay>N</UseItemRefOnPay>
+                <BillItemAmt>7885</BillItemAmt>
+                <BillItemEqvAmt>7885</BillItemEqvAmt>
+                <BillItemMiscAmt>0</BillItemMiscAmt>
+                <GfsCode>300103</GfsCode>
+            </BillItem>
+        </BillItems>
+    </BillTrxInf>
+</gepgBillSubReq>
