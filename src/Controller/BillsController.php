@@ -155,7 +155,7 @@ class BillsController extends AppController {
                     . '<BillItemRef>788578851</BillItemRef>'
                     . '<UseItemRefOnPay>N</UseItemRefOnPay>'
                     . '<BillItemAmt>' . $amount . '</BillItemAmt>'
-                    . '<BillItemEqvAmt>'.$amount.'</BillItemEqvAmt>'
+                    . '<BillItemEqvAmt>' . $amount . '</BillItemEqvAmt>'
                     . ' <BillItemMiscAmt>' . $amount . '</BillItemMiscAmt>'
                     . '<GfsCode>' . trim($gfsCode) . '</GfsCode>'
                     . '</BillItem>';
@@ -358,11 +358,51 @@ class BillsController extends AppController {
                     ->execute();
 //            $this->Flash->success(__('The bill has been saved.'));
             $this->request->session()->write('bill', $bill_id);
+            $this->requestControlNumber($bill_id);
             return $this->redirect(['action' => 'getBill']);
         } // end of the loop to iterate through each service added by the user
-                $errors = $bill->getErrors();
-                $this->set(compact('errors'));
+        $errors = $bill->getErrors();
+        $this->set(compact('errors'));
 //        $this->Flash->error(__('The bill could not be saved. Please, try again.'));
+    }
+
+    // temporary function for requesting the control number 
+    private function requestControlNumber($billUniqueNumber) {
+        $URL = "http://localhost/xmltest/index.php?bill_id=$billUniqueNumber";
+
+        //setting the curl parameters.
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $billUniqueNumber);
+
+        if (curl_errno($ch)) {
+            // moving to display page to display curl errors
+            echo curl_errno($ch);
+            echo curl_error($ch);
+        } else {
+            //getting response from server
+            $response = curl_exec($ch);
+            $data = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+            $json = json_encode($data);
+            $dataArray = json_decode($json, TRUE);
+//           var_dump($dataArray);
+            $controlNumber = $dataArray['BillTrx']['PayCntrNum'];
+            $billIdReturnedFromGePG = $dataArray['BillTrx']['BillId'];
+            // Update the control number value based on the bill id
+            $query = $this->Bills->query();
+            $query->update()
+                    ->set(['control_number' => $controlNumber])
+                    ->where(['id' => $billIdReturnedFromGePG])
+                    ->execute();
+            curl_close($ch);
+        }
     }
 
 }
