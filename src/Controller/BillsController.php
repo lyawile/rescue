@@ -396,12 +396,60 @@ class BillsController extends AppController {
             $controlNumber = $dataArray['BillTrx']['PayCntrNum'];
             $billIdReturnedFromGePG = $dataArray['BillTrx']['BillId'];
             // Update the control number value based on the bill id
-            $query = $this->Bills->query();
-            $query->update()
-                    ->set(['control_number' => $controlNumber])
-                    ->where(['id' => $billIdReturnedFromGePG])
-                    ->execute();
+//            $query = $this->Bills->query();
+//            $query->update()
+//                    ->set(['control_number' => $controlNumber])
+//                    ->where(['id' => $billIdReturnedFromGePG])
+//                    ->execute();
+
+            if (isset($controlNumber) && !empty($controlNumber)) {
+                // update the control number for the bill in bills table 
+                $billsTable = TableRegistry::get('Bills');
+                $billsData = $billsTable->get($billIdReturnedFromGePG);
+                $billsData->control_number = $controlNumber;
+                $billsTable->save($billsData);
+                // Prepare the XML response for gepgBillSubRespAck
+                $gepgBillSubRespAck = "<gepgBillSubRespAck>
+                                            <TrxStsCode>7101</TrxStsCode>
+                                        </gepgBillSubRespAck>";
+                // send the xml success response to GePG
+                $this->curl($gepgBillSubRespAck);
+            } else {
+                $gepgBillSubRespAck = "<gepgBillSubRespAck>
+                                        <TrxStsCode>7201</TrxStsCode>
+                                       </gepgBillSubRespAck>";
+                // send the xml failure response to GePG
+                $this->curl($gepgBillSubRespAck);
+            }
             curl_close($ch);
+        }
+    }
+
+    private function curl($content) {
+        //setting the curl parameters.
+        $curlConf = curl_init();
+        $url = "http://localhost/xmltest/resp.php";
+
+        curl_setopt($curlConf, CURLOPT_URL, $url);
+        curl_setopt($curlConf, CURLOPT_VERBOSE, 1);
+        curl_setopt($curlConf, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curlConf, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlConf, CURLOPT_POST, 1);
+        curl_setopt($curlConf, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlConf, CURLOPT_HTTPHEADER, array('Content-type: application/xml'));
+        curl_setopt($curlConf, CURLOPT_POSTFIELDS, $content);
+
+        if (curl_errno($curlConf)) {
+            // moving to display page to display curl errors
+            echo curl_errno($curlConf);
+            echo curl_error($curlConf);
+        } else {
+            $response = curl_exec($curlConf);
+// Don't remove below lines, zinaniamsha kwenye debugging            
+//            echo curl_getinfo($curlConf) . '<br/>';
+//            echo curl_errno($curlConf) . '<br/>';
+//            echo curl_error($curlConf) . '<br/>';
+            curl_close($curlConf);
         }
     }
 
