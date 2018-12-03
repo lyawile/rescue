@@ -52,7 +52,7 @@ foreach ($queryDetails as $customerDetails) {
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
             <b>Bill #:<?=$payerReference = $customerDetails['reference']; ?></b><br>
-            <b>Control Number #: <?="On processing"; ?></b><br>
+            <b>Control Number #: <?=$customerDetails['control_number'] ?></b><br>
             <br>
             <!--<b>Order ID:</b> 4F3S8J<br>-->
             <b>Payment Due:</b> <?=$expireDate = $customerDetails['expire_date']; ?><br>
