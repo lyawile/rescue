@@ -28,10 +28,15 @@ class BillsController extends AppController {
      * @return \Cake\Http\Response|void
      */
     public function index() {
-        $bills = $this->paginate($this->Bills);
-        var_dump($this->Auth->user());
-//        var_dump($_SESSION);
-//        exit();
+        // get the login username 
+        $currentLoggedInUser = $this->request->getSession()->read('Auth.User.username');
+        // check if the user is admin, if he is, show all bills otherwise show only bills related to user
+        $currentLoggedInUserPrivillege = $this->request->getSession()->read('Auth.User.group_id');
+        if ($currentLoggedInUserPrivillege === 1) {
+            $bills = $this->paginate($this->Bills);
+        } else {
+            $bills = $this->paginate($this->Bills->find()->where(['userUpdated' => $currentLoggedInUser]));
+        }
         $this->set(compact('bills'));
     }
 
