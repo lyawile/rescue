@@ -371,6 +371,7 @@ class ComposerStaticInit49cb4ecbd1877fd1b404e423cebca4c4
     );
 
     public static $classMap = array (
+        'FPDF' => __DIR__ . '/..' . '/setasign/fpdf/fpdf.php',
         'Mobile_Detect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
         'SqlFormatter' => __DIR__ . '/..' . '/jdorn/sql-formatter/lib/SqlFormatter.php',
     );

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Cake\ORM\TableRegistry;
 use App\Controller\AppController;
+use Setasign\Fpdf;
 
 date_default_timezone_set('Africa/Nairobi');
 
@@ -553,6 +554,15 @@ class BillsController extends AppController {
         // codes go here
         // exit execution 
         exit();
+    }
+
+    public function getPdfBill() {
+        $pdf = new \FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(40, 10, 'Hello World!');
+        $pdf->Output();
+        exit;
     }
 
 }
