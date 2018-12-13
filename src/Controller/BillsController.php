@@ -324,8 +324,10 @@ class BillsController extends AppController {
         $bill->amount = 0; // not right place just fix amount for now
         $bill->equivalent_amount = 0;
         $bill->misc_amount = 0;
-        $bill->expire_date = '2018-12-01'; // assumed
-        $bill->generated_date = date("Y-m-d");
+        $generatedDate = date("Y-m-d H:i:s");
+        $expireDate = date('Y-m-d H:i:s', strtotime($generatedDate . ' + 3 days'));
+        $bill->expire_date =$expireDate; // assumed
+        $bill->generated_date =$generatedDate;
         $bill->has_reminder = 0;
         $bill->userUpdated = $currentLoggedInUser;
         $totalAmount = 0;
@@ -556,11 +558,124 @@ class BillsController extends AppController {
         exit();
     }
 
-    public function getPdfBill() {
+    public function getPdfBill($bill_id) {
+        // set the bill_id in session 
+        $this->request->session()->write('bill', $bill_id);
+        // get the bills details 
+        $queryDetails = $this->Bills->find()->where(['Bills.id' => $bill_id]);
+//        $queryDetails->innerJoinWith('BillItems', function($data) {
+//            $billIdentification = $this->request->getSession()->read('bill');
+//            return $data->where(['Bills.id' => $billIdentification]);
+//        });
+        $this->loadModel('BillItems');
+        $this->loadModel('Collections');
+        $this->loadModel('CollectionCategories');
+        $billIdentification = $this->request->getSession()->read('bill');
+        $billDetails = $this->BillItems->find('all', ['contain' => 'Collections'])
+                ->select(['BillItems.amount', 'BillItems.quantity', 'BillItems.unit', 'Collections.name', 'Collections.amount', 'Collections.collection_categorie_id'])
+                ->where(['BillItems.bill_id' => $billIdentification]);
+        // read total from the bill
+        $queryTotal = $this->Bills->find()->select('amount')->where(['id' => $billIdentification]);
+        foreach ($queryTotal as $queryT) {
+            $totalAmount = $queryT['amount'];
+        }
+        $this->request->getSession()->delete('bill');
+        foreach ($queryDetails as $billsData) {
+            
+        }
+
+
         $pdf = new \FPDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(40, 10, 'Hello World!');
+        $logoLocation = "http://localhost/eservice/img/necta-logo-large.png";
+        $rodLocation = "http://localhost/eservice/img/thin-rod.png";
+        // Row for images; Logo and vertical rod
+        $pdf->Image($logoLocation, 10, 10);
+        $pdf->Image($rodLocation, 50, 10);
+
+        $pdf->Cell("", 2, "", "", 1);
+        $pdf->Cell(45);
+        $pdf->Cell(0, 7, "The United Republic of Tanzania", 0, 1);
+        $pdf->Cell(45);
+        $pdf->Cell(0, 7, "The National Examinations Council of Tanzania", 0, 1);
+//Row for the NECTA address         
+        $pdf->Cell(45);
+        $pdf->Cell(0, 7, "P.O.Box 2624 Dar es Salaam", 0, 1);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(45);
+        $pdf->Cell(0, 7, "Telephone: +255-22-2700493 - 6/9, Email: esnecta@necta.go.tz", 0, 1);
+//        Row for payer name
+        $pdf->Cell('', 17, '', '', 1);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(25, 0, "Bill To: ", 0, 0);
+        $pdf->SetFont('Arial', '', 16);
+        $pdf->Cell(12, 0, $billsData->payer_name, 0, 1);
+//        Row for control number
+        $pdf->SetY(63);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(50, 0, "Control Number : ", 0, 0);
+        $pdf->SetFont('Arial', '', 16);
+        $pdf->Cell(0, 0, $billsData->control_number, 0, 1);
+//        Row for phone number 
+        $pdf->SetY(70);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(45, 0, "Phone number : ", 0, 0);
+        $pdf->SetFont('Arial', '', 16);
+        $pdf->Cell(0, 0, $billsData->payer_mobile, 0, 1);
+//        Row for email address
+        $pdf->SetY(77);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(45, 0, "Email address : ", 0, 0);
+        $pdf->SetFont('Arial', '', 16);
+        $pdf->Cell(0, 0, $billsData->payer_email, 0, 1);
+//        Row for bill generated at
+        $pdf->SetY(84);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(45, 0, "Generated on : ", 0, 0);
+        $pdf->SetFont('Arial', '', 16);
+        $pdf->Cell(0, 0, $billsData->generated_date, 0, 1);
+//        Row for Bill due date
+        $pdf->SetY(91);
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(45, 0, "Due date : ", 0, 0);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(0, 0, $billsData->expire_date, 0, 1);
+        $pdf->SetY(102);
+//        $pdf->SetFillColor(87.1,93.3,82.0);
+//        Header for bill items 
+        // Item Serial number
+        $pdf->Cell(10, 10, 'SN ', 1, '', '');
+        // Item Description
+        $pdf->Cell(85, 10, 'ITEM DESCRIPTION ', 1, '', '');
+        // Item Serial number
+        $pdf->Cell(15, 10, 'QTY ', 1);
+        // Total for each service
+        $pdf->Cell(32, 10, 'UNIT PRICE ', 1);
+        // Total for each service
+        $pdf->Cell(40, 10, 'TOTAL ', 1, 1);
+        $pdf->SetFont('Arial', '', 13);
+        $i = 0;
+
+        foreach ($billDetails as $billData) {
+
+            // Item Serial number
+            $pdf->Cell(10, 10, $i + 1, 1, '', '');
+            // Item Description
+            $pdf->Cell(85, 10, $billData['collection']['name'], 1, '', '');
+            // Item Serial number
+            $pdf->Cell(15, 10, $billData['quantity'], 1, '', "C");
+            // Total for each service
+            $pdf->Cell(32, 10, number_format($billData['collection']['amount'], 2), 1, '', "R");
+            // Total for each service
+            $pdf->Cell(40, 10, number_format($billData['amount'], 2), 1, 1, "R");
+            $i++;
+        }
+        $pdf->SetFont('Arial', 'B');
+        $pdf->Cell(110);
+        $pdf->Cell(32, 10, 'TOTAL', 1);
+        $pdf->Cell(40, 10, number_format($billsData->amount, 2), 1, 1, "R");
+
         $pdf->Output();
         exit;
     }
