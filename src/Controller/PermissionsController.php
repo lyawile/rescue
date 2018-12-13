@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\Entity;
 
 /**
  * Permissions Controller
@@ -27,17 +28,32 @@ class PermissionsController extends AppController
         $this->loadModel('Regions');
         $this->loadModel('Districts');
         $this->loadModel('Centres');
+        $this->loadModel('GroupDistrictRegionSchoolUsers');
 //        $permissions = $this->paginate($this->Permissions);
         $groups = $this->Groups->find('list');
         $permissionRegions = $this->Regions->find('list');
 
         if ($this->request->is(['post'])) {
 
-            echo "Group id " . $this->request->getData('group_id');
-            echo "Region id " . $this->request->getData('region_id');
-            echo "District id " . $this->request->getData('district_id');
-            echo "Centre id " . $this->request->getData('centre_id');
-            exit;
+            $data = $this->request->getData();
+
+            $data['group_district_region_school_users'] = [
+                'group_id' => $this->request->getData('group_id'),
+                'region_id' => $this->request->getData('region_id'),
+                'district_id' => $this->request->getData('district_id')
+            ];
+
+            $groupPermission = $this->GroupDistrictRegionSchoolUsers->findByGroupId($this->request->getData('group_id'))->first();
+            if(is_null($groupPermission))
+                $groupPermission = $this->GroupDistrictRegionSchoolUsers->newEntity();
+            $groupPermission = $this->GroupDistrictRegionSchoolUsers->patchEntity($groupPermission, $data);
+
+            if($this->GroupDistrictRegionSchoolUsers->save($groupPermission)){
+                $this->Flash->success(__("Permissions has been saved!"));
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->error(__("Permissions could not be saved"));
         }
 
         $this->set(compact('groups'));
