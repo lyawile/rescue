@@ -39,7 +39,9 @@ class GroupsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('GroupDistrictRegionSchoolUsers', [
-            'foreignKey' => 'group_id'
+            'foreignKey' => 'group_id',
+            'dependent'        => true,
+            'cascadeCallbacks' => true
         ]);
         $this->hasMany('Users', [
             'foreignKey' => 'group_id'
