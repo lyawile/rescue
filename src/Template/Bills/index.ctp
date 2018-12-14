@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Bill[]|\Cake\Collection\CollectionInterface $bills
@@ -46,24 +47,24 @@
                     </thead>
                     <tbody>
                         <?php foreach ($bills as $bill): ?>
-                            <tr>
-                                <td><?= h($bill->reference) ?></td>
-                                <td><?= $this->Number->format($bill->amount) ?></td>
-                                <td><?= $this->Number->format($bill->equivalent_amount) ?></td>
-                                <td><?= h($bill->expire_date) ?></td>
-                                <td><?= h($bill->generated_date) ?></td>
-                                <td><?= h($bill->payer_name) ?></td>
-                                <td><?= h($bill->payer_mobile) ?></td>
-                                <td><?= h($bill->payer_email) ?></td>
-                                <td><?= h($bill->control_number) ?></td>
-                                <td class="actions pull-right">
-                                    <?= $this->Html->link('', ['action' => 'view', $bill->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                        <tr>
+                            <td><?= h($bill->reference) ?></td>
+                            <td><?= $this->Number->format($bill->amount) ?></td>
+                            <td><?= $this->Number->format($bill->equivalent_amount) ?></td>
+                            <td><?= h($bill->expire_date) ?></td>
+                            <td><?= h($bill->generated_date) ?></td>
+                            <td><?= h($bill->payer_name) ?></td>
+                            <td><?= h($bill->payer_mobile) ?></td>
+                            <td><?= h($bill->payer_email) ?></td>
+                            <td><?= h($bill->control_number) ?></td>
+                            <td class="actions pull-right">
+                                    <?= $this->Html->link('', ['action' => 'get-pdf-bill', $bill->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','target'=>'_blank', 'title' => __('View')]) ?>
                                     <?= $this->Html->link('', ['action' => 'edit', $bill->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                                     <?= $this->Form->postLink('', ['action' => 'delete', $bill->id], ['confirm' =>
                                         __('Are you sure you want to delete # {0}?', $bill->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')])
                                     ?>
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
 <?php endforeach; ?>
                     </tbody>
                 </table>
