@@ -29,7 +29,8 @@ class pdfBill extends \FPDF{
         $this->SetFont('Arial', 'B', 12);
         $this->Cell(45);
         $this->Cell(0, 7, "Telephone: +255-22-2700493 - 6/9, Email: esnecta@necta.go.tz", 0, 1);
-        $this->Cell(0, 100);
+        // Push the contents down before starting the body by 15mm
+        $this->Cell(0,15, "",0,1);
 
     }
     public function Footer() {

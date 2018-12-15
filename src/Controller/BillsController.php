@@ -444,7 +444,6 @@ class BillsController extends AppController {
 //            }
 //        }
 //    }
-
 //    private function curl($content) {
 //        //setting the curl parameters.
 //        $curlConf = curl_init();
@@ -472,7 +471,6 @@ class BillsController extends AppController {
 //            curl_close($curlConf);
 //        }
 //    }
-
 //    public function pay() {
 //
 //        // Get the submitted XML 
@@ -589,76 +587,96 @@ class BillsController extends AppController {
         $pdf->AddPage();
         // THE BODY OF THE PDF BILL STARTS HERE
         //      $thisw for payer name
-        $pdf->Cell('', 17, '', '', 1);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(25, 0, "Bill To: ", 0, 0);
-        $pdf->SetFont('Arial', '', 16);
+//        $pdf->Cell('', 17, '', '', 1);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(18, 0, "Bill To: ", 0, 0);
+        $pdf->SetFont('Arial', '', 13);
         $pdf->Cell(12, 0, $billsData->payer_name, 0, 1);
 //      Row for control number
         $pdf->SetY(63);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(50, 0, "Control Number : ", 0, 0);
-        $pdf->SetFont('Arial', '', 16);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(40, 0, "Control Number : ", 0, 0);
+        $pdf->SetFont('Arial', '', 13);
         $pdf->Cell(0, 0, $billsData->control_number, 0, 1);
 //      Row for phone number 
         $pdf->SetY(70);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(45, 0, "Phone number : ", 0, 0);
-        $pdf->SetFont('Arial', '', 16);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(38, 0, "Phone number : ", 0, 0);
+        $pdf->SetFont('Arial', '', 13);
         $pdf->Cell(0, 0, $billsData->payer_mobile, 0, 1);
 //      $pdfw for email address
         $pdf->SetY(77);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(45, 0, "Email address : ", 0, 0);
-        $pdf->SetFont('Arial', '', 16);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(35, 0, "Email address : ", 0, 0);
+        $pdf->SetFont('Arial', '', 13);
         $pdf->Cell(0, 0, $billsData->payer_email, 0, 1);
 //      Row for bill generated at
         $pdf->SetY(84);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(45, 0, "Generated on : ", 0, 0);
-        $pdf->SetFont('Arial', '', 16);
-        $pdf->Cell(0, 0, $billsData->generated_date, 0, 1);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(33, 0, "Generated on : ", 0, 0);
+        $pdf->SetFont('Arial', '', 13);
+        $pdf->Cell(0, 0, $billsData->generated_date->i18nFormat('dd-MM-yyyy HH:mm:ss'), 0, 1);
 //      $pdfw for Bill due date
         $pdf->SetY(91);
-        $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(45, 0, "Due date : ", 0, 0);
         $pdf->SetFont('Arial', 'B', 13);
-        $pdf->Cell(0, 0, $billsData->expire_date, 0, 1);
-        $pdf->SetY(102);
+        $pdf->Cell(23, 0, "Due date : ", 0, 0);
+        $pdf->SetFont('Arial', '', 13);
+        $pdf->Cell(0, 0, $billsData->expire_date->i18nFormat('dd-MM-yyyy HH:mm:ss'), 0, 1);
+        $pdf->Cell(0, 20,"The following are the bill items you have selected:", 0, 1);
+        $pdf->SetY(105);
 //        $pdf->SetFillColor(87.1,93.3,82.0);
 //        Header for bill items 
+        $pdf->SetFont('Arial', 'B', 13);
         // Item Serial number
-        $pdf->Cell(10, 10, 'SN ', 1, '', '');
+        $pdf->SetFillColor(230);
+        $pdf->Cell(10, 10, 'SN ', 0, '', '',TRUE);
         // Item Description
-        $pdf->Cell(85, 10, 'ITEM DESCRIPTION ', 1, '', '');
+        $pdf->SetFillColor(230);
+        $pdf->Cell(85, 10, 'ITEM DESCRIPTION ',0, '', '', TRUE);
         // Item Serial number
-        $pdf->Cell(15, 10, 'QTY ', 1);
+        $pdf->SetFillColor(230);
+        $pdf->Cell(15, 10, 'QTY ',0,"","C", TRUE);
         // Total for each service
-        $pdf->Cell(32, 10, 'UNIT PRICE ', 1);
+        $pdf->SetFillColor(230);
+        $pdf->Cell(37, 10, 'UNIT PRICE ', 0,"","R", TRUE);
         // Total for each service
-        $pdf->Cell(40, 10, 'TOTAL ', 1, 1);
+        $pdf->SetFillColor(230);
+        $pdf->Cell(40, 10, 'TOTAL ', 0, 1,"R", TRUE);
         $pdf->SetFont('Arial', '', 13);
         $i = 0;
-
+        // iterate to fill up the bill PDF output 
         foreach ($billDetails as $billData) {
 
             // Item Serial number
-            $pdf->Cell(10, 10, $i + 1, 1, '', '');
+            $pdf->Cell(10, 10, $i + 1, 0, '', '');
             // Item Description
-            $pdf->Cell(85, 10, $billData['collection']['name'], 1, '', '');
+            $pdf->Cell(85, 10, $billData['collection']['name'], 0, '', '');
             // Item Serial number
-            $pdf->Cell(15, 10, $billData['quantity'], 1, '', "C");
+            $pdf->Cell(15, 10, $billData['quantity'], 0, '', "C");
             // Total for each service
-            $pdf->Cell(32, 10, number_format($billData['collection']['amount'], 2), 1, '', "R");
+            $pdf->Cell(37, 10, number_format($billData['collection']['amount'], 2), 0, '', "R");
             // Total for each service
-            $pdf->Cell(40, 10, number_format($billData['amount'], 2), 1, 1, "R");
+            $pdf->Cell(40, 10, number_format($billData['amount'], 2), 0, 1, "R");
+            $pdf->SetFillColor(230);
+            $pdf->Cell(187, 0.5, '', 0, 1, "R",true);
             $i++;
         }
+         $pdf->Cell(187, 5, '', 0, 1, "R");
+        $pdf->SetFont('Arial');
         $pdf->SetFont('Arial', 'B');
-        $pdf->Cell(110);
-        $pdf->Cell(32, 10, 'TOTAL', 1);
-        $pdf->Cell(40, 10, number_format($billsData->amount, 2), 1, 1, "R");
+        $pdf->Cell(135);
+        $pdf->Cell(22, 10, 'TOTAL', 0,'','',TRUE);
+        $pdf->Cell(30, 10, number_format($billsData->amount, 2), 0, 1, "R", TRUE);
+        $pdf->Cell(0, 5, '', '', 1);
+        $pdf->SetFont('', 'I',10 );
+        if (isset($billsData->control_number)) {
+            $controlNumber = "You can pay in one out of these payment options: Bank, Mobile (Tigo, Vodacom, Airtel, TTCL or Zantel) or MaxMalipo with control number " . $billsData->control_number;
+        } else {
+            $controlNumber = 'The control number was not received for this bill, try to generate new bill or keep on waiting for sometime and view this bill again.';
+        }
+        $pdf->MultiCell(0, 5, $controlNumber);
 
+        // Diplay the PDF
         $pdf->Output();
         exit;
     }
