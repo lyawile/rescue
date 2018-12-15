@@ -90,16 +90,11 @@ class AppController extends Controller
         $this->loadModel('Centres');
         $this->loadModel('Users');
         $this->loadModel('Notifications');
-        $this->loadModel('NotificationsUsers');
         $this->loadModel('ExamTypes');
 
-        $userId =  $this->request->getSession()->read('Auth.User.id');
-        if(isset($userId)){
-            $user = $this->Users->get($userId, ['contain' => ['Notifications']]);
-            $userNotifications = $user->notifications;
-        }
-
-        $unreadNotifications = $this->NotificationsUsers->find()->where(['user_id' => $userId, 'is_read' => 0])->count();
+        $userId = $this->request->getSession()->read('Auth.User.id');
+        $unreadNotifications = $this->Notifications->userUnReadNotifications($userId);
+        $totalUnreadNotifications = $unreadNotifications->count();
 
         $sessionRegionId = $this->request->getSession()->read('regionId');
         $sessionDistrictId = $this->request->getSession()->read('districtId');
@@ -112,7 +107,7 @@ class AppController extends Controller
         $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
         $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
 
-        $this->set(compact('regions', 'districts', 'centres', 'userNotifications', 'unreadNotifications', 'examTypes'));
+        $this->set(compact('regions', 'districts', 'centres', 'totalUnreadNotifications', 'unreadNotifications', 'examTypes'));
     }
 
     public function beforeRender(Event $event)

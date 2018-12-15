@@ -78,8 +78,8 @@ if (file_exists($file)) {
                         <span data-toggle="tooltip" data-placement="bottom" title="Unread">
                             <i class="fa fa-bell"></i>
                             </span>
-                        <?php if ($unreadNotifications > 0) {
-                            echo '<span class="label label-warning">' . $unreadNotifications . '</span>';
+                        <?php if ($totalUnreadNotifications > 0) {
+                            echo '<span class="label label-warning">' . $totalUnreadNotifications . '</span>';
                         } ?>
 
                     </a>
@@ -89,22 +89,23 @@ if (file_exists($file)) {
                             <ul class="menu">
 
                                 <?php
-                                foreach ($userNotifications as $userNotification) {
+                                foreach ($unreadNotifications as $unreadNotification) {
                                     ?>
                                     <li>
-                                        <a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inboxView', $userNotification->id]); ?>">
-                                            <?= h($userNotification->title) ?>
+                                        <a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inboxView', $unreadNotification->id]); ?>">
+                                            <?= h($unreadNotification->title) ?>
                                         </a>
                                     </li>
                                     <?php
                                 }
 
+                                if($totalUnreadNotifications == 0)
+                                    echo "<li style='display: block; height: 200px; text-align: center; line-height: 200px;'>No unread notifications</li>";
+
                                 ?>
                             </ul>
                         </li>
-                        <li class="footer"><a
-                                href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inbox']); ?>">View
-                                all</a></li>
+                        <li class="footer"><a href="<?= $this->Url->build(['controller' => 'notifications', 'action' => 'inbox']); ?>">View all</a></li>
                     </ul>
                 </li>
                 <!-- User Account: style can be found in dropdown.less -->
