@@ -106,7 +106,8 @@
         // });
 
         $('.region').chosen({
-            width: '150'
+            width: '150',
+            allow_single_deselect: true
         }).change(function () {
             $('.centre').find('option').not(':first').remove();
             $('.centre').trigger("chosen:updated");
@@ -132,7 +133,8 @@
         });
 
         $('.exam-type').chosen({
-            width: '150'
+            width: '150',
+            allow_single_deselect: true
         });
 
         $('.region-permissions').chosen({
