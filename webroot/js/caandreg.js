@@ -36,7 +36,23 @@ function getSubs(exm)
 		  }
 		//subs
 }
+function removesub(idx)
+{
+	$('span').remove('#'+idx);
+	$('#insubs').val($('#insubs').val().replace(';'+idx,''));
+}
+
+function removedis(idx)
+{
+	$('span').remove('#d'+idx);
+	$('#indisbs').val($('#indisbs').val().replace(';'+idx,''));
+}
+
+
 $(document).ready(function(){
+	$('#datepicker').datepicker({
+      autoclose: true
+    })
 	
 	$('.cls_exams').click(function(){
 		var exam = $(this).html();
@@ -48,6 +64,39 @@ $(document).ready(function(){
 			$('#hd_exam').html(exam);
 		}
 	});
+	
+	$('#ssub').change(function(){
+		var value = $("#ssub option:selected").val();
+		var txt = $("#ssub option:selected").text();
+		//
+		var vals = $('#insubs').val();
+		if(vals.search(value)<0)
+		{
+			var excess = (vals.match(/;/g) || []).length;
+			if(excess<11)
+			{
+			var add = '<span id = "'+value+'" class="button button-info">'+txt+'&nbsp;&nbsp;<a title="remove" href="#" onclick="removesub(\''+value+'\')"><span class="glyphicon glyphicon-remove-sign delsub"></span></a></span>';
+			$('#setsub').append(add);
+			$('#insubs').val($('#insubs').val()+';'+value);
+			}
+		}
+		//subs
+	});
+	
+	$('#sdis').change(function(){
+		var value = $("#sdis option:selected").val();
+		var txt = $("#sdis option:selected").text();
+		//
+		var vals = $('#indisbs').val();
+		if(vals.search(value)<0)
+		{
+				var add = '<span id = "d'+value+'" class="button button-info">'+txt+'&nbsp;&nbsp;<a title="remove" href="#" onclick="removedis('+value+')"><span class="glyphicon glyphicon-remove-sign delsub"></span></a></span>';
+				$('#setdis').append(add);
+				$('#indisbs').val($('#indisbs').val()+';'+value);
+		}
+		//disabs
+	});
+	
 	
 	$('.ca_exams').click(function(){
 		var exam = $(this).html();

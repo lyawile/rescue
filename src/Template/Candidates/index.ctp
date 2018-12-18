@@ -18,7 +18,7 @@
     </section>
 
     <section class="content">
-
+	<?php if($seth){ ?>
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
@@ -122,6 +122,7 @@
             <!-- /.box-footer-->
         </div>
         <!-- /.box -->
+        <?php }?>
     </section>
 </div>
 <?= $this->Html->script('jquery'); ?>

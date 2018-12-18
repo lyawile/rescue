@@ -18,16 +18,16 @@ class CandidateSubjectsFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'candidates_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'subjects_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'candidate_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'subject_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
-            'candidates_id' => ['type' => 'index', 'columns' => ['candidates_id'], 'length' => []],
-            'subjects_id' => ['type' => 'index', 'columns' => ['subjects_id'], 'length' => []],
+            'candidate_id' => ['type' => 'index', 'columns' => ['candidate_id'], 'length' => []],
+            'subject_id' => ['type' => 'index', 'columns' => ['subject_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-            'candidate_subjects_ibfk_1' => ['type' => 'foreign', 'columns' => ['candidates_id'], 'references' => ['candidates', 'id'], 'update' => 'cascade', 'delete' => 'cascade', 'length' => []],
-            'candidate_subjects_ibfk_2' => ['type' => 'foreign', 'columns' => ['subjects_id'], 'references' => ['subjects', 'id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
+            'candidate_subjects_ibfk_1' => ['type' => 'foreign', 'columns' => ['candidate_id'], 'references' => ['candidates', 'id'], 'update' => 'cascade', 'delete' => 'cascade', 'length' => []],
+            'candidate_subjects_ibfk_2' => ['type' => 'foreign', 'columns' => ['subject_id'], 'references' => ['subjects', 'id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -46,8 +46,8 @@ class CandidateSubjectsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'candidates_id' => 1,
-                'subjects_id' => 1
+                'candidate_id' => 1,
+                'subject_id' => 1
             ],
         ];
         parent::init();

@@ -26,7 +26,10 @@ class DisqualifiedCandidatesTableTest extends TestCase
     public $fixtures = [
         'app.disqualified_candidates',
         'app.exam_types',
-        'app.centres'
+        'app.centres',
+        'app.disability_disqualified_candidates',
+        'app.disqualified_candidate_qualifications',
+        'app.disqualified_candidate_subjects'
     ];
 
     /**

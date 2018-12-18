@@ -87,6 +87,7 @@
 <!-- AdminLTE App -->
 <?php echo $this->Html->script('AdminLTE./js/app.min'); ?>
 <?php echo $this->Html->script('chosen.jquery') ?>
+<?php echo $this->Html->script('datepicker.min') ?>
 <!-- AdminLTE for demo purposes -->
 <?php echo $this->fetch('script'); ?>
 <?php echo $this->fetch('scriptBottom'); ?>
@@ -95,6 +96,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+		$('#datepicker').datepicker({
+      autoclose: true
+    });
         $(".navbar .menu").slimscroll({
             height: "200px",
             alwaysVisible: false,

@@ -57,12 +57,18 @@ class CandidatesController extends AppController
      */
     public function index()
     {
+		$st = false;
+		if(!empty($this->request->getSession()->read('centreId'))){
+		if(!empty($this->request->getSession()->read('examTypeId'))){
         $this->paginate = [
             'contain' => ['ExamTypes', 'Centres']
         ];
-        $candidates = $this->paginate($this->Candidates);
-
+        $candidates = $this->paginate($this->Candidates->find()->where(['exam_type_id'=>$this->request->getSession()->read('examTypeId'), 'centre_id'=>$this->request->getSession()->read('centreId')]));
+		$st = true;
         $this->set(compact('candidates'));
+		} else $this->Flash->error(__('Please Select Exam'));
+		} else $this->Flash->error(__('Please Select Centre'));
+		$this->set('seth',$st);
     }
 
     /**
@@ -90,17 +96,191 @@ class CandidatesController extends AppController
     {
         $candidate = $this->Candidates->newEntity();
         if ($this->request->is('post')) {
-            $candidate = $this->Candidates->patchEntity($candidate, $this->request->getData());
-            if ($this->Candidates->save($candidate)) {
-                $this->Flash->success(__('The candidate has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The candidate could not be saved. Please, try again.'));
+			
+			$data = $this->request->getData();
+			//$this->chapa($data); //
+			if(!empty($data['exam_type_id']) && !empty($data['centre_id']))
+			{
+				$currexm = $this->ExamTypes->get($data['exam_type_id']);
+				$temps = $this->getTemplate($currexm->short_name);
+				$metaDT=$temps[2];
+				
+					$fname = trim($data["first_name"]);
+					$oname = trim($data["other_name"]);
+					$sname = trim($data["surname"]);
+					
+	  
+					if($fname !='' && $sname !='')
+					{
+						$bad=false;
+						$resn = array();
+						//1)NAMBA
+						$ROW['ref']=$data["number"];
+						
+						//2)SIFA
+						$sifa=array();
+						//0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	 
+						switch($metaDT['sft'])
+						{
+							case 0: $ROW['sifa']=false;
+							break;
+							default: $ct = 0; $chksf=false;
+									 foreach($data["year"] as $yr)
+									 {
+										 $schono = trim($data["cntno"][$ct]);
+										 $candno = trim($data["candno"][$ct]); 
+										 if(preg_match("/^[E|S][0-9]{3,4}/i",$schono) && preg_match("/^[0-9]{3}/i",$candno))
+										 {
+											 $chksf=true;
+											 $sifa[]=$schono[0].substr('0'.substr($schono,1,strlen($schono)),-4).'/'.$candno.'/'.$yr;
+										 }
+										 $ct++; 
+									 }
+									 if($chksf)$ROW['sifa']=$sifa; else {$ROW['sifa']=false; $bad=true; $resn[]='Incorrect Qualifications';}					
+							break;
+						} 
+						
+						
+						//3) WORK EXPERIENCE integer
+						if($metaDT['we'])
+						{
+							//$bad
+							$we=intval($data["work_experience"]);
+							if(!$we>0){ $bad=true; $resn[]='No work experience';}
+							else if($we<3){ $bad=true; $resn[]='Insuficient work experience';}
+							$ROW['we']=$we;
+						}
+						else $ROW['we']=false;
+						
+						//4) REPEATER integer
+						if($metaDT['rep'])
+						{
+							$ROW['rep']=intval($data["is_repeater"]);
+						}
+						else $ROW['rep']=false;
+						//5)SEX
+						$ROW['sex']=$data["sex"];
+						
+						//6) CANDIDADOS
+						$ROW['name']=array($fname,$oname,$sname);
+						
+						//7) DATE OF BIRTH 
+						$d=intval($data['date_of_birth']['day']);
+						$m=intval($data['date_of_birth']['month']);
+						$Y=intval($data['date_of_birth']['year']);
+						
+						
+						$dob=$Y.'-'.$m.'-'.$d;
+						//valid check
+						if(!checkdate($m,$d,$Y)){$bad=true; $resn[]='Date of birth not correct';}
+						
+						$ROW['dob']=$dob;
+						
+						//8) SUBJECTS
+						$subar=array();
+						$substart=explode(';',$data['insubs']);
+						foreach($substart as $onesub)
+						{
+							if(preg_match("/^[0-9]{3}/i", $onesub))
+							{
+								$subar[]=$onesub;
+							}
+						}
+						
+						$ROW['subs']=$subar;
+						//9) DISABILITY
+						$disar=array();
+						if(!empty($data['indisbs']))
+						{
+							$disstart=explode(';',$data['indisbs']);
+							foreach($disstart as $onedisab)
+							{
+								if(preg_match("/^[1-9]/i", $onedisab))
+								{
+									$disar[]=$onesub;
+								}
+							}
+							$ROW['dis']=$disar;
+						}
+						else $ROW['dis']=false;
+						
+						//10) PARENT / GUARDIAN
+						if($metaDT['gp'])
+						{
+							$ROW['gp']=$data['guardian_phone'];
+						}
+						else $ROW['gp']=false;
+						
+						//11) PSLE NUMBER
+						$pslen = trim($data['PSLE_number']);
+						if($metaDT['7n'] && preg_match("/^[0-9]{11}/i", $pslen))
+						{
+							$ROW['psle']=$pslen;
+						}
+						else $ROW['psle']=false;
+						
+						//12) PSLE YEAR
+						$psleyr = intval(trim($data['PSLE_year']));
+						
+						if($metaDT['7y'] && ($psleyr>2015 && $psleyr<date('Y')))
+						{
+							$ROW['psley']=$psleyr;
+						}
+						else $ROW['psley']=false;
+						
+						//13) COMBINATION
+						$cmb= strtoupper(trim($data['combination']));
+						if($metaDT['cmb'] && preg_match("/^[A-Z]{3}/i", $cmb))
+						{
+							$ROW['cmb']=$cmb;
+						}
+						else $ROW['cmb']=false;
+						
+						//SAVE			
+						if(!$bad)
+						{
+							$in = $this->dataInsert(array($data['exam_type_id'],$data['centre_id']),$ROW); 
+							if($in[0] == 1)
+							{
+								$this->Flash->success(__('Candidate  Registered'));;
+							}
+							else if($in[0] == 2)
+							{
+								//SIFA DONT
+								$bad = true;
+								$resn[]=$in[1];
+							}
+							else if($in[0] == 3)
+							{
+								$this->Flash->error(__('Duplicate Names : Candidate already exists'));
+							}
+						}
+						
+						if($bad)
+						{
+							$ROW['resn'] = implode(',',$resn);
+							$in = $this->dataInsertInc(array($data['exam_type_id'],$data['centre_id']),$ROW);
+							if($in == 1)
+							{
+								$this->Flash->error(__('Candidate has been Disqualified; Please see the reason in Disqualified List.'));
+							}
+							else if($in == 3)
+							{
+								$this->Flash->error(__('Candidate already exists in Disqualified List.'));
+							}
+						}
+					} else $this->Flash->error(__('Firstname and or Surname Empty!'));
+				
+				}//NO CANDIDATE NAME
+				else $this->Flash->error(__('Select Exam and or Centre'));
         }
-        $examTypes = $this->Candidates->ExamTypes->find('list', ['limit' => 200]);
-        $centres = $this->Candidates->Centres->find('list', ['limit' => 200]);
-        $this->set(compact('candidate', 'examTypes', 'centres'));
+        $examTypes = $this->Candidates->ExamTypes->find('list', ['limit' => 200])->where(['id'=>$this->request->getSession()->read('examTypeId')]);
+        $centres = $this->Candidates->Centres->find('list', ['limit' => 200])->where(['id'=>$this->request->getSession()->read('centreId')]);
+		$subjects = $this->getsubjects($this->request->getSession()->read('examTypeId'));
+		$disabs = $this->getDisabilies();
+		// $this->Candidates->CandidateDisabilities->Disabilities->find('list', ['limit' => 200]);
+		
+        $this->set(compact('candidate', 'examTypes', 'centres', 'subjects','disabs'));
     }
 
     /**
@@ -148,6 +328,26 @@ class CandidatesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+	
+	private function getsubjects($exam)
+	{
+		//echo $centid;exit;
+		$subs = $this->Subjects->find('all',array('fields' => array('id','code','name')))->where(['exam_type_id' => $exam]);//
+		$subjects=$subs->toArray();
+		$subject=array();
+		foreach($subjects as $k=>$v)$subject[$v['code']]= $v['name'];
+		return $subject;
+	}
+	
+	private function getDisabilies()
+	{
+		//echo $centid;exit;
+		$ds = $this->Disabilities->find('all',array('fields' => array('id','shortname')));//
+		$disab=$ds->toArray();
+		$dsb=array();
+		foreach($disab as $k=>$v)$dsb[$v['id']]= $v['shortname'];
+		return $dsb;
+	}
 	
 	public function bulk()
     {
@@ -245,19 +445,9 @@ class CandidatesController extends AppController
 		$ans=$this->fileprocess($sheetData, $exam);
 		return $ans;
 	}
-		
-	private function fileprocess($data, $exam)
+	private function getTemplate($exam=false)
 	{
-		$alpha=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF');
-		//TEMPLATES SET
-		//-ID-KEYWORDS-DATA WIDTH-DATA CELLS
-		/*************
-		KEY: SIFA //0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	
-			sft- Sifa Type, sfb - Begining Column of Sifa, we- Work Experience, rep - Repeater, cmb - Combination
-			subs - Beginning Column fo subjects, sube- ending column for subjects, pg - Parent/Guardian
-		
-		************/
-	$templates=array(
+		$templates=array(
 	'CSEE'=>array(array('CSEE'),25
 	,array('sft'=>1,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>20,'dis'=>21,'gp'=>23,'7n'=>false,'7y'=>false,'cmb'=>false)),
 	'ACSEE'=>array(array('ADVANCED CERTIFICATE OF SECONDARY EDUCATION EXAMINATION'),22
@@ -272,7 +462,22 @@ class CandidatesController extends AppController
 	,array('sft'=>2,'sfb'=>1,'we'=>false,'rep'=>false,'sex'=>4,'nem'=>5,'dob'=>8,'subs'=>11,'sube'=>23,'dis'=>24,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)),
 	'GATSCCE'=>array(array("GRADE 'A' TEACHER SPECIAL COURSE CERTIFICATE  EXAMINATION"),25
 	,array('sft'=>3,'sfb'=>1,'we'=>2,'rep'=>false,'sex'=>3,'nem'=>4,'dob'=>7,'subs'=>10,'sube'=>20,'dis'=>21,'gp'=>false,'7n'=>false,'7y'=>false,'cmb'=>false)));
+		return $exam?$templates[$exam]:$templates;
+	}
+		
+	private function fileprocess($data, $exam)
+	{
+		$alpha=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE','AF');
+		//TEMPLATES SET
+		//-ID-KEYWORDS-DATA WIDTH-DATA CELLS
+		/*************
+		KEY: SIFA //0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	
+			sft- Sifa Type, sfb - Begining Column of Sifa, we- Work Experience, rep - Repeater, cmb - Combination
+			subs - Beginning Column fo subjects, sube- ending column for subjects, pg - Parent/Guardian
+		
+		************/
 	
+		$templates = $this->getTemplate();
 		$csee=array('31','32','33');
 		$disabs=array('BR', 'LV', 'HI', 'II', 'Others');
 		
@@ -380,7 +585,8 @@ class CandidatesController extends AppController
 			
 			if($keepRead)
 			{
-				$metaDT=$templates[$examTP][2];
+				$temps = $this->getTemplate($examTP);
+				$metaDT=$temps[2];
 				//EXAM ID
 				$dbexm = $this->ExamTypes->find()->where(['short_name' => $examTP])->first();
 				if(!empty($dbexm))
@@ -545,7 +751,8 @@ class CandidatesController extends AppController
 					{
 						//$bad
 						$we=intval($data[$rw][$alpha[$metaDT['we']]]);
-						if($we>0){ $bad=true; $resn[]='No work experience';}
+						if(!$we>0){ $bad=true; $resn[]='No work experience';}
+						else if($we<3){ $bad=true; $resn[]='Insuficient work experience';}
 						$ROW['we']=$we;
 					}
 					else $ROW['we']=false;
@@ -639,17 +846,17 @@ class CandidatesController extends AppController
 					if(!$bad)
 					{
 						$in = $this->dataInsert(array($dbexamid,$dbcentid),$ROW);
-						if($in == 1)
+						if($in[0] == 1)
 						{
 							$comp++;
 						}
-						else if($in == 2)
+						else if($in[0] == 2)
 						{
 							//SIFA DONT
 							$bad = true;
-							$resn[]='Candidate lacks required qualification';
+							$resn[]=$in[1];
 						}
-						else if($in == 3)
+						else if($in[0] == 3)
 						{
 							$dupcomp[] = implode(' ', $nem);
 						}
@@ -716,82 +923,88 @@ class CandidatesController extends AppController
 			$cands = $this->Candidates->find()->select(array('id', 'exam_type_id'))->where($where)->first();
 					if(empty($cands))
 					{ 
-						//INSERT CANDIDATE
-						$cand=$this->Candidates->newEntity();
-						$cand->number=$data['ref'];
-						$cand->sex=$data['sex'];
-						$cand->first_name=$data['name'][0];
-						$cand->other_name=$data['name'][1];
-						$cand->surname=$data['name'][2]; 
-						$cand->guardian_phone=$data['gp'];
-						
-						$cand->date_of_birth=$data['dob'];
-						$cand->work_experience=$data['we']?$data['we']:'NULL';
-						$cand->combination=$data['cmb']?$data['cmb']:'NULL';
-						$cand->PSLE_number=$data['psle']?$data['psle']:'NULL';
-						$cand->PSLE_year=$data['psley']?$data['psley']:'NULL';
-						$cand->is_repeater=$data['rep']?$data['rep']:'0';
-						
-						$cand->centre_id=$head[1]; 
-						$cand->exam_type_id=$head[0]; 
-						$this->Candidates->save($cand);
-						//  $sqllog = $this->Candidates->getDataSource()->getLog(false, false);       
-						 //debug($sqllog);
-								
-						//INSERT DISABILITIES
-						if($data['dis'])
+						$exm = $this->ExamTypes->get($head[0]);
+						$vsifa = $this->sifaVerify($data['name'],$data['sifa'],$exm->short_name);
+						if($vsifa[0])
 						{
-							$replace=array(' ','.');
-							$dis=str_replace($replace,'',strtoupper(trim($data['dis'])));
-							$dis=$dis=='OTHERS'?ucfirst(strtolower($dis)):$dis;
+							//INSERT CANDIDATE
+							$cand=$this->Candidates->newEntity();
+							$cand->number=$data['ref'];
+							$cand->sex=$data['sex'];
+							$cand->first_name=$data['name'][0];
+							$cand->other_name=$data['name'][1];
+							$cand->surname=$data['name'][2]; 
+							$cand->guardian_phone=$data['gp'];
 							
-							$disob= $this->Disabilities->findByShortname($dis)->first();
-							$disab=$this->CandidateDisabilities->newEntity();
-							$disab->disability_id=$disob->id;
-							$disab->candidate_id=$cand->id;
-							$this->CandidateDisabilities->save($disab);
+							$cand->date_of_birth=$data['dob'];
+							$cand->work_experience=$data['we']?$data['we']:'NULL';
+							$cand->combination=$data['cmb']?$data['cmb']:'NULL';
+							$cand->PSLE_number=$data['psle']?$data['psle']:'NULL';
+							$cand->PSLE_year=$data['psley']?$data['psley']:'NULL';
+							$cand->is_repeater=$data['rep']?$data['rep']:'0';
 							
-						}
-						
-								
-						//INSERT QUALIFICATIONS
-						if($data['sifa'])
-						{
-						//	$this->chapa($data['sifa']);
-							foreach($data['sifa'] as $sifa)
+							$cand->centre_id=$head[1]; 
+							$cand->exam_type_id=$head[0]; 
+							$this->Candidates->save($cand);
+							//  $sqllog = $this->Candidates->getDataSource()->getLog(false, false);       
+							 //debug($sqllog);
+									
+							//INSERT DISABILITIES
+							if($data['dis'])
 							{
-								if(trim($sifa)!='')
+								$replace=array(' ','.');
+								$dis=str_replace($replace,'',strtoupper(trim($data['dis'])));
+								$dis=$dis=='OTHERS'?ucfirst(strtolower($dis)):$dis;
+								
+								$disob= $this->Disabilities->findByShortname($dis)->first();
+								$disab=$this->CandidateDisabilities->newEntity();
+								$disab->disability_id=$disob->id;
+								$disab->candidate_id=$cand->id;
+								$this->CandidateDisabilities->save($disab);
+								
+							}
+							
+									
+							//INSERT QUALIFICATIONS
+							if($data['sifa'])
+							{
+							//	$this->chapa($data['sifa']);
+								foreach($data['sifa'] as $sifa)
 								{
-									$sf=explode('/',$sifa);
-									$candQ=$this->CandidateQualifications->newEntity();
-									$candQ->centre_number=$sf[0];
-									$candQ->candidate_number=$sf[1];
-									$candQ->exam_year=$sf[2];
-									$candQ->candidate_id=$cand->id;
-									$this->CandidateQualifications->save($candQ);
+									if(trim($sifa)!='')
+									{
+										$sf=explode('/',$sifa);
+										$candQ=$this->CandidateQualifications->newEntity();
+										$candQ->centre_number=$sf[0];
+										$candQ->candidate_number=$sf[1];
+										$candQ->exam_year=$sf[2];
+										$candQ->candidate_id=$cand->id;
+										$this->CandidateQualifications->save($candQ);
+									}
 								}
 							}
+									
+							//INSERT SUBJECTS  
+							foreach($data['subs'] as $sbj)
+							{
+								if($sbj!='' && $sbj!='00')
+								{
+								$subo = $this->Subjects->findByCode(intval($sbj))->first();
+								if($subo!=NULL)
+								{
+									//SUBJECT FOUND
+									$candsub = $this->CandidateSubjects->newEntity();
+									$candsub->candidate_id=$cand->id;
+									$candsub->subject_id=$subo->id;
+									$this->CandidateSubjects->save($candsub);
+								}
+								}
+							}//FOREACH SUBS
+							return array(1,'');
 						}
-								
-						//INSERT SUBJECTS  
-						foreach($data['subs'] as $sbj)
-						{
-							if($sbj!='' && $sbj!='00')
-							{
-							$subo = $this->Subjects->findByCode(intval($sbj))->first();
-							if($subo!=NULL)
-							{
-								//SUBJECT FOUND
-								$candsub = $this->CandidateSubjects->newEntity();
-								$candsub->candidate_id=$cand->id;
-								$candsub->subject_id=$subo->id;
-								$this->CandidateSubjects->save($candsub);
-							}
-							}
-						}//FOREACH SUBS
-						return 1;
+						else return  array(2,$vsifa[1]); //SIFA DONT
 					}
-					else return 3;
+					else return  array(3,'') ;
 		} //DATA CHECK
 		
 	}
@@ -826,9 +1039,28 @@ class CandidatesController extends AppController
 						$cand->subjects = implode(';',$data['subs']);
 						if($data['sifa'])$cand->sifa = implode(';',$data['sifa']);
 						
-						$cand->centre_id=$cent->id; 
-						$cand->exam_type_id=$exam->id; 
-						$this->DisqualifiedCandidates->save($cand);
+						$cand->centre_id=$head[1]; 
+						$cand->exam_type_id=$head[0]; 
+						$this->DisqualifiedCandidates->save($cand); //DisqualifiedCandidateQualifications
+						
+						//INSERT QUALIFICATIONS
+							if($data['sifa'])
+							{
+							//	$this->chapa($data['sifa']);
+								foreach($data['sifa'] as $sifa)
+								{
+									if(trim($sifa)!='')
+									{
+										$sf=explode('/',$sifa);
+										$candQ=$this->DisqualifiedCandidateQualifications->newEntity();
+										$candQ->centre_number=$sf[0];
+										$candQ->candidate_number=$sf[1];
+										$candQ->exam_year=$sf[2];
+										$candQ->disqualified_candidate_id=$cand->id;
+										$this->DisqualifiedCandidateQualifications->save($candQ);
+									}
+								}
+							}
 						return 1;
 					}
 					else return 3;
@@ -836,21 +1068,58 @@ class CandidatesController extends AppController
 		
 	}
 	
-	private function sifaVerify($sifa,$exam)
+	private function sifaVerify($names,$sifa,$exam)
 	{
 		if(is_array($sifa)&&!empty($sifa))
 		{
 			switch($exam)
 			{
-				case 'CSEE':
+				case 'FTNA': return array(true,'');
 				break;
-				case 'ACSEE':
-								
+				case 'CSEE': $scon = ConnectionManager::get('sifaftwo');
+								$comnt = array();
+								foreach($sifa as $ones)
+								{
+									$sf = explode('/',$ones);
+									//1: Year Less Than 2
+									
+									if(date('Y') - intval($sf[2]) < 2)
+									{
+									
+										$query = $scon->newQuery();
+										$query->select(['full_name','sex','avg','grade'])->from('tbl_form_two_data')
+											->where(['candno' => $sf[0].'/'.$sf[1], 'exam_year'=>$sf[2]]);
+											
+										$rows = $query->execute()->fetchAll('assoc');
+										$resn = '';
+										if(!empty($rows))
+										{
+											foreach ($rows as $row) {
+												//2: Names Not Match
+												if (strpos($names[0],$row['full_name']) !== false && strpos($names[2],$row['full_name']) !== false)
+												{
+													//3: Qualification
+													if($row['avg']>30)
+													{
+														return array(true,'');
+													}
+													else $resn = $ones.' : Candidate has no Required Qualification';
+												}
+												else $resn = $ones.' : Registered name and Qualification name did not match';
+											}
+											$comnt[] = $resn;
+										}
+										else $comnt[] = $ones.' : Incorrect Qualification';
+									}//1
+									else $comnt[] = $ones.' : Qualification Year Less Than Required';
+								}//FOREACH
+								if(!empty($comnt)) return array(false,implode(', ',$comnt));
 				break;
-				case 'ACSEE':
+				default : return array(false,'Sorry, No Verification for '.$exam.' Qualifications Yet');
 				break;
 			}
 		}
+		else return 'Invalid Qualification Details';
 	}
 	
 	private function chapa($dt)
