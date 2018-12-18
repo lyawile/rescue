@@ -77,4 +77,20 @@ class NotificationsTable extends Table
 
         return $validator;
     }
+
+    public function findNotificationsByUser($userId){
+        $query = $this->find()->contain('users')->matching('users', function ($q) use ($userId){
+           return $q->where(['Users.id' => $userId]);
+        });
+
+        return $query;
+    }
+
+    public function userUnReadNotifications($userId){
+        $query = $this->find()->contain('users')->matching('users', function ($q) use ($userId){
+            return $q->where(['Users.id' => $userId, 'is_read' => false]);
+        });
+
+        return $query;
+    }
 }

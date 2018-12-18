@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -143,5 +144,10 @@ class CentresTable extends Table
         $rules->add($rules->existsIn(['district_id'], 'Districts'));
 
         return $rules;
+    }
+
+    public function getCentreStats($regionId, $districtId, $examTypeId)
+    {
+//        $this->
     }
 }
