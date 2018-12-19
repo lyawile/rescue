@@ -60,7 +60,8 @@ class GroupsController extends AppController
             $group = $this->Groups->patchEntity($group, $this->request->getData());
             if ($this->Groups->save($group)) {
                 $this->Acl->allow($group, "controllers/Users/logout"); // Allow all users to logout
-                $this->Acl->allow($group, "controllers/Notifications", ['inbox', 'inboxView']);
+                $this->Acl->allow($group, "controllers/Notifications/inbox");
+                $this->Acl->allow($group, "controllers/Notifications/inboxView");
                 $this->Flash->success(__('The group has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
