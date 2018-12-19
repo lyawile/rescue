@@ -116,9 +116,12 @@ class CentresController extends AppController
         if ($this->request->is('ajax')) {
             $this->response->withDisabledCache();
         }
-        $districtCentres = $this->Centres->find('list', [
-            'conditions' => ['Centres.district_id' => $id]
-        ]);
+
+        $groupCentreId = $this->request->getSession()->read('Auth.User.centre_id');
+        if (is_null($groupCentreId))
+            $districtCentres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $id]]);
+        else
+            $districtCentres = $this->Centres->find('list', ['conditions' => ['Centres.id' => $groupCentreId]]);
 
         return $this->response->withType("application/json")->withStringBody(json_encode($districtCentres));
     }

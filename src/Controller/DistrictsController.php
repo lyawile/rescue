@@ -113,9 +113,12 @@ class DistrictsController extends AppController
 
     public function listDistricts($id = null)
     {
-        $regionDistricts = $this->Districts->find('list', [
-            'conditions' => ['Districts.region_id' => $id]
-            ]);
+        $groupDistrictId = $this->request->getSession()->read('Auth.User.district_id');
+
+        if (is_null($groupDistrictId))
+            $regionDistricts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $id]]);
+        else
+            $regionDistricts = $this->Districts->find('list', ['conditions' => ['Districts.id' => $groupDistrictId]]);
 
         return $this->response->withType("application/json")->withStringBody(json_encode($regionDistricts));
     }
