@@ -70,7 +70,7 @@ class CandidatesController extends AppController
 		} else $this->Flash->error(__('Please Select Centre'));
 		$this->set('seth',$st);
     }
-
+ 
     /**
      * View method
      *
@@ -112,163 +112,164 @@ class CandidatesController extends AppController
 	  
 					if($fname !='' && $sname !='')
 					{
-						$bad=false;
-						$resn = array();
-						//1)NAMBA
-						$ROW['ref']=$data["number"];
-						
-						//2)SIFA
-						$sifa=array();
-						//0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	 
-						switch($metaDT['sft'])
+						if(trim($data['date_of_birth'])!='')
 						{
-							case 0: $ROW['sifa']=false;
-							break;
-							default: $ct = 0; $chksf=false;
-									 foreach($data["year"] as $yr)
-									 {
-										 $schono = trim($data["cntno"][$ct]);
-										 $candno = trim($data["candno"][$ct]); 
-										 if(preg_match("/^[E|S][0-9]{3,4}/i",$schono) && preg_match("/^[0-9]{3}/i",$candno))
+							$bad=false;
+							$resn = array();
+							//1)NAMBA
+							$ROW['ref']=$data["number"];
+							
+							//2)SIFA
+							$sifa=array();
+							//0-no sifa, 1-csee (1 sifa/3 columns), 2-acsee+dse+gatce(3 sifaz/3 columns),	3-gatscce(1 sifa/1 columns)	 
+							switch($metaDT['sft'])
+							{
+								case 0: $ROW['sifa']=false;
+								break;
+								default: $ct = 0; $chksf=false;
+										 foreach($data["year"] as $yr)
 										 {
-											 $chksf=true;
-											 $sifa[]=$schono[0].substr('0'.substr($schono,1,strlen($schono)),-4).'/'.$candno.'/'.$yr;
+											 $schono = trim($data["cntno"][$ct]);
+											 $candno = trim($data["candno"][$ct]); 
+											 if(preg_match("/^[E|S][0-9]{3,4}/i",$schono) && preg_match("/^[0-9]{3}/i",$candno))
+											 {
+												 $chksf=true;
+												 $sifa[]=$schono[0].substr('0'.substr($schono,1,strlen($schono)),-4).'/'.$candno.'/'.$yr;
+											 }
+											 $ct++; 
 										 }
-										 $ct++; 
-									 }
-									 if($chksf)$ROW['sifa']=$sifa; else {$ROW['sifa']=false; $bad=true; $resn[]='Incorrect Qualifications';}					
-							break;
-						} 
-						
-						
-						//3) WORK EXPERIENCE integer
-						if($metaDT['we'])
-						{
-							//$bad
-							$we=intval($data["work_experience"]);
-							if(!$we>0){ $bad=true; $resn[]='No work experience';}
-							else if($we<3){ $bad=true; $resn[]='Insuficient work experience';}
-							$ROW['we']=$we;
-						}
-						else $ROW['we']=false;
-						
-						//4) REPEATER integer
-						if($metaDT['rep'])
-						{
-							$ROW['rep']=intval($data["is_repeater"]);
-						}
-						else $ROW['rep']=false;
-						//5)SEX
-						$ROW['sex']=$data["sex"];
-						
-						//6) CANDIDADOS
-						$ROW['name']=array($fname,$oname,$sname);
-						
-						//7) DATE OF BIRTH 
-						$d=intval($data['date_of_birth']['day']);
-						$m=intval($data['date_of_birth']['month']);
-						$Y=intval($data['date_of_birth']['year']);
-						
-						
-						$dob=$Y.'-'.$m.'-'.$d;
-						//valid check
-						if(!checkdate($m,$d,$Y)){$bad=true; $resn[]='Date of birth not correct';}
-						
-						$ROW['dob']=$dob;
-						
-						//8) SUBJECTS
-						$subar=array();
-						$substart=explode(';',$data['insubs']);
-						foreach($substart as $onesub)
-						{
-							if(preg_match("/^[0-9]{3}/i", $onesub))
+										 if($chksf)$ROW['sifa']=$sifa; else {$ROW['sifa']=false; $bad=true; $resn[]='Incorrect Qualifications';}					
+								break;
+							} 
+							
+							
+							//3) WORK EXPERIENCE integer
+							if($metaDT['we'])
 							{
-								$subar[]=$onesub;
+								//$bad
+								$we=intval($data["work_experience"]);
+								if(!$we>0){ $bad=true; $resn[]='No work experience';}
+								else if($we<3){ $bad=true; $resn[]='Insuficient work experience';}
+								$ROW['we']=$we;
 							}
-						}
-						
-						$ROW['subs']=$subar;
-						//9) DISABILITY
-						$disar=array();
-						if(!empty($data['indisbs']))
-						{
-							$disstart=explode(';',$data['indisbs']);
-							foreach($disstart as $onedisab)
+							else $ROW['we']=false;
+							
+							//4) REPEATER integer
+							if($metaDT['rep'])
 							{
-								if(preg_match("/^[1-9]/i", $onedisab))
+								$ROW['rep']=intval($data["is_repeater"]);
+							}
+							else $ROW['rep']=false;
+							//5)SEX
+							$ROW['sex']=$data["sex"];
+							
+							//6) CANDIDADOS
+							$ROW['name']=array($fname,$oname,$sname);
+							
+							//7) DATE OF BIRTH 
+							$dt = explode('/',$data['date_of_birth']);						
+							$dob=$dt[2].'-'.$dt[0].'-'.$dt[1];
+							//valid check
+							if(!checkdate($dt[0],$dt[1],$dt[2])){$bad=true; $resn[]='Date of birth not correct';}
+							$ROW['dob']=$dob;
+								
+							//8) SUBJECTS
+							$subar=array();
+							$substart=$data['insubs'];
+							if(!empty($data['insubs']))
+							{
+								foreach($substart as $onesub)
 								{
-									$disar[]=$onesub;
+									if(preg_match("/^[0-9]{3}/i", $onesub))
+									{
+										$subar[]=$onesub;
+									}
 								}
 							}
-							$ROW['dis']=$disar;
-						}
-						else $ROW['dis']=false;
-						
-						//10) PARENT / GUARDIAN
-						if($metaDT['gp'])
-						{
-							$ROW['gp']=$data['guardian_phone'];
-						}
-						else $ROW['gp']=false;
-						
-						//11) PSLE NUMBER
-						$pslen = trim($data['PSLE_number']);
-						if($metaDT['7n'] && preg_match("/^[0-9]{11}/i", $pslen))
-						{
-							$ROW['psle']=$pslen;
-						}
-						else $ROW['psle']=false;
-						
-						//12) PSLE YEAR
-						$psleyr = intval(trim($data['PSLE_year']));
-						
-						if($metaDT['7y'] && ($psleyr>2015 && $psleyr<date('Y')))
-						{
-							$ROW['psley']=$psleyr;
-						}
-						else $ROW['psley']=false;
-						
-						//13) COMBINATION
-						$cmb= strtoupper(trim($data['combination']));
-						if($metaDT['cmb'] && preg_match("/^[A-Z]{3}/i", $cmb))
-						{
-							$ROW['cmb']=$cmb;
-						}
-						else $ROW['cmb']=false;
-						
-						//SAVE			
-						if(!$bad)
-						{
-							$in = $this->dataInsert(array($data['exam_type_id'],$data['centre_id']),$ROW); 
-							if($in[0] == 1)
+							$ROW['subs']=$subar;
+							
+							//9) DISABILITY
+							$disar=array();
+							if(!empty($data['indisbs']))
 							{
-								$this->Flash->success(__('Candidate  Registered'));;
+								$disstart=$data['indisbs'];
+								foreach($disstart as $onedisab)
+								{
+									if(preg_match("/^[A-Z]{2}/i", $onedisab))
+									{
+										$disar[]=$onedisab;
+									}
+								}
+								$ROW['dis']=$disar;
 							}
-							else if($in[0] == 2)
+							else $ROW['dis']=false;
+							
+							//10) PARENT / GUARDIAN
+							if($metaDT['gp'])
 							{
-								//SIFA DONT
-								$bad = true;
-								$resn[]=$in[1];
+								$ROW['gp']=$data['guardian_phone'];
 							}
-							else if($in[0] == 3)
+							else $ROW['gp']=false;
+							
+							//11) PSLE NUMBER
+							$pslen = trim($data['PSLE_number']);
+							if($metaDT['7n'] && preg_match("/^[0-9]{11}/i", $pslen))
 							{
-								$this->Flash->error(__('Duplicate Names : Candidate already exists'));
+								$ROW['psle']=$pslen;
 							}
-						}
-						
-						if($bad)
-						{
-							$ROW['resn'] = implode(',',$resn);
-							$in = $this->dataInsertInc(array($data['exam_type_id'],$data['centre_id']),$ROW);
-							if($in == 1)
+							else $ROW['psle']=false;
+							
+							//12) PSLE YEAR
+							$psleyr = intval(trim($data['PSLE_year']));
+							
+							if($metaDT['7y'] && ($psleyr>2015 && $psleyr<date('Y')))
 							{
-								$this->Flash->error(__('Candidate has been Disqualified; Please see the reason in Disqualified List.'));
+								$ROW['psley']=$psleyr;
 							}
-							else if($in == 3)
+							else $ROW['psley']=false;
+							
+							//13) COMBINATION
+							$cmb= strtoupper(trim($data['combination']));
+							if($metaDT['cmb'] && preg_match("/^[A-Z]{3}/i", $cmb))
 							{
-								$this->Flash->error(__('Candidate already exists in Disqualified List.'));
+								$ROW['cmb']=$cmb;
 							}
-						}
+							else $ROW['cmb']=false;
+							
+							//SAVE			
+							if(!$bad)
+							{
+								$in = $this->dataInsert(array($data['exam_type_id'],$data['centre_id']),$ROW); 
+								if($in[0] == 1)
+								{
+									$this->Flash->success(__('Candidate  Registered'));;
+								}
+								else if($in[0] == 2)
+								{
+									//SIFA DONT
+									$bad = true;
+									$resn[]=$in[1];
+								}
+								else if($in[0] == 3)
+								{
+									$this->Flash->error(__('Duplicate Names : Candidate already exists'));
+								}
+							}
+							
+							if($bad)
+							{
+								$ROW['resn'] = implode(',',$resn);
+								$in = $this->dataInsertInc(array($data['exam_type_id'],$data['centre_id']),$ROW);
+								if($in == 1)
+								{
+									$this->Flash->error(__('Candidate has been Disqualified; Please see the reason in Disqualified List.'));
+								}
+								else if($in == 3)
+								{
+									$this->Flash->error(__('Candidate already exists in Disqualified List.'));
+								}
+							}
+						} else $this->Flash->error(__('Plase Provide Date of Birth'));
 					} else $this->Flash->error(__('Firstname and or Surname Empty!'));
 				
 				}//NO CANDIDATE NAME
@@ -511,7 +512,7 @@ class CandidatesController extends AppController
 									foreach($ext[0] as $sub)
 									{
 										//exam type
-										if (strpos($cell,$sub) !== false)
+										if (stripos($cell,$sub) !== false)
 										{
 											$checkET=true;
 											$examTP=$k;
@@ -533,7 +534,7 @@ class CandidatesController extends AppController
 								foreach($dataIC as $st)
 								{
 									//exam type
-										if (strpos(strtoupper($cell),$st) !== false)
+										if (stripos(strtoupper($cell),$st) !== false)
 										{
 											$checkDT=true;
 											$dataStart=$j+2;
@@ -950,10 +951,12 @@ class CandidatesController extends AppController
 							 //debug($sqllog);
 									
 							//INSERT DISABILITIES
-							if($data['dis'])
+							if(!empty($data['dis']))
 							{
+								foreach($data['dis'] as $datadis)
+								{
 								$replace=array(' ','.');
-								$dis=str_replace($replace,'',strtoupper(trim($data['dis'])));
+								$dis=str_replace($replace,'',strtoupper(trim($datadis)));
 								$dis=$dis=='OTHERS'?ucfirst(strtolower($dis)):$dis;
 								
 								$disob= $this->Disabilities->findByShortname($dis)->first();
@@ -961,7 +964,7 @@ class CandidatesController extends AppController
 								$disab->disability_id=$disob->id;
 								$disab->candidate_id=$cand->id;
 								$this->CandidateDisabilities->save($disab);
-								
+								}
 							}
 							
 									
@@ -983,15 +986,16 @@ class CandidatesController extends AppController
 									}
 								}
 							}
-									
+							//	$this->chapa($data['subs']);	
 							//INSERT SUBJECTS  
 							foreach($data['subs'] as $sbj)
 							{
 								if($sbj!='' && $sbj!='00')
 								{
-								$subo = $this->Subjects->findByCode(intval($sbj))->first();
+								$subo = $this->Subjects->findByCode($sbj)->first();
 								if($subo!=NULL)
 								{
+									echo $subo->id.'<br>';
 									//SUBJECT FOUND
 									$candsub = $this->CandidateSubjects->newEntity();
 									$candsub->candidate_id=$cand->id;
@@ -999,7 +1003,7 @@ class CandidatesController extends AppController
 									$this->CandidateSubjects->save($candsub);
 								}
 								}
-							}//FOREACH SUBS
+							}exit;//FOREACH SUBS
 							return array(1,'');
 						}
 						else return  array(2,$vsifa[1]); //SIFA DONT
@@ -1035,9 +1039,9 @@ class CandidatesController extends AppController
 						$cand->is_repeater = $data['rep']?$data['rep']:'0';
 						
 						$cand->reason = $data['resn'];
-						$cand->disabilities = $data['dis'];
+						$cand->disabilities = implode(';',$data['dis']);
 						$cand->subjects = implode(';',$data['subs']);
-						if($data['sifa'])$cand->sifa = implode(';',$data['sifa']);
+						//if($data['sifa'])$cand->sifa = implode(';',$data['sifa']);
 						
 						$cand->centre_id=$head[1]; 
 						$cand->exam_type_id=$head[0]; 
@@ -1082,8 +1086,7 @@ class CandidatesController extends AppController
 								{
 									$sf = explode('/',$ones);
 									//1: Year Less Than 2
-									
-									if(date('Y') - intval($sf[2]) < 2)
+									if(date('Y') - intval($sf[2]) >= 2)
 									{
 									
 										$query = $scon->newQuery();
@@ -1094,9 +1097,12 @@ class CandidatesController extends AppController
 										$resn = '';
 										if(!empty($rows))
 										{
-											foreach ($rows as $row) {
+											foreach ($rows as $row) 
+											{
 												//2: Names Not Match
-												if (strpos($names[0],$row['full_name']) !== false && strpos($names[2],$row['full_name']) !== false)
+												//if(stripos($row['full_name'])) !== false) echo '=yee<br>';
+												//echo $names[0].' '.$names[2].'<br>'.$row['full_name']; exit;
+												if(stripos($row['full_name'],trim($names[0])) !== false && stripos($row['full_name'],trim($names[2])) !== false)
 												{
 													//3: Qualification
 													if($row['avg']>30)

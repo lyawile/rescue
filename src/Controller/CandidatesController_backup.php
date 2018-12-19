@@ -315,7 +315,7 @@ class CandidatesController extends AppController
 									foreach($ext[0] as $sub)
 									{
 										//exam type
-										if (strpos($cell,$sub) !== false)
+										if (stripos($cell,$sub) !== false)
 										{
 											$checkET=true;
 											$examTP=$k;
@@ -337,7 +337,7 @@ class CandidatesController extends AppController
 								foreach($dataIC as $st)
 								{
 									//exam type
-										if (strpos(strtoupper($cell),$st) !== false)
+										if (stripos(strtoupper($cell),$st) !== false)
 										{
 											$checkDT=true;
 											$dataStart=$j+2;

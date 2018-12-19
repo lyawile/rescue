@@ -1,8 +1,8 @@
 @charset "utf-8";
 /* CSS Document */
 
-/* The container */
-.container {
+/* The checkhd */
+.checkhd {
     display: block;
     position: relative;
     padding-left: 35px;
@@ -16,7 +16,7 @@
 }
 
 /* Hide the browser's default checkbox */
-.container input {
+.checkhd input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -35,12 +35,12 @@
 }
 
 /* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
+.checkhd:hover input ~ .checkmark {
     background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container input:checked ~ .checkmark {
+.checkhd input:checked ~ .checkmark {
     background-color: #2196F3;
 }
 
@@ -52,12 +52,12 @@
 }
 
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+.checkhd input:checked ~ .checkmark:after {
     display: block;
 }
 
 /* Style the checkmark/indicator */
-.container .checkmark:after {
+.checkhd .checkmark:after {
     left: 9px;
     top: 5px;
     width: 5px;

@@ -137,32 +137,43 @@ class CandidateCasController extends AppController
     }
 	
 	public function templatedown()
-    {	 
-        if ($this->request->is('post')) 
-		{
-			$etype =  explode('_',$this->request->getData['exam']);
-			$cent = $this->getcentres($this->request->getSession()->read('centreId'));
-			$subs = $this->request->getData['chksub'];
-			if($cent[0]<1 )$this->Flash->error(__('Please Select Centre'));
-			else if($etype[0]<1)$this->Flash->error(__('Please Select Exam'));
-			else
-			{
-				$this->write($etype[1],$cent[0],$cent[2].'_'.$cent[1],$subs);
-			}
-			
-		}
-        $cent = $this->getcentres($this->request->getSession()->read('centreId'));
-		$centid = '';
-		if($cent!='Select Centre')
-		{
-			$c=explode('_',$cent);
-			$cent=$c[1];
-			$centid = $c[0].'_'.$c[1];
-		}
-        $this->set('centre', $cent);
+    {	
+		$st = false;
+		if(!empty($this->request->getSession()->read('centreId'))){
+			if(!empty($this->request->getSession()->read('examTypeId'))){
+					 
+				if ($this->request->is('post')) 
+				{
+					$etype =  explode('_',$this->request->getData['exam']);
+					$cent = $this->getcentres($this->request->getSession()->read('centreId'));
+					$subs = $this->request->getData['chksub'];
+					if($cent[0]<1 )$this->Flash->error(__('Please Select Centre'));
+					else if($etype[0]<1)$this->Flash->error(__('Please Select Exam'));
+					else
+					{
+						$this->write($etype[1],$cent[0],$cent[2].'_'.$cent[1],$subs);
+					}
+					
+				}
+				$cent = $this->getcentres($this->request->getSession()->read('centreId'));
+				$centid = '';
+				if($cent!='Select Centre')
+				{
+					$c=explode('_',$cent);
+					$cent=$c[1];
+					$centid = $c[0].'_'.$c[1];
+				}
+				$this->set('centre', $cent);
+				$subs = array();
+				$subs = $this->getsubjects($this->request->getSession()->read('examTypeId'));
+				$exams=$this->getexam();
+				$st = true;
+				$this->set('etypes',$exams);
+				$this->set('subs',$subs);
 		
-		$exams=$this->getexam();
-		$this->set('etypes',$exams);
+			} else $this->Flash->error(__('Please Select Exam'));
+		} else $this->Flash->error(__('Please Select Centre'));
+		$this->set('seth',$st);
     }
 	
 	
@@ -223,10 +234,16 @@ class CandidateCasController extends AppController
 	private function getsubjects($exam)
 	{
 		//echo $centid;exit;
-		$subs = $this->Subjects->find('all',array('fields' => array('id','code','name')))->where(['exam_type_id' => $exam]);//
-		$subjects=$subs->toArray();
+		/*$exms = $this->ExamTypes->find('all')->where(['id'=>$exam]);
+		$ety=$exms->toArray();
+		//$this->chapa($ety);
 		$subject=array();
+		if($ety[0]['has_ca']==1) ,array('fields' => array('id','code','name')
+		{*/
+		$subs = $this->ExamTypes->Subjects->find('all')->where(['id' => $exam, 'has_ca'=>1 ]);//
+		$subjects=$subs->toArray();
 		foreach($subjects as $k=>$v)$subject[$v['id'].'_'.$v['code'].'_'.$v['name']]= $v['name'];
+		//}
 		return $subject;
 	}
 	public function getcentres($centid)
@@ -363,7 +380,7 @@ class CandidateCasController extends AppController
 									foreach($ext[0] as $sub)
 									{
 										//exam type
-										if (strpos($cell,$sub) !== false)
+										if (stripos($cell,$sub) !== false)
 										{
 											$checkET=true;
 											$examTP=$k;
@@ -397,7 +414,7 @@ class CandidateCasController extends AppController
 								foreach($dataIC as $st)
 								{
 									//exam type
-										if (strpos(strtoupper($cell),$st) !== false)
+										if (stripos(strtoupper($cell),$st) !== false)
 										{ 
 											$checkDT = true;
 											$dataStart = $j+1;

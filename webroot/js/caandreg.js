@@ -19,17 +19,17 @@ function getSubs(exm)
 					var dump='';
 					$a=0;
 					$.each(JSON.parse(data), function (i, item) {
-						if($a%3==0)dump+='<div class="row"><div class="col-md-4">';
-						else dump+='</div><div class="col-md-4">';
+						if($a%4==0)dump+='<div class="row"><div class="col-md-3">';
+						else dump+='</div><div class="col-md-3">';
 						//$('#myTable > tbody:last-child').append('<tr>...</tr><tr>...</tr>');
-				dump+='<label class="container">'+item.text+'<input type="checkbox" name="chksub[]" value="'+item.value+'"><span class="checkmark"></span></label>';
+				dump+='<label class="checkhd">'+item.text+'<input type="checkbox" name="chksub[]" value="'+item.value+'"><span class="checkmark"></span></label>';
 					//	dump+='<input type="checkbox" name="chksub[]" value="'+item.value+'">&nbsp;'+item.text+'<br>';
-						if($a%3==2)dump+='</div></div>';
+						if($a%4==3)dump+='</div></div>';
 						//else dump+='</div>';
 						$a++;
 					});
 					$a--;
-					if($a%3!=2)dump+='</div></div>';
+					if($a%4!=3)dump+='</div></div>';
 					//alert(dump);
 					$('#subs').html(dump);
 				});
