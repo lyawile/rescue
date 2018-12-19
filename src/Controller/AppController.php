@@ -100,9 +100,20 @@ class AppController extends Controller
         $sessionDistrictId = $this->request->getSession()->read('districtId');
         $sessionCentreId = $this->request->getSession()->read('centreId');
 
-        $regions = $this->Regions->find('list');
-        $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
-        $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+        if (is_null($sessionRegionId))
+            $regions = $this->Regions->find('list');
+        else
+            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $sessionRegionId]]);
+
+        if (is_null($sessionDistrictId))
+            $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
+        else
+            $districts = $this->Districts->find('list', ['conditions' => ['Districts.id' => $sessionDistrictId]]);
+
+        if (is_null($sessionCentreId))
+            $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+        else
+            $centres = $this->Centres->find('list', ['conditions' => ['Centres.id' => $sessionCentreId]]);
 
         $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
         $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
