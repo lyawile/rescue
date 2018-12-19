@@ -4,7 +4,7 @@
  * @var \App\Model\Entity\CandidateCa $candidateCa
  */
 ?>
-
+<?= $this->Html->css('careg'); ?>
 <div class="candidateCas view large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
@@ -18,9 +18,10 @@
         </ol>
     </section>
      	<?= $this->Form->create(null, ['url' => ['action' => 'templatedown'],'id'=>'ftemp']);?>
-   		<?= $this->Form->input('', array('type'=>'hidden','name'=>'urlx','id'=>'urlx','value'=>$this->Url->build('/', true))) ?>
+   		<?= $this->Form->control('', array('type'=>'hidden','name'=>'urlx','id'=>'urlx','value'=>$this->Url->build('/', true))) ?>
 
     <section class="content">
+    <?php if($seth){ ?>
         <div class="box">
        
             <div class="box-header with-border">
@@ -40,14 +41,43 @@
                                         </ul>
                 </div>
                  <div class="pull-right">
-             		<b><span id="centexm"><?php echo $centre; ?></span></b>
+             		<b><span id="centexm"><?php if(isset($centre))echo $centre; ?></span></b>
       			  </div>
                 
             </div>
             <!-- Default box -->
             <div class="box-body">
                    <div id="subs" style="overflow:hidden">
-                   Subjects                
+                   <?php
+				   if(!empty($subs))
+				   {
+					   $a=0;
+					   foreach($subs as $k=>$v)
+					   {
+						 	if($a%4==0) echo '<div class="row"><div class="col-md-3">';
+							else echo '</div><div class="col-md-3">';
+							echo '<label class="checkhd">'.$v.'<input type="checkbox" name="chksub[]" value="'.$k.'"><span class="checkmark"></span></label>';
+							if($a%4==3)echo '</div></div>';
+							$a++;
+					   }
+					   $a--;
+					if($a%4!=3)echo '</div></div>';
+				   	/*		var dump='';
+					$a=0;
+					$.each(JSON.parse(data), function (i, item) {
+						if($a%4==0)dump+='<div class="row"><div class="col-md-3">';
+						else dump+='</div><div class="col-md-3">';
+						//$('#myTable > tbody:last-child').append('<tr>...</tr><tr>...</tr>');
+				dump+='<label class="checkhd">'+item.text+'<input type="checkbox" name="chksub[]" value="'+item.value+'"><span class="checkmark"></span></label>';
+					//	dump+='<input type="checkbox" name="chksub[]" value="'+item.value+'">&nbsp;'+item.text+'<br>';
+						if($a%4==3)dump+='</div></div>';
+						//else dump+='</div>';
+						$a++;
+					});
+					$a--;
+					if($a%4!=3)dump+='</div></div>';*/
+				   }
+				   ?>                
                </div><!-- hidden -->
                <div><!-- box -->
                
@@ -61,8 +91,8 @@
                  </div>
            </div>
         </div>
+         <?php }?>
     </section>
 </div>
 <?= $this->Html->script('jquery'); ?>
-<?= $this->Html->css('careg'); ?>
 <?= $this->Html->script('caandreg') ?>

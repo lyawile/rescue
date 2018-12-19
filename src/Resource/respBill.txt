@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Gepg><gepgBillSubReqAck>
-	<TrxStsCode>
-				7101
-	</TrxStsCode>
-</gepgBillSubReqAck>
-
-<gepgSignature>
-				QxabtcSqgr08gka7J/2ZK8pc0e9pHiwUw8eHw1efi7+wGUP1uaEbish96NLth6u/UbkJEpB93HAdVWBGt6QZPHJc/WAgUUvHTgloSqrsd2TFVd3IEP3E2TJUOKc+YqS/9vaBGLKNTxthvN1JWejY7Ubvvv5i2mzh3YtCYXfkrgMZcFRwmmCkCN9mzPJflsPh7E6yQH21Yr5BY6oLBcMCITiFHXs3UgEKx0EEAPnWAm+YlzLKRJ6hGBM1HjTNfABLQ1ee/qvf1OvyWYKIMqE66N6QVAnmJU2MXUN3IlV0LiR56h68TKkdeqXI2PjulrVKs/RbWYEDVhv40Yj/9o6BOQ==
-</gepgSignature>
-</Gepg>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Gepg><gepgBillSubReqAck><TrxStsCode>7269</TrxStsCode></gepgBillSubReqAck><gepgSignature>JzGjx3krzf84xfVKDE3Vr9dXNQGqZX2tHZ3YjzMQGImT0sl6rDB36OUMfC0OPYg/pWaVN4Ltdda6u/gVNDwxJal5hnuIu4SdKsKJkhs2pZoWcdqvm3MoJyUJeOGLbukTxGFB7Rn01JWX/p4xsO012zHyE/xtFGf7PFKYrVeooE7Qwg6dPkiLtei1N82cF03jEKuIPwRTaaRw5VGy4I4WAtVL91rg9oiMc5T4PyItsEERNiC9GAWPQPAsGkVWZztgDku723wSEG35piHZhLF244UAm9AW3Hh6aZ2R3h7HKaY2uqeWNE332OuVctaglULNOBeQoRTyCikagyCG0AuRQQ==</gepgSignature></Gepg>
