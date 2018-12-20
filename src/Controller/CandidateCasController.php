@@ -9,6 +9,7 @@ use Cake\Datasource\ConnectionManager;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Helper;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Cake\Http\Response;
 require ROOT.DS.'vendor' .DS. 'phpoffice/phpspreadsheet/src/Bootstrap.php';
 
 /**
@@ -144,14 +145,17 @@ class CandidateCasController extends AppController
 					 
 				if ($this->request->is('post')) 
 				{
-					$etype =  explode('_',$this->request->getData['exam']);
-					$cent = $this->getcentres($this->request->getSession()->read('centreId'));
-					$subs = $this->request->getData['chksub'];
-					if($cent[0]<1 )$this->Flash->error(__('Please Select Centre'));
-					else if($etype[0]<1)$this->Flash->error(__('Please Select Exam'));
+					//$this->chapa($this->request->getData());
+					$request = $this->request->getData();
+					$etype =  $this->ExamTypes->get($this->request->getSession()->read('examTypeId'));
+					$cents = $this->getcentres($this->request->getSession()->read('centreId'));
+					$subs = isset($request['chksub'])?$request['chksub']:array();
+					if($cents[0]<1 )$this->Flash->error(__('Please Select Centre'));
+					else if(empty($subs))$this->Flash->error(__('Please Select at Least One Subject'));
 					else
 					{
-						$this->write($etype[1],$cent[0],$cent[2].'_'.$cent[1],$subs);
+						$cent = explode('_',$cents);
+						$this->write($etype->short_name,$cent[0],$cent[2].'_'.$cent[1],$subs);
 					}
 					
 				}
@@ -166,9 +170,7 @@ class CandidateCasController extends AppController
 				$this->set('centre', $cent);
 				$subs = array();
 				$subs = $this->getsubjects($this->request->getSession()->read('examTypeId'));
-				$exams=$this->getexam();
-				$st = true;
-				$this->set('etypes',$exams);
+				$st = empty($subs)?false:true;
 				$this->set('subs',$subs);
 		
 			} else $this->Flash->error(__('Please Select Exam'));
@@ -219,7 +221,6 @@ class CandidateCasController extends AppController
 		
 	private function getexam()
 	{
-		//echo $centid;exit;
 		$ety = $this->ExamTypes->find('all',array('fields' => array('id','short_name')))->where(['has_ca' => 1]);//
 		$ety->innerJoinWith('CentreExamTypes', function ($q) { return $q->where(['centre_id' => $this->request->getSession()->read('centreId')]);});
 		if(!$ety->isEmpty())
@@ -233,17 +234,16 @@ class CandidateCasController extends AppController
 	}
 	private function getsubjects($exam)
 	{
-		//echo $centid;exit;
-		/*$exms = $this->ExamTypes->find('all')->where(['id'=>$exam]);
+		$exms = $this->ExamTypes->find('all')->where(['id'=>$exam]);
 		$ety=$exms->toArray();
 		//$this->chapa($ety);
 		$subject=array();
-		if($ety[0]['has_ca']==1) ,array('fields' => array('id','code','name')
-		{*/
-		$subs = $this->ExamTypes->Subjects->find('all')->where(['id' => $exam, 'has_ca'=>1 ]);//
+		if($ety[0]['has_ca']==1)// ,array('fields' => array('id','code','name')
+		{
+		$subs = $this->Subjects->find('all')->where(['exam_type_id' => $ety[0]['id']]);//
 		$subjects=$subs->toArray();
 		foreach($subjects as $k=>$v)$subject[$v['id'].'_'.$v['code'].'_'.$v['name']]= $v['name'];
-		//}
+		}
 		return $subject;
 	}
 	public function getcentres($centid)
@@ -881,24 +881,56 @@ $bod=array('borders'=>array('outline'=>array('borderStyle'=>\PhpOffice\PhpSpread
 			
 			$a++;	
 		}
-		$filepath=WWW_ROOT.$dwnpath.'CA'.date('Y').'.xlsx';
+		$file = 'CA'.date('Y').'_'.$cent[1].'.xlsx';
+		$filepath=WWW_ROOT.$dwnpath.$file;
 		$writer = new Xlsx($spreadsheet);
 		$writer ->save($filepath);
-		$this->sendFile($filepath);
-		//$this->response->withFile($filepath, array( 'download' => true,'name' => 'file_name.xlsx'));
-		//$response = $this->response->file($filepath,array('download' => true, 'name' => 'template.xlsx'));
-		exit;
-	//	return $response;
+		$response = $this->downloadfile($file);
+		
+		return $response;
 		
 	}
 	
-	public function sendFile($id)
+	public function sendfile($fl)
 	{
-		//echo $id; exit;
-		$file = $this->Attachments->getFile('C:\xampp\htdocs\eservice\webroot\downloads\ca\CA2018.xlsx');
-		$response = $this->response->withFile($file['path'],array( 'download' => true,'name' => 'file_name.xlsx'));
+		$path = WWW_ROOT.'downloads'.DS.'ca'.DS.$fl;
+		$response = $this->response->withFile($path, array( 'download' => true, 'name' => $fl));
 	   
 		return $response;
+	}
+	
+	public function downloade($id=null) { 
+      $download=true;
+
+      // path will be app/outsidefiles/yourfilename.pdf
+      $params = array(
+            'id'        => $filename,
+            'name'      => $name[0],
+             'download'  => $download,
+            'extension' => 'pdf',
+            'path'      => APP . 'outsidefiles' . DS
+        );
+        
+     $this->set($params);
+	}
+	
+	private function downloadfile($file)
+	{
+		
+		$path = WWW_ROOT.'downloads'.DS.'ca'.DS.$file;
+		//DOWNLOAD FILE
+		if (file_exists($path)) {
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename="'.basename($path).'"');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($path));
+			readfile($path); exit;
+			unlink($path);
+		}
+		
 	}
 	
 	private function chapa($dt)
