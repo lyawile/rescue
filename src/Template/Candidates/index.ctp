@@ -4,6 +4,7 @@
  * @var \App\Model\Entity\Candidate[]|\Cake\Collection\CollectionInterface $candidates
  */
 ?>
+<?= $this->Html->css('careg'); ?>
 <div class="candidates index large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
@@ -18,7 +19,7 @@
     </section>
 
     <section class="content">
-
+	<?php if($seth){ ?>
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
@@ -32,6 +33,7 @@
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
                     <tr>
+                    	<th scope="col"><label class="checkhd">All<input type="checkbox" class="chkhd"><span class="checkmark"></span></label></th>
                        <!--    <th scope="col"><?= $this->Paginator->sort('id') ?></th> -->
                        <th scope="col"><?= $this->Paginator->sort('number') ?></th>
                        <th scope="col"><?= $this->Paginator->sort('first_name') ?></th>
@@ -48,14 +50,15 @@
                        <!--     <th scope="col"><?= $this->Paginator->sort('is_repeater') ?></th> -->
                        <th scope="col"><?= $this->Paginator->sort('exam_type_id') ?></th>
                        <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th>
-                       <th scope="col"><?= $this->Form->input('Select All', array('type'=>'checkbox','class'=>'chkhd')) ?></th>
+                       <!--     <th scope="col"><?= $this->Form->control('Select All', array('type'=>'checkbox','class'=>'chkhd')) ?></th> -->
                        <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($candidates as $candidate): ?>
                     <tr>
-                                                                                                                                                                                                 <!--	<td><?= $this->Number->format($candidate->id) ?></td> -->
+                           <td><label class="checkhd"><input type="checkbox" class="chk" value="<?= $candidate->id ?>"><span class="checkmark"></span></label></td>
+                      <!--	<td><?= $this->Number->format($candidate->id) ?></td> -->
 					  <td><?= h($candidate->number) ?></td>
                                                                                                                                                                                                  <td><?= h($candidate->first_name) ?></td>
                       <td><?= h($candidate->other_name) ?></td>
@@ -83,7 +86,7 @@
                                         ->centre
                                         ->id]) : '' ?>
                         </td>
-                        <td><?= $this->Form->input('', array('type'=>'checkbox','class'=>'chk','value'=>$candidate->id)) ?></td>
+                        
                         <td class="actions pull-right">
                             <?= $this->Html->link('', ['action' => 'view', $candidate->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
                             <?= $this->Html->link('', ['action' => 'edit', $candidate->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
@@ -96,10 +99,10 @@
                 </table>
             </div>
             <div class="box-footer">
-          		<div class="btn-group pull-right">
+          		<div class="btn-group pull-left">
                 Pay Fees
                 <?= $this->Form->create(null, ['url' => ['controller' => 'Epay', 'action' => 'fees']]);?>
-                <?= $this->Form->input('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
+                <?= $this->Form->control('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
 				<?= $this->Form->button(__('Selected')) ?>
                 <?= $this->Html->link(__('Whole Centre'), ['controller' => 'epay','action' => 'feesall'], ['class' => 'btn btn btn-success']) ?>
                 <?= $this->Form->end() ?>
@@ -122,6 +125,7 @@
             <!-- /.box-footer-->
         </div>
         <!-- /.box -->
+        <?php }?>
     </section>
 </div>
 <?= $this->Html->script('jquery'); ?>

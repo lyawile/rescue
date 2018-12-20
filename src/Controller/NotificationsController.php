@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Notifications Controller
@@ -26,11 +27,11 @@ class NotificationsController extends AppController
         $this->set(compact('notifications'));
     }
 
-    public function inbox(){
-        $userId =  $this->request->getSession()->read('Auth.User.id');
-        if(isset($userId)){
-            $user = $this->Users->get($userId, ['contain' => ['Notifications']]);
-            $inboxNotifications = $user->notifications;
+    public function inbox()
+    {
+        $userId = $this->request->getSession()->read('Auth.User.id');
+        if (isset($userId)) {
+            $inboxNotifications = $this->paginate($this->Notifications->findNotificationsByUser($userId));
         }
 
         $this->set(compact('inboxNotifications'));
@@ -58,6 +59,19 @@ class NotificationsController extends AppController
             'contain' => ['Users']
         ]);
 
+        $userId = $this->request->getSession()->read('Auth.User.id');
+
+        //Mark this notificatio as read
+        $query = TableRegistry::get('NotificationsUsers')->query();
+        $query->update()
+            ->set(['is_read' => true])
+            ->where(['notification_id' => $id, 'user_id' => $userId])
+            ->execute();
+
+//        $notification = $this->Notifications->find()->matching('Users', function ($q) {
+//            return $q->where(['Users.id' => $this->request->getSession()->read('Auth.User.id')]);
+//        })->where(['Notifications.id' => $id]);
+
         $this->set('notification', $notification);
     }
 
@@ -75,8 +89,8 @@ class NotificationsController extends AppController
             $this->loadModel('Users');
 
             $groupUsers = $this->Users->find('all', [
-                'fields' => ['id'],
-                'conditions' => ['Users.group_id IN' => $this->request->getData('groups')]
+                    'fields' => ['id'],
+                    'conditions' => ['Users.group_id IN' => $this->request->getData('groups')]
                 ]
             );
 
@@ -95,7 +109,7 @@ class NotificationsController extends AppController
         }
 //        $users = $this->Notifications->Users->find('list', ['limit' => 200]);
         $groups = $this->Groups->find('list');
-        $this->set(compact('notification','groups'));
+        $this->set(compact('notification', 'groups'));
     }
 
     /**
@@ -141,5 +155,25 @@ class NotificationsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function deleteInbox($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+
+        $userId = $this->request->getSession()->read('Auth.User.id');
+
+        //Mark this notificatio as read
+        $query = TableRegistry::get('NotificationsUsers')->query();
+        $result = $query->delete()
+            ->where(['notification_id' => $id, 'user_id' => $userId])
+            ->execute();
+
+        if ($result)
+            $this->Flash->success(__('The notification has been deleted.'));
+        else
+            $this->Flash->error(__('The notification could not be deleted. Please, try again.'));
+
+        return $this->redirect(['action' => 'inbox']);
     }
 }

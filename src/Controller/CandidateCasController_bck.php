@@ -140,9 +140,9 @@ class CandidateCasController extends AppController
     {	 
         if ($this->request->is('post')) 
 		{
-			$etype =  explode('_',$this->request->data['exam']);
+			$etype =  explode('_',$this->request->getData['exam']);
 			$cent = $this->getcentres($this->request->getSession()->read('centreId'));
-			$subs = $this->request->data['chksub'];
+			$subs = $this->request->getData['chksub'];
 			if($cent[0]<1 )$this->Flash->error(__('Please Select Centre'));
 			else if($etype[0]<1)$this->Flash->error(__('Please Select Exam'));
 			else
@@ -253,17 +253,17 @@ class CandidateCasController extends AppController
 		 $allowedtypes=array('application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		 
         if ($this->request->is('post')) {
-			if(!empty($this->request->data['exam']))
-				if(!empty($this->request->data['file']['name'])){
-					$fileName = $this->request->data['file']['name'];
-					$exam = $this->request->data['exam'];
+			if(!empty($this->request->getData['exam']))
+				if(!empty($this->request->getData['file']['name'])){
+					$fileName = $this->request->getData['file']['name'];
+					$exam = $this->request->getData['exam'];
 					
-					if(in_array($this->request->data['file']['type'],$allowedtypes) )
+					if(in_array($this->request->getData['file']['type'],$allowedtypes) )
 					{
 						$uploadPath = 'uploads'.DS.'cas'.DS;
 						$uploadFile = $uploadPath.$fileName;
-						//$ftype = $this->request->data['file']['name'];
-						if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
+						//$ftype = $this->request->getData['file']['name'];
+						if(move_uploaded_file($this->request->getData['file']['tmp_name'],$uploadFile)){
 							$msg=$this->importExcelfile($uploadFile, $exam);
 							//$this->chapa($msg);
 							$this->set('msgs',$msg);
@@ -363,7 +363,7 @@ class CandidateCasController extends AppController
 									foreach($ext[0] as $sub)
 									{
 										//exam type
-										if (strpos($cell,$sub) !== false)
+										if (stripos($cell,$sub) !== false)
 										{
 											$checkET=true;
 											$examTP=$k;
@@ -397,7 +397,7 @@ class CandidateCasController extends AppController
 								foreach($dataIC as $st)
 								{
 									//exam type
-										if (strpos(strtoupper($cell),$st) !== false)
+										if (stripos(strtoupper($cell),$st) !== false)
 										{ 
 											$checkDT = true;
 											$dataStart = $j+1;

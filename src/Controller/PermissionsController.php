@@ -29,9 +29,14 @@ class PermissionsController extends AppController
         $this->loadModel('Districts');
         $this->loadModel('Centres');
         $this->loadModel('GroupDistrictRegionSchoolUsers');
-//        $permissions = $this->paginate($this->Permissions);
+
         $groups = $this->Groups->find('list');
-        $permissionRegions = $this->Regions->find('list');
+        $groupRegionId = $this->request->getSession()->read('Auth.User.region_id');
+
+        if (is_null($groupRegionId))
+            $permissionRegions = $this->Regions->find('list');
+        else
+            $permissionRegions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
 
         if ($this->request->is(['post'])) {
 

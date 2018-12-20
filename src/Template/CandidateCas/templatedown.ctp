@@ -4,12 +4,12 @@
  * @var \App\Model\Entity\CandidateCa $candidateCa
  */
 ?>
-
+<?= $this->Html->css('careg'); ?>
 <div class="candidateCas view large-9 medium-8 columns content">
     <section class="content-header">
         <h1>
             <?= __('Centrewise CA Templates') ?>
-            <small>Select Subjects to be included in the CA template File</small>
+            
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -18,36 +18,43 @@
         </ol>
     </section>
      	<?= $this->Form->create(null, ['url' => ['action' => 'templatedown'],'id'=>'ftemp']);?>
-   		<?= $this->Form->input('', array('type'=>'hidden','name'=>'urlx','id'=>'urlx','value'=>$this->Url->build('/', true))) ?>
+   		<?= $this->Form->control('', array('type'=>'hidden','name'=>'urlx','id'=>'urlx','value'=>$this->Url->build('/', true))) ?>
 
     <section class="content">
+    <?php if($seth){ ?>
         <div class="box">
        
             <div class="box-header with-border">
             
                 <div class="pull-left">
-                 	
+                 	<small>Select Subjects to be included in the CA template File</small>
                     <input type="hidden" name="exam" id="exam" value="" />
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:120px;">
-                                    <span id="hd_exam">Select Exam</span>&nbsp;&nbsp;<span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                        <?php
-                                        foreach($etypes as $k=>$exam)
-										{
-											echo '<li><a href="#" id="'.$k.'" class="ca_exams">'.$exam.'</a></li>';
-										}
-										?>
-                                        </ul>
                 </div>
                  <div class="pull-right">
-             		<b><span id="centexm"><?php echo $centre; ?></span></b>
+             		<b><span id="centexm"><?php if(isset($centre))echo $centre; ?></span></b>
       			  </div>
                 
             </div>
             <!-- Default box -->
             <div class="box-body">
                    <div id="subs" style="overflow:hidden">
-                   Subjects                
+                   <?php
+				   if(!empty($subs))
+				   {
+					   $a=0;
+					   foreach($subs as $k=>$v)
+					   {
+						 	if($a%4==0) echo '<div class="row"><div class="col-md-3">';
+							else echo '</div><div class="col-md-3">';
+							echo '<label class="checkhd">'.$v.'<input type="checkbox" name="chksub[]" value="'.$k.'"><span class="checkmark"></span></label>';
+							if($a%4==3)echo '</div></div>';
+							$a++;
+					   }
+					   $a--;
+					if($a%4!=3)echo '</div></div>';
+				   
+				   }
+				   ?>                
                </div><!-- hidden -->
                <div><!-- box -->
                
@@ -61,8 +68,8 @@
                  </div>
            </div>
         </div>
+         <?php }?>
     </section>
 </div>
 <?= $this->Html->script('jquery'); ?>
-<?= $this->Html->css('careg'); ?>
 <?= $this->Html->script('caandreg') ?>

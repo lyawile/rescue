@@ -90,29 +90,41 @@ class AppController extends Controller
         $this->loadModel('Centres');
         $this->loadModel('Users');
         $this->loadModel('Notifications');
-        $this->loadModel('NotificationsUsers');
         $this->loadModel('ExamTypes');
 
-        $userId =  $this->request->getSession()->read('Auth.User.id');
-        if(isset($userId)){
-            $user = $this->Users->get($userId, ['contain' => ['Notifications']]);
-            $userNotifications = $user->notifications;
-        }
-
-        $unreadNotifications = $this->NotificationsUsers->find()->where(['user_id' => $userId, 'is_read' => 0])->count();
+        $userId = $this->request->getSession()->read('Auth.User.id');
+        $unreadNotifications = $this->Notifications->userUnReadNotifications($userId);
+        $totalUnreadNotifications = $unreadNotifications->count();
 
         $sessionRegionId = $this->request->getSession()->read('regionId');
         $sessionDistrictId = $this->request->getSession()->read('districtId');
         $sessionCentreId = $this->request->getSession()->read('centreId');
 
-        $regions = $this->Regions->find('list');
-        $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
-        $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+        $groupRegionId = $this->request->getSession()->read('Auth.User.region_id');
+        $groupDistrictId = $this->request->getSession()->read('Auth.User.district_id');
+        $groupCentreId = $this->request->getSession()->read('Auth.User.centre_id');
+
+        if (is_null($groupRegionId))
+            $regions = $this->Regions->find('list');
+        else
+            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $sessionRegionId]]);
+        if ($regions->count() == 0)
+            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
+
+        if (is_null($groupDistrictId))
+            $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
+        else
+            $districts = $this->Districts->find('list', ['conditions' => ['Districts.id' => $sessionDistrictId]]);
+
+        if (is_null($groupCentreId))
+            $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+        else
+            $centres = $this->Centres->find('list', ['conditions' => ['Centres.id' => $sessionCentreId]]);
 
         $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
         $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
 
-        $this->set(compact('regions', 'districts', 'centres', 'userNotifications', 'unreadNotifications', 'examTypes'));
+        $this->set(compact('regions', 'districts', 'centres', 'totalUnreadNotifications', 'unreadNotifications', 'examTypes'));
     }
 
     public function beforeRender(Event $event)

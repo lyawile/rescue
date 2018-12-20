@@ -18,6 +18,7 @@ class EpayController extends AppController
 	 public function initialize(){
         parent::initialize();
         
+		$this->Auth->allow(['contolnumber','reconciliation','payment']);
         // Include the FlashComponent
         $this->loadComponent('Flash');
 		$this->loadModel('ExamTypes');
@@ -73,9 +74,15 @@ class EpayController extends AppController
 	
 	public function contolnumber()
     {
-		'154.72.86.88/eservice/epay/contolnumber';
+		if(!empty($this->request->input))
+		{
+		$data = $this->request->input('Cake\Utility\Xml::build', ['return' => 'domdocument']);
+		$fp=fopen(APP.'Resource'.DS.'contNo'.time().'.txt','w'); fwrite($fp,$data);
+		}
+		else die('No Input');
+		/*'154.72.86.88/eservice/epay/contolnumber';
 		'154.72.86.88/eservice/epay/payment';
-		'154.72.86.88/eservice/epay/recoinciliation';
+		'154.72.86.88/eservice/epay/recoinciliation';*/
     }
 	public function reconciliation()
     {
@@ -89,7 +96,7 @@ class EpayController extends AppController
 	{
 		if(!$getcand)
 		{
-			$cands = $this->request->data('put');
+			$cands = $this->request->getData('put');
 			$carray = explode(',',$cands);
 			$getcand=array();
 			foreach($carray as $v)
@@ -253,7 +260,7 @@ class EpayController extends AppController
 				curl_close($curl);
 				
 				if ($err) {
-					return 'cURL error';
+					//return 'cURL error';
 				 // echo "cURL Error #:" . $err;
 				} else {
 					$fp=fopen(APP.'Resource'.DS.'respBill.txt','w');
