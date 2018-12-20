@@ -100,9 +100,26 @@ class AppController extends Controller
         $sessionDistrictId = $this->request->getSession()->read('districtId');
         $sessionCentreId = $this->request->getSession()->read('centreId');
 
-        $regions = $this->Regions->find('list');
-        $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
-        $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+        $groupRegionId = $this->request->getSession()->read('Auth.User.region_id');
+        $groupDistrictId = $this->request->getSession()->read('Auth.User.district_id');
+        $groupCentreId = $this->request->getSession()->read('Auth.User.centre_id');
+
+        if (is_null($groupRegionId))
+            $regions = $this->Regions->find('list');
+        else
+            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $sessionRegionId]]);
+        if ($regions->count() == 0)
+            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
+
+        if (is_null($groupDistrictId))
+            $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
+        else
+            $districts = $this->Districts->find('list', ['conditions' => ['Districts.id' => $sessionDistrictId]]);
+
+        if (is_null($groupCentreId))
+            $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+        else
+            $centres = $this->Centres->find('list', ['conditions' => ['Centres.id' => $sessionCentreId]]);
 
         $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
         $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);

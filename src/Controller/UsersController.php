@@ -122,8 +122,23 @@ class UsersController extends AppController
     {
         // Identify user
         if ($this->request->is('post')) {
+            $this->loadModel('GroupDistrictRegionSchoolUsers');
             $user = $this->Auth->identify();
-            if ($user) {
+            $permission = $this->GroupDistrictRegionSchoolUsers->findByGroupId($user['group_id'])->first();
+
+            if (is_null($permission)) {
+                $this->Flash->error(__('User group permissions not set'));
+                return $this->redirect(['controller' => 'users', 'action' => 'login']);
+            } else if ($user) {
+                $user['region_id'] = $permission->region_id;
+                $user['district_id'] = $permission->district_id;
+                $user['centre_id'] = $permission->centre_id;
+
+                //Set session variables
+                $this->request->getSession()->write('regionId', $permission->region_id);
+                $this->request->getSession()->write('districtId', $permission->district_id);
+                $this->request->getSession()->write('centreId', $permission->centre_id);
+
                 $this->Auth->setUser($user);
                 return $this->redirect($this->Auth->redirectUrl());
             }
