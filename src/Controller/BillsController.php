@@ -622,26 +622,26 @@ class BillsController extends AppController {
         $pdf->Cell(23, 0, "Due date : ", 0, 0);
         $pdf->SetFont('Arial', '', 13);
         $pdf->Cell(0, 0, $billsData->expire_date->i18nFormat('dd-MM-yyyy HH:mm:ss'), 0, 1);
-        $pdf->Cell(0, 20,"The following are the bill items you have selected:", 0, 1);
+        $pdf->Cell(0, 20, "The following are the bill items you have selected:", 0, 1);
         $pdf->SetY(105);
 //        $pdf->SetFillColor(87.1,93.3,82.0);
 //        Header for bill items 
         $pdf->SetFont('Arial', 'B', 13);
         // Item Serial number
         $pdf->SetFillColor(230);
-        $pdf->Cell(10, 10, 'SN ', 0, '', '',TRUE);
+        $pdf->Cell(10, 10, 'SN ', 0, '', '', TRUE);
         // Item Description
         $pdf->SetFillColor(230);
-        $pdf->Cell(85, 10, 'ITEM DESCRIPTION ',0, '', '', TRUE);
+        $pdf->Cell(85, 10, 'ITEM DESCRIPTION ', 0, '', '', TRUE);
         // Item Serial number
         $pdf->SetFillColor(230);
-        $pdf->Cell(15, 10, 'QTY ',0,"","C", TRUE);
+        $pdf->Cell(15, 10, 'QTY ', 0, "", "C", TRUE);
         // Total for each service
         $pdf->SetFillColor(230);
-        $pdf->Cell(37, 10, 'UNIT PRICE ', 0,"","R", TRUE);
+        $pdf->Cell(37, 10, 'UNIT PRICE ', 0, "", "R", TRUE);
         // Total for each service
         $pdf->SetFillColor(230);
-        $pdf->Cell(40, 10, 'TOTAL ', 0, 1,"R", TRUE);
+        $pdf->Cell(40, 10, 'TOTAL ', 0, 1, "R", TRUE);
         $pdf->SetFont('Arial', '', 13);
         $i = 0;
         // iterate to fill up the bill PDF output 
@@ -658,22 +658,26 @@ class BillsController extends AppController {
             // Total for each service
             $pdf->Cell(40, 10, number_format($billData['amount'], 2), 0, 1, "R");
             $pdf->SetFillColor(230);
-            $pdf->Cell(187, 0.5, '', 0, 1, "R",true);
+            $pdf->Cell(187, 0.5, '', 0, 1, "R", true);
             $i++;
         }
-         $pdf->Cell(187, 5, '', 0, 1, "R");
+        $pdf->Cell(187, 5, '', 0, 1, "R");
         $pdf->SetFont('Arial');
         $pdf->SetFont('Arial', 'B');
         $pdf->Cell(135);
-        $pdf->Cell(22, 10, 'TOTAL', 0,'','',TRUE);
-        $pdf->Cell(30, 10, number_format($billsData->amount, 2), 0, 1, "R", TRUE);
+        $pdf->SetFillColor(230);
+        $pdf->SetLineWidth(0.5);
+        $pdf->SetDrawColor(230);
+        $pdf->Cell(22, 10, 'TOTAL', 1, '', '', true);
+        $pdf->Cell(30, 10, number_format($billsData->amount, 2), 1, 1, "R");
         $pdf->Cell(0, 5, '', '', 1);
-        $pdf->SetFont('', 'I',10 );
+        $pdf->SetFont('', 'I', 10);
         if (isset($billsData->control_number)) {
             $controlNumber = "You can pay in one out of these payment options: Bank, Mobile (Tigo, Vodacom, Airtel, TTCL or Zantel) or MaxMalipo with control number " . $billsData->control_number;
         } else {
             $controlNumber = 'The control number was not received for this bill, try to generate new bill or keep on waiting for sometime and view this bill again.';
         }
+        $pdf->SetTextColor(50);
         $pdf->MultiCell(0, 5, $controlNumber);
 
         // Diplay the PDF
