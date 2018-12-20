@@ -59,18 +59,29 @@ class UsersController extends AppController
      */
     public function add()
     {
+        $groupRegionId = $this->request->getSession()->read('Auth.User.region_id');
+
+        if (is_null($groupRegionId))
+            $permissionRegions = $this->Regions->find('list');
+        else
+            $permissionRegions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
+
         $user = $this->Users->newEntity();
+
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+            $user = $this->Users->patchEntity($user, $data, ['associated' => ['GroupDistrictRegionSchoolUsers']]);
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
+
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
+
         $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups'));
+        $this->set(compact('user', 'groups', 'permissionRegions'));
     }
 
     /**
@@ -124,10 +135,10 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $this->loadModel('GroupDistrictRegionSchoolUsers');
             $user = $this->Auth->identify();
-            $permission = $this->GroupDistrictRegionSchoolUsers->findByGroupId($user['group_id'])->first();
+            $permission = $this->GroupDistrictRegionSchoolUsers->findByUserId($user['id'])->first();
 
             if (is_null($permission)) {
-                $this->Flash->error(__('User group permissions not set'));
+                $this->Flash->error(__('User permissions not set'));
                 return $this->redirect(['controller' => 'users', 'action' => 'login']);
             } else if ($user) {
                 $user['region_id'] = $permission->region_id;
