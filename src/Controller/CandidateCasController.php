@@ -4,12 +4,13 @@ namespace App\Controller;
 use App\Controller\AppController;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Cake\ORM\TableRegistry;
-use App\Model\Table\User; // <—My model
+use App\Model\Table\User; // <—My model 
 use Cake\Datasource\ConnectionManager;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Helper;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Cake\Http\Response;
+use Cake\ORM\Query;
 require ROOT.DS.'vendor' .DS. 'phpoffice/phpspreadsheet/src/Bootstrap.php';
 
 /**
@@ -45,12 +46,21 @@ class CandidateCasController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Candidates', 'Subjects']
-        ];
+		$st = false;
+		if(!empty($this->request->getSession()->read('centreId'))){
+		if(!empty($this->request->getSession()->read('examTypeId'))){
+			
+        $this->paginate = ['contain' => ['Subjects','Candidates' 
+		=> function (Query $query) { return $query->select(['id', 'first_name', 'other_name', 'surname'])
+        ->where(['candidates.exam_type_id'=>$this->request->getSession()->read('examTypeId'), 'candidates.centre_id'=>$this->request->getSession()->read('centreId')]);}
+			]];
         $candidateCas = $this->paginate($this->CandidateCas);
 
         $this->set(compact('candidateCas'));
+		$st = true;
+		} else $this->Flash->error(__('Please Select Exam'));
+		} else $this->Flash->error(__('Please Select Centre'));
+		$this->set('seth',$st);
     }
 
     /**
@@ -270,17 +280,22 @@ class CandidateCasController extends AppController
 		 $allowedtypes=array('application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		 
         if ($this->request->is('post')) {
-			if(!empty($this->request->getData['exam']))
-				if(!empty($this->request->getData['file']['name'])){
-					$fileName = $this->request->getData['file']['name'];
-					$exam = $this->request->getData['exam'];
+		if(!empty($this->request->getSession()->read('centreId'))){
+			if(!empty($this->request->getSession()->read('examTypeId'))){
+				
+				$reqdata = $this->request->getData();
+				if(!empty($reqdata['file']['name'])){
+					$fileName = $reqdata['file']['name'];
 					
-					if(in_array($this->request->getData['file']['type'],$allowedtypes) )
+					$etype =  $this->ExamTypes->get($this->request->getSession()->read('examTypeId'));
+					$exam = $etype->short_name;
+					
+					if(in_array($reqdata['file']['type'],$allowedtypes) )
 					{
 						$uploadPath = 'uploads'.DS.'cas'.DS;
 						$uploadFile = $uploadPath.$fileName;
 						//$ftype = $this->request->getData['file']['name'];
-						if(move_uploaded_file($this->request->getData['file']['tmp_name'],$uploadFile)){
+						if(move_uploaded_file($reqdata['file']['tmp_name'],$uploadFile)){
 							$msg=$this->importExcelfile($uploadFile, $exam);
 							//$this->chapa($msg);
 							$this->set('msgs',$msg);
@@ -293,8 +308,12 @@ class CandidateCasController extends AppController
 						}
 				}else{
 					$this->Flash->error(__('Please choose a file to upload.'));
+				}
            }else{
 					$this->Flash->error(__('Please Select Exam'));
+				} 
+		}else{
+					$this->Flash->error(__('Please Select Centre'));
 				} 
         }
 		$cent = $this->getcentres($this->request->getSession()->read('centreId'));
@@ -307,7 +326,7 @@ class CandidateCasController extends AppController
 		}
         $this->set('centre', $cent);
 		$this->set('centreid', $centid);
-		$exams=$this->getexam();
+		$exams=$this->getexam(); 
 		$this->set('etypes',$exams);
     }
 	
@@ -515,7 +534,7 @@ class CandidateCasController extends AppController
 					
 				}else 
 				{
-					$msg[]="Template Exam Centre not recognised";
+					$msg[]="Template Exam Centre not recognized";
 					 return '0;'.implode(', ',$msg);
 				}
 				
@@ -546,7 +565,7 @@ class CandidateCasController extends AppController
 						if($metaDT['btp'])
 						{
 							$grade = trim($data[$rw][$alpha[$c]]);
-							$btp = preg_match("/^[A-Z]/i",$grade)?$grade:'NULL';
+							$btp = preg_match("/^[A-F]/i",$grade)?$grade:'NULL';
 							$proj=intval(trim($data[$rw][$alpha[$c+1]]));
 							$remks=trim($data[$rw][$alpha[$c+2]]);
 							$onem = false;$twom = false;$threem = false;
@@ -557,6 +576,7 @@ class CandidateCasController extends AppController
 							$onem=intval(trim($data[$rw][$alpha[$c]]));
 							$twom=intval(trim($data[$rw][$alpha[$c+1]]));
 							$threem=intval(trim($data[$rw][$alpha[$c+2]]));
+
 							if($metaDT['proj'])
 							{
 								$proj=intval(trim($data[$rw][$alpha[$c+3]]));
@@ -574,14 +594,15 @@ class CandidateCasController extends AppController
 					
 					//GET CANDIDATE
 					$where = array(
-									"right(concat('00',number),3)" => $refNO
+									"right(concat('00',number),4)" => $refNO
 									,'first_name' => $nem[0]
 									,'other_name' => $nem[1]
 									,'surname' => $nem[2]
 									,'centre_id' => $dbcentid
 									,'exam_type_id' => $dbexamid);
-									
+				//echo $refNO.' = '.$nem[0].' = '.$nem[1].' = '.$nem[2].' = '. $dbcentid.' = '.$dbexamid;		
 					$cands = $this->Candidates->find()->select(array('id', 'exam_type_id'))->where($where)->first();
+				//	$this->chapa($cands);
 					if(!empty($cands))
 					{ 
 						$twhere=array('subject_id' => $dbsubid,'candidate_id' => $cands->id);
