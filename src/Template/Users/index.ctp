@@ -31,9 +31,9 @@
                     <thead>
                     <tr>
                         <th scope="col"><?= $this->Paginator->sort('username') ?></th>
-                        <th scope="col"><?= $this->Paginator->sort('surname') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('first_name') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('other_name') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('surname') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('email') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('mobile') ?></th>
                         <th scope="col"><?= $this->Paginator->sort('group_id') ?></th>
