@@ -32,6 +32,7 @@ class GroupDistrictRegionSchoolUser extends Entity
      * @var array
      */
     protected $_accessible = [
+        'id' => true,
         'district_id' => true,
         'region_id' => true,
         'group_id' => true,
