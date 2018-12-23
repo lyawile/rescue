@@ -15,7 +15,6 @@ class PermissionsController extends AppController
 {
 
 
-
     /**
      * Index method
      *
@@ -25,47 +24,37 @@ class PermissionsController extends AppController
     {
 
         $this->loadModel('Groups');
-        $this->loadModel('Regions');
-        $this->loadModel('Districts');
-        $this->loadModel('Centres');
-        $this->loadModel('GroupDistrictRegionSchoolUsers');
+        $this->loadModel('Acos');
+        $this->loadModel('Aros');
+        $this->loadModel('Permissions');
+
+        $permissions = $this->Permissions->find('all');
 
         $groups = $this->Groups->find('list');
-        $groupRegionId = $this->request->getSession()->read('Auth.User.region_id');
+        $acos = $this->Acos->find('all');
 
-        if (is_null($groupRegionId))
-            $permissionRegions = $this->Regions->find('list');
-        else
-            $permissionRegions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
+        foreach ($acos as $aco){
+            if($aco->parent_id == 1){
+                $headers[] = [$aco->id, $aco->alias];
+            }else{
+                $actions[$aco->parent_id][] = $aco->alias;
+            }
+//            $actions[$aco->parent_id][] = [$aco->parent_id, $aco->alias];
+        }
+
+
 
         if ($this->request->is(['post'])) {
 
             $data = $this->request->getData();
-
-            $data['group_district_region_school_users'] = [
-                'group_id' => $this->request->getData('group_id'),
-                'region_id' => $this->request->getData('region_id'),
-                'district_id' => $this->request->getData('district_id')
-            ];
-
-            $groupPermission = $this->GroupDistrictRegionSchoolUsers->findByGroupId($this->request->getData('group_id'))->first();
-            if(is_null($groupPermission))
-                $groupPermission = $this->GroupDistrictRegionSchoolUsers->newEntity();
-            $groupPermission = $this->GroupDistrictRegionSchoolUsers->patchEntity($groupPermission, $data);
-
-            if($this->GroupDistrictRegionSchoolUsers->save($groupPermission)){
-                $this->Flash->success(__("Permissions has been saved!"));
-                return $this->redirect(['action' => 'index']);
-            }
-
             $this->Flash->error(__("Permissions could not be saved"));
         }
 
-        $this->set(compact('groups'));
-        $this->set(compact('permissionRegions'));
+        $this->set(compact('groups', 'acos', 'headers', 'actions'));
     }
 
-    public function save(){
+    public function save()
+    {
 
     }
 

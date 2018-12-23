@@ -24,46 +24,16 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <?php
-                            echo $this->Form->control('group_id',[
+                            echo $this->Form->control('group_id', [
                                 'options' => $groups,
                                 'class' => 'group-permissions'
                             ]);
                             ?>
                         </div>
-                        <div class="col-sm-3">
-                            <?php
-                            echo $this->Form->control('region_id', [
-                                'options' => $permissionRegions,
-                                'class' => 'region-permissions',
-                                'data-placeholder' => 'Choose a region...',
-                                'empty' => true
-                            ]);
-                            ?>
-                        </div>
-                        <div class="col-sm-3">
-                            <?php
-                            echo $this->Form->control('district_id', [
-                                'class' => 'district-permissions',
-                                'data-placeholder' => 'Choose a district...',
-                                'empty' => true
-//                            'default' => $this->request->getSession()->read('centreId')
-                            ]);
-                            ?>
-                        </div>
-                        <div class="col-sm-3">
-                            <?php
-                            echo $this->Form->control('centre_id', [
-                                'class' => 'centre-permissions',
-                                'data-placeholder' => 'Choose a centre...',
-                                'empty' => true
-//                            'default' => $this->request->getSession()->read('centreId')
-                            ]);
-                            ?>
-                        </div>
                     </div>
-
+                </form>
             </div>
-            <?= $this->Form->end() ?>
+
         </div>
 
         <div class="column">
@@ -73,10 +43,26 @@
                         <h3 class="box-title"><?= __('Dashboards') ?></h3>
                     </div>
                     <div class="box-body">
-                        <div class="col-sm-8">
-                            <fieldset>
-                            </fieldset>
-                        </div>
+                        <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                            <tbody>
+                            <tr>
+                                <td>Registration <?= $this->Acl->check('Administrator', 'controllers/dashboards', ['registration']); ?>
+                                    <span class="pull-right"><?= $this->Form->control('registration',
+                                            ['type' => 'checkbox',
+                                                'label' => false]) ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Finance
+                                    <span class="pull-right"><?= $this->Form->control('finance',
+                                            ['type' => 'checkbox',
+                                                'label' => false]) ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -87,10 +73,7 @@
                         <h3 class="box-title"><?= __('Centres') ?></h3>
                     </div>
                     <div class="box-body">
-                        <div class="col-sm-8">
-                            <fieldset>
-                            </fieldset>
-                        </div>
+
                     </div>
                 </div>
             </div>
