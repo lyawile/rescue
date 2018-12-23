@@ -33,19 +33,7 @@
                                     <div class="input-group">
                                     <input type="file" id="file" name="file" class="form-control" aria-label="...">
                                     <input type="hidden" name="centreid" value="<?php echo $centreid; ?>" />
-                                    <input type="hidden" name="exam" id="exam" value="" />
                                       <div class="input-group-btn">
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:120px;">
-                                    <span id="hd_exam">Select Exam</span>&nbsp;&nbsp;<span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                        <?php
-                                        foreach($etypes as $exam)
-										{
-											echo '<li><a href="#" class="cls_exams">'.$exam.'</a></li>';
-										}
-										?>
-                                        </ul>
-                                        <!-- disabled=disabled -->
                                       <button class="btn btn-info" type="submit" >Upload File!</button>
                     <?= $this->Form->end() ?>
                                         <!-- Buttons -->

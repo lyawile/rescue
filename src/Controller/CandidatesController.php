@@ -269,7 +269,7 @@ class CandidatesController extends AppController
 									$this->Flash->error(__('Candidate already exists in Disqualified List.'));
 								}
 							}
-						} else $this->Flash->error(__('Plase Provide Date of Birth'));
+						} else $this->Flash->error(__('Please Provide Date of Birth'));
 					} else $this->Flash->error(__('Firstname and or Surname Empty!'));
 				
 				}//NO CANDIDATE NAME
@@ -356,17 +356,23 @@ class CandidatesController extends AppController
 		 $allowedtypes=array('application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		 
         if ($this->request->is('post')) {
-			if(!empty($this->request->data['exam'])){
-            	if(!empty($this->request->data['file']['name'])){
-                $fileName = $this->request->data['file']['name'];
+			if(!empty($this->request->getSession()->read('centreId'))){
+			if(!empty($this->request->getSession()->read('examTypeId'))){
+				
+				$reqdata = $this->request->getData();
+				$etype =  $this->ExamTypes->get($this->request->getSession()->read('examTypeId'));
+				$exam = $etype->short_name;
+				
+            	if(!empty($reqdata['file']['name'])){
+                $fileName = $reqdata['file']['name'];
 				$exam = $this->request->data['exam'];
 								
-					if(in_array($this->request->data['file']['type'],$allowedtypes) )
+					if(in_array($reqdata['file']['type'],$allowedtypes) )
 					{
 						$uploadPath = 'uploads'.DS.'files'.DS;
 						$uploadFile = $uploadPath.$fileName;
 						//$ftype = $this->request->data['file']['name'];
-							if(move_uploaded_file($this->request->data['file']['tmp_name'],$uploadFile)){
+							if(move_uploaded_file($reqdata['file']['tmp_name'],$uploadFile)){
 								$msg=$this->importExcelfile($uploadFile, $exam);
 								$msgs=explode(';',$msg);
 								if($msgs[0]==0)$this->Flash->error(__($msgs[1]));
@@ -391,6 +397,9 @@ class CandidatesController extends AppController
 				}
 			  }else{
 				$this->Flash->error(__('Please Select Exam'));
+			  }
+			}else{
+				$this->Flash->error(__('Please Select Centre'));
 			  }
         }//post
 		

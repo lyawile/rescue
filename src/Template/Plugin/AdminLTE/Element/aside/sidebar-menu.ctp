@@ -83,10 +83,11 @@ if (file_exists($file)) {
                 <li><a href="<?php echo $this->Url->build(['controller' => 'CollectionCategories', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Collection categories') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Regions', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Regions') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Districts', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Districts') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Centres', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Centres') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'ExamTypes', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Exam types') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Subjects', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Subjects') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Settings', 'action' => 'general']); ?>"><i class="fa"></i> <?= __('General') ?></a></li>
             </ul>
         </li>
-        <li><a href="<?php echo $this->Url->build('/pages/debug'); ?>"><i class="fa fa-bug"></i> Debug</a></li>
     </ul>
 <?php } ?>

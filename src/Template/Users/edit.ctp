@@ -29,6 +29,28 @@
                         <?php
                         echo $this->Form->control('username');
                         echo $this->Form->control('group_id', ['options' => $groups]);
+                        echo $this->Form->control('group_district_region_school_users.0.id', [
+                            'hidden' => true
+                        ]);
+                        echo $this->Form->control('group_district_region_school_users.0.region_id', [
+                            'options' => $permissionRegions,
+                            'class' => 'region-permissions',
+                            'data-placeholder' => 'Choose a region...',
+                            'empty' => true
+                        ]);
+
+                        echo $this->Form->control('group_district_region_school_users.0.district_id', [
+                            'class' => 'district-permissions',
+                            'data-placeholder' => 'Choose a district...',
+                            'empty' => true
+//                            'default' => $this->request->getSession()->read('centreId')
+                        ]);
+                        echo $this->Form->control('group_district_region_school_users.0.centre_id', [
+                            'class' => 'centre-permissions',
+                            'data-placeholder' => 'Choose a centre...',
+                            'empty' => true
+//                            'default' => $this->request->getSession()->read('centreId')
+                        ]);
                         echo $this->Form->control('surname');
                         echo $this->Form->control('first_name');
                         echo $this->Form->control('other_name');
