@@ -46,18 +46,22 @@
                         <table cellpadding="0" cellspacing="0" class="table table table-striped">
                             <tbody>
                             <tr>
-                                <td>Registration <?= $this->Acl->check('Administrator', 'controllers/dashboards', ['registration']); ?>
-                                    <span class="pull-right"><?= $this->Form->control('registration',
-                                            ['type' => 'checkbox',
-                                                'label' => false]) ?>
+                                <td>Registration
+                                    <span class="pull-right"><?= $this->Form->control('registration', [
+                                            'type' => 'checkbox',
+                                            'label' => false,
+                                            'checked' => @$this->Acl->check(['Groups' => ['id' => 1]], 'Dashboards', 'registration')
+                                        ]) ?>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Finance
-                                    <span class="pull-right"><?= $this->Form->control('finance',
-                                            ['type' => 'checkbox',
-                                                'label' => false]) ?>
+                                    <span class="pull-right"><?= $this->Form->control('finance', [
+                                            'type' => 'checkbox',
+                                            'label' => false,
+                                            'checked' => @$this->Acl->check(['Groups' => ['id' => 1]], 'Dashboards', 'finance')
+                                        ]) ?>
                                     </span>
                                 </td>
                             </tr>

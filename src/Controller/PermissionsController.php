@@ -24,23 +24,23 @@ class PermissionsController extends AppController
     {
 
         $this->loadModel('Groups');
-        $this->loadModel('Acos');
-        $this->loadModel('Aros');
-        $this->loadModel('Permissions');
 
-        $permissions = $this->Permissions->find('all');
 
         $groups = $this->Groups->find('list');
-        $acos = $this->Acos->find('all');
 
-        foreach ($acos as $aco){
-            if($aco->parent_id == 1){
-                $headers[] = [$aco->id, $aco->alias];
-            }else{
-                $actions[$aco->parent_id][] = $aco->alias;
-            }
-//            $actions[$aco->parent_id][] = [$aco->parent_id, $aco->alias];
-        }
+        $group = $this->Groups->get(1);
+
+//       echo $this->Acl->check(['Users'=> ['id' => 1]], 'controllers');
+//       exit;
+
+//        foreach ($acos as $aco){
+//            if($aco->parent_id == 1){
+//                $headers[] = [$aco->id, $aco->alias];
+//            }else{
+//                $actions[$aco->parent_id][] = $aco->alias;
+//            }
+////            $actions[$aco->parent_id][] = [$aco->parent_id, $aco->alias];
+//        }
 
 
 
@@ -50,7 +50,7 @@ class PermissionsController extends AppController
             $this->Flash->error(__("Permissions could not be saved"));
         }
 
-        $this->set(compact('groups', 'acos', 'headers', 'actions'));
+        $this->set(compact('groups', 'acos', 'headers', 'actions', 'group'));
     }
 
     public function save()
