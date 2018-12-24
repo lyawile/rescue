@@ -26,7 +26,7 @@ if (file_exists($file)) {
         </li>
         <li class="treeview">
             <a href="#">
-                <i class="fa fa-graduation-cap"></i> <span><?= __('Centres') ?></span>
+                <i class="fa fa-university"></i> <span><?= __('Centres') ?></span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
@@ -53,7 +53,7 @@ if (file_exists($file)) {
 
         <li class="treeview">
             <a href="#">
-                <i class="fa fa-graduation-cap"></i> <span><?= __('Bills') ?></span>
+                <i class="fa fa-file-text-o"></i> <span><?= __('Bills') ?></span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
