@@ -26,7 +26,7 @@ if (file_exists($file)) {
         </li>
         <li class="treeview">
             <a href="#">
-                <i class="fa fa-graduation-cap"></i> <span><?= __('Centres') ?></span>
+                <i class="fa fa-university"></i> <span><?= __('Centres') ?></span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
@@ -48,6 +48,18 @@ if (file_exists($file)) {
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Candidates']); ?>"><i class="fa"></i><?= __('Registered') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'DisqualifiedCandidates']); ?>"><i class="fa"></i><?= __('Disqualified') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'CandidateCas']); ?>"><i class="fa"></i><?= __('CA') ?></a></li>
+            </ul>
+        </li>
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-file-text-o"></i> <span><?= __('Bills') ?></span>
+                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Bills']); ?>"><i class="fa"></i><?= __('My bills') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Bills', 'action' => 'add']); ?>"><i class="fa"></i><?= __('Create bill') ?></a></li>
             </ul>
         </li>
 

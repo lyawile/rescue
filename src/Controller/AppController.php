@@ -105,26 +105,26 @@ class AppController extends Controller
         $groupCentreId = $this->request->getSession()->read('Auth.User.centre_id');
 
         if (is_null($groupRegionId))
-            $regions = $this->Regions->find('list');
+            $navRegions = $this->Regions->find('list');
         else
-            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $sessionRegionId]]);
-        if ($regions->count() == 0)
-            $regions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
+            $navRegions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $sessionRegionId]]);
+        if ($navRegions->count() == 0)
+            $navRegions = $this->Regions->find('list', ['conditions' => ['Regions.id' => $groupRegionId]]);
 
         if (is_null($groupDistrictId))
-            $districts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
+            $navDistricts = $this->Districts->find('list', ['conditions' => ['Districts.region_id' => $sessionRegionId]]);
         else
-            $districts = $this->Districts->find('list', ['conditions' => ['Districts.id' => $sessionDistrictId]]);
+            $navDistricts = $this->Districts->find('list', ['conditions' => ['Districts.id' => $sessionDistrictId]]);
 
         if (is_null($groupCentreId))
-            $centres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
+            $navCentres = $this->Centres->find('list', ['conditions' => ['Centres.district_id' => $sessionDistrictId]]);
         else
-            $centres = $this->Centres->find('list', ['conditions' => ['Centres.id' => $sessionCentreId]]);
+            $navCentres = $this->Centres->find('list', ['conditions' => ['Centres.id' => $sessionCentreId]]);
 
         $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
-        $examTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
+        $examinationTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
 
-        $this->set(compact('regions', 'districts', 'centres', 'totalUnreadNotifications', 'unreadNotifications', 'examTypes'));
+        $this->set(compact('navRegions', 'navDistricts', 'navCentres', 'totalUnreadNotifications', 'unreadNotifications', 'examinationTypes'));
     }
 
     public function beforeRender(Event $event)

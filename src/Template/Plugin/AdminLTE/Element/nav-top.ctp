@@ -20,7 +20,7 @@ if (file_exists($file)) {
                 <li>
                     <div class="user-level float-right">
                         <?= $this->Form->control('region_id', [
-                            'options' => $regions,
+                            'options' => $navRegions,
                             'class' => 'region nav-top',
                             'data-placeholder' => 'Choose a region...',
                             'label' => false,
@@ -32,7 +32,7 @@ if (file_exists($file)) {
                 <li>
                     <div class="user-level float-right">
                         <?= $this->Form->control('district_id', [
-                            'options' => $districts,
+                            'options' => $navDistricts,
                             'class' => 'district nav-top',
                             'data-placeholder' => 'Choose a district...',
                             'label' => false,
@@ -44,7 +44,7 @@ if (file_exists($file)) {
                 <li>
                     <div class="user-level float-right">
                         <?= $this->Form->control('centre_id', [
-                            'options' => $centres,
+                            'options' => $navCentres,
                             'class' => 'centre nav-top',
                             'data-placeholder' => 'Choose a centre...',
                             'label' => false,
@@ -56,7 +56,7 @@ if (file_exists($file)) {
                 <li>
                     <div class="user-level float-right">
                         <?= $this->Form->control('exam_type_id', [
-                            'options' => $examTypes,
+                            'options' => $examinationTypes,
                             'class' => 'exam-type nav-top',
                             'data-placeholder' => 'Choose exam type...',
                             'label' => false,
