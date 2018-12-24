@@ -52,6 +52,18 @@ if (file_exists($file)) {
         </li>
 
         <li class="treeview">
+            <a href="#">
+                <i class="fa fa-graduation-cap"></i> <span><?= __('Bills') ?></span>
+                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Bills']); ?>"><i class="fa"></i><?= __('My bills') ?></a></li>
+                <li><a href="<?php echo $this->Url->build(['controller' => 'Bills', 'action' => 'add']); ?>"><i class="fa"></i><?= __('Create bill') ?></a></li>
+            </ul>
+        </li>
+
+        <li class="treeview">
             <a href="<?php echo $this->Url->build(['controller' => 'notifications']); ?>">
                 <i class="fa fa-bell"></i> <span><?= __('Notifications') ?></span>
                 <span class="pull-right-container">
