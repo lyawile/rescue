@@ -376,7 +376,7 @@ class BillsController extends AppController {
                     ->execute();
 //            $this->Flash->success(__('The bill has been saved.'));
             $this->request->session()->write('bill', $bill_id);
-//            $this->requestControlNumber($bill_id);
+            $this->requestControlNumber($bill_id);
             return $this->redirect(['action' => 'getBill']);
         } // end of the loop to iterate through each service added by the user
         $errors = $bill->getErrors();
@@ -385,180 +385,180 @@ class BillsController extends AppController {
     }
 
 //    // temporary function for requesting the control number 
-//    private function requestControlNumber($billUniqueNumber) {
-//        $URL = "http://localhost/xmltest/index.php?bill_id=$billUniqueNumber";
-//
-//        //setting the curl parameters.
-//        $ch = curl_init();
-//
-//        curl_setopt($ch, CURLOPT_URL, $URL);
-//        curl_setopt($ch, CURLOPT_VERBOSE, 1);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-//        curl_setopt($ch, CURLOPT_POST, 1);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, $billUniqueNumber);
-//
-//        if (curl_errno($ch)) {
-//            // moving to display page to display curl errors
-//            echo curl_errno($ch);
-//            echo curl_error($ch);
-//        } else {
-//            //getting response from server
-//            $response = curl_exec($ch);
-//            $data = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
-//            $json = json_encode($data);
-//            $dataArray = json_decode($json, TRUE);
-////           var_dump($dataArray);
-//            $controlNumber = $dataArray['BillTrx']['PayCntrNum'];
-//            $billIdReturnedFromGePG = $dataArray['BillTrx']['BillId'];
-//            curl_close($ch);
-//
-//            if (isset($controlNumber) && !empty($controlNumber)) {
-//                // update the control number for the bill in bills table 
-////                $billsTable = TableRegistry::get('Bills');
-////                $billsData = $billsTable->get($billIdReturnedFromGePG);
-////                $billsData->control_number = $controlNumber;
-////                $billsTable->save($billsData);
-////                
-////            =========================================
-//                // Update the control number value based on the bill id
-//                $query = $this->Bills->query();
-//                $query->update()
-//                        ->set(['control_number' => $controlNumber])
-//                        ->where(['id' => $billIdReturnedFromGePG])
-//                        ->execute();
-//                // Prepare the XML response for gepgBillSubRespAck
-//                $gepgBillSubRespAck = "<gepgBillSubRespAck>
-//                                            <TrxStsCode>7101</TrxStsCode>
-//                                        </gepgBillSubRespAck>";
-//                // send the xml success response to GePG
-//                $this->curl($gepgBillSubRespAck);
-//            } else {
-//                $gepgBillSubRespAck = "<gepgBillSubRespAck>
-//                                        <TrxStsCode>7201</TrxStsCode>
-//                                       </gepgBillSubRespAck>";
-//                // send the xml failure response to GePG
-//                $this->curl($gepgBillSubRespAck);
-//            }
-//        }
-//    }
-//    private function curl($content) {
-//        //setting the curl parameters.
-//        $curlConf = curl_init();
-//        $url = "http://localhost/xmltest/resp.php";
-//
-//        curl_setopt($curlConf, CURLOPT_URL, $url);
-//        curl_setopt($curlConf, CURLOPT_VERBOSE, 1);
-//        curl_setopt($curlConf, CURLOPT_SSL_VERIFYHOST, 0);
-//        curl_setopt($curlConf, CURLOPT_SSL_VERIFYPEER, 0);
-//        curl_setopt($curlConf, CURLOPT_POST, 1);
-//        curl_setopt($curlConf, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($curlConf, CURLOPT_HTTPHEADER, array('Content-type: application/xml'));
-//        curl_setopt($curlConf, CURLOPT_POSTFIELDS, $content);
-//
-//        if (curl_errno($curlConf)) {
-//            // moving to display page to display curl errors
-//            echo curl_errno($curlConf);
-//            echo curl_error($curlConf);
-//        } else {
-//            $response = curl_exec($curlConf);
-//// Don't remove below lines, zinaniamsha kwenye debugging            
-////            echo curl_getinfo($curlConf) . '<br/>';
-////            echo curl_errno($curlConf) . '<br/>';
-////            echo curl_error($curlConf) . '<br/>';
-//            curl_close($curlConf);
-//        }
-//    }
-//    public function pay() {
-//
-//        // Get the submitted XML 
+    private function requestControlNumber($billUniqueNumber) {
+        $URL = "http://localhost/xmltest/index.php?bill_id=$billUniqueNumber";
+
+        //setting the curl parameters.
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $billUniqueNumber);
+
+        if (curl_errno($ch)) {
+            // moving to display page to display curl errors
+            echo curl_errno($ch);
+            echo curl_error($ch);
+        } else {
+            //getting response from server
+            $response = curl_exec($ch);
+            $data = simplexml_load_string($response, "SimpleXMLElement", LIBXML_NOCDATA);
+            $json = json_encode($data);
+            $dataArray = json_decode($json, TRUE);
+//           var_dump($dataArray);
+            $controlNumber = $dataArray['BillTrx']['PayCntrNum'];
+            $billIdReturnedFromGePG = $dataArray['BillTrx']['BillId'];
+            curl_close($ch);
+
+            if (isset($controlNumber) && !empty($controlNumber)) {
+                // update the control number for the bill in bills table 
+//                $billsTable = TableRegistry::get('Bills');
+//                $billsData = $billsTable->get($billIdReturnedFromGePG);
+//                $billsData->control_number = $controlNumber;
+//                $billsTable->save($billsData);
+//                
+//            =========================================
+                // Update the control number value based on the bill id
+                $query = $this->Bills->query();
+                $query->update()
+                        ->set(['control_number' => $controlNumber])
+                        ->where(['id' => $billIdReturnedFromGePG])
+                        ->execute();
+                // Prepare the XML response for gepgBillSubRespAck
+                $gepgBillSubRespAck = "<gepgBillSubRespAck>
+                                            <TrxStsCode>7101</TrxStsCode>
+                                        </gepgBillSubRespAck>";
+                // send the xml success response to GePG
+                $this->curl($gepgBillSubRespAck);
+            } else {
+                $gepgBillSubRespAck = "<gepgBillSubRespAck>
+                                        <TrxStsCode>7201</TrxStsCode>
+                                       </gepgBillSubRespAck>";
+                // send the xml failure response to GePG
+                $this->curl($gepgBillSubRespAck);
+            }
+        }
+    }
+    private function curl($content) {
+        //setting the curl parameters.
+        $curlConf = curl_init();
+        $url = "http://localhost/xmltest/resp.php";
+
+        curl_setopt($curlConf, CURLOPT_URL, $url);
+        curl_setopt($curlConf, CURLOPT_VERBOSE, 1);
+        curl_setopt($curlConf, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curlConf, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlConf, CURLOPT_POST, 1);
+        curl_setopt($curlConf, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlConf, CURLOPT_HTTPHEADER, array('Content-type: application/xml'));
+        curl_setopt($curlConf, CURLOPT_POSTFIELDS, $content);
+
+        if (curl_errno($curlConf)) {
+            // moving to display page to display curl errors
+            echo curl_errno($curlConf);
+            echo curl_error($curlConf);
+        } else {
+            $response = curl_exec($curlConf);
+// Don't remove below lines, zinaniamsha kwenye debugging            
+//            echo curl_getinfo($curlConf) . '<br/>';
+//            echo curl_errno($curlConf) . '<br/>';
+//            echo curl_error($curlConf) . '<br/>';
+            curl_close($curlConf);
+        }
+    }
+    public function pay() {
+
+        // Get the submitted XML 
 //        $gepgPmtSpInfo = file_get_contents('php://input');
-//
-//        // Pre populated xml data-structre for testing
-//        $gepgPmtSpInfo = "<gepgPmtSpInfo>
-//                                    <PymtTrxInf>
-//                                    <TrxId>45522212</TrxId>
-//                                    <SpCode>12333</SpCode>
-//                                    <PayRefId>12121211545</PayRefId>
-//                                    <BillId>147</BillId>
-//                                    <PayCtrNum>454545451548</PayCtrNum>
-//                                    <BillAmt>50000</BillAmt>
-//                                    <PaidAmt>50000</PaidAmt>
-//                                    <BillPayOpt>1</BillPayOpt>
-//                                    <CCy>TZS</CCy>
-//                                    <TrxDtTm>2018-08-25T08:00:45</TrxDtTm>
-//                                    <UsdPayChnl>Tigo</UsdPayChnl>
-//                                    <PyrCellNum>0718440572</PyrCellNum>
-//                                    <PyrName>Hassan Lyawile</PyrName>
-//                                    <PyrEmail>webdev271@gmail.com</PyrEmail>
-//                                    <PspReceiptNumber>454545115454</PspReceiptNumber>
-//                                    <PspName>Mimi</PspName>
-//                                    <CtrAccNum>0J54512452555</CtrAccNum >
-//                                    </PymtTrxInf>
-//                                </gepgPmtSpInfo>";
-//        $xmlObjectgepgPmtSpInfo = simplexml_load_string($gepgPmtSpInfo, "SimpleXMLElement", LIBXML_NOCDATA);
-//        $jsonData = json_encode($xmlObjectgepgPmtSpInfo);
-//        $dataArray = json_decode($jsonData, TRUE);
-//
-////        var_dump($dataArray);
-//        $pyrName = $dataArray['PymtTrxInf']['PyrName'];
-//        $ctrAccNum = $dataArray['PymtTrxInf']['CtrAccNum'];
-//        // update the bills 
-////        $queryForUpdatingBills = $this->Bills->query();
-////        $queryForUpdatingBills->update()
-////                        ->set(['payer_idx' => $IDONT_KNOW_WHICH_DATA_FROM_XML_I_SHOULD_USE])
-////                        ->where(['id' => $billId])
-////                        ->execute();
-////Load Payments model 
-//        $payments = $this->loadModel('payments');
-//
-////       Set payments data for saving 
-//        $payVars = $payments->newEntity();
-//        $payVars->transaction_idx = $dataArray['PymtTrxInf']['TrxId'];
-//        $payVars->transaction_date = $dataArray['PymtTrxInf']['TrxDtTm'];
-//        $payVars->gepg_receipt = '012455';
-//        $payVars->control_number = $dataArray['PymtTrxInf']['PayCtrNum'];
-//        $payVars->bill_amount = $dataArray['PymtTrxInf']['BillAmt'];
-//        $payVars->paid_amount = $dataArray['PymtTrxInf']['PaidAmt'];
-//        $payVars->bill_payment_option = $dataArray['PymtTrxInf']['BillPayOpt'];
-//        $payVars->currency = $dataArray['PymtTrxInf']['CCy'];
-//        $payVars->payment_channel = $dataArray['PymtTrxInf']['UsdPayChnl'];
-//        $payVars->payer_mobile = $dataArray['PymtTrxInf']['PyrCellNum'];
-//        $payVars->payer_email = $dataArray['PymtTrxInf']['PyrEmail'];
-//        $payVars->provider_receipt = $dataArray['PymtTrxInf']['PspReceiptNumber'];
-//        $payVars->provider_name = $dataArray['PymtTrxInf']['PspName'];
-//        $payVars->credited_account = $dataArray['PymtTrxInf']['CtrAccNum'];
-//        $payVars->bill_id = $dataArray['PymtTrxInf']['BillId'];
-//        $payVars->is_consumed = 1;
-//
-//        // insert the payments details into the payments table 
-//        $dataReturnedFromPaymentSave = $payments->save($payVars);
-//        $paymentSavedId = $dataReturnedFromPaymentSave->id;
-//        if (isset($paymentSavedId) && !empty($paymentSavedId)) {
-//            // Prepare the response for acknowledgement gepgBillSubReqAck to GePG
-//            //TrxStsCode
-//            //7101: Successful
-//            //7242: Failed - Bill Content Irregular
-//            //7201: Failed - General Error
-//            $gepgBillSubReqAck = "<gepgBillSubReqAck>
-//                                    <TrxStsCode>7101</TrxStsCode>
-//                                </gepgBillSubReqAck>";
-//        } else {
-//            $gepgBillSubReqAck = "<gepgBillSubReqAck>
-//                                    <TrxStsCode>7201</TrxStsCode>
-//                                </gepgBillSubReqAck>";
-//        }
-//        // Send the response gepgBillSubReqAck
-//        // codes go here
-//        // exit execution 
-//        exit();
-//    }
+
+        // Pre populated xml data-structre for testing
+        $gepgPmtSpInfo = "<gepgPmtSpInfo>
+                                    <PymtTrxInf>
+                                    <TrxId>45522212</TrxId>
+                                    <SpCode>12333</SpCode>
+                                    <PayRefId>12121211545</PayRefId>
+                                    <BillId>147</BillId>
+                                    <PayCtrNum>454545451548</PayCtrNum>
+                                    <BillAmt>50000</BillAmt>
+                                    <PaidAmt>50000</PaidAmt>
+                                    <BillPayOpt>1</BillPayOpt>
+                                    <CCy>TZS</CCy>
+                                    <TrxDtTm>2018-08-25T08:00:45</TrxDtTm>
+                                    <UsdPayChnl>Tigo</UsdPayChnl>
+                                    <PyrCellNum>0718440572</PyrCellNum>
+                                    <PyrName>Hassan Lyawile</PyrName>
+                                    <PyrEmail>webdev271@gmail.com</PyrEmail>
+                                    <PspReceiptNumber>454545115454</PspReceiptNumber>
+                                    <PspName>Mimi</PspName>
+                                    <CtrAccNum>0J54512452555</CtrAccNum >
+                                    </PymtTrxInf>
+                                </gepgPmtSpInfo>";
+        $xmlObjectgepgPmtSpInfo = simplexml_load_string($gepgPmtSpInfo, "SimpleXMLElement", LIBXML_NOCDATA);
+        $jsonData = json_encode($xmlObjectgepgPmtSpInfo);
+        $dataArray = json_decode($jsonData, TRUE);
+
+//        var_dump($dataArray);
+        $pyrName = $dataArray['PymtTrxInf']['PyrName'];
+        $ctrAccNum = $dataArray['PymtTrxInf']['CtrAccNum'];
+        // update the bills 
+//        $queryForUpdatingBills = $this->Bills->query();
+//        $queryForUpdatingBills->update()
+//                        ->set(['payer_idx' => $IDONT_KNOW_WHICH_DATA_FROM_XML_I_SHOULD_USE])
+//                        ->where(['id' => $billId])
+//                        ->execute();
+//Load Payments model 
+        $payments = $this->loadModel('payments');
+
+//       Set payments data for saving 
+        $payVars = $payments->newEntity();
+        $payVars->transaction_idx = $dataArray['PymtTrxInf']['TrxId'];
+        $payVars->transaction_date = $dataArray['PymtTrxInf']['TrxDtTm'];
+        $payVars->gepg_receipt = '012455';
+        $payVars->control_number = $dataArray['PymtTrxInf']['PayCtrNum'];
+        $payVars->bill_amount = $dataArray['PymtTrxInf']['BillAmt'];
+        $payVars->paid_amount = $dataArray['PymtTrxInf']['PaidAmt'];
+        $payVars->bill_payment_option = $dataArray['PymtTrxInf']['BillPayOpt'];
+        $payVars->currency = $dataArray['PymtTrxInf']['CCy'];
+        $payVars->payment_channel = $dataArray['PymtTrxInf']['UsdPayChnl'];
+        $payVars->payer_mobile = $dataArray['PymtTrxInf']['PyrCellNum'];
+        $payVars->payer_email = $dataArray['PymtTrxInf']['PyrEmail'];
+        $payVars->provider_receipt = $dataArray['PymtTrxInf']['PspReceiptNumber'];
+        $payVars->provider_name = $dataArray['PymtTrxInf']['PspName'];
+        $payVars->credited_account = $dataArray['PymtTrxInf']['CtrAccNum'];
+        $payVars->bill_id = $dataArray['PymtTrxInf']['BillId'];
+        $payVars->is_consumed = 1;
+
+        // insert the payments details into the payments table 
+        $dataReturnedFromPaymentSave = $payments->save($payVars);
+        $paymentSavedId = $dataReturnedFromPaymentSave->id;
+        if (isset($paymentSavedId) && !empty($paymentSavedId)) {
+            // Prepare the response for acknowledgement gepgBillSubReqAck to GePG
+            //TrxStsCode
+            //7101: Successful
+            //7242: Failed - Bill Content Irregular
+            //7201: Failed - General Error
+            $gepgBillSubReqAck = "<gepgBillSubReqAck>
+                                    <TrxStsCode>7101</TrxStsCode>
+                                </gepgBillSubReqAck>";
+        } else {
+            $gepgBillSubReqAck = "<gepgBillSubReqAck>
+                                    <TrxStsCode>7201</TrxStsCode>
+                                </gepgBillSubReqAck>";
+        }
+        // Send the response gepgBillSubReqAck
+        // codes go here
+        // exit execution 
+        exit();
+    }
 
     public function getPdfBill($bill_id) {
         // set the bill_id in session 
-        $this->request->session()->write('bill', $bill_id);
+        $this->request->getSession()->write('bill', $bill_id);
         // get the bills details 
         $queryDetails = $this->Bills->find()->where(['Bills.id' => $bill_id]);
 //        $queryDetails->innerJoinWith('BillItems', function($data) {
