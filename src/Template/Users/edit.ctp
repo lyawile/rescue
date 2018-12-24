@@ -29,6 +29,9 @@
                         <?php
                         echo $this->Form->control('username');
                         echo $this->Form->control('group_id', ['options' => $groups]);
+                        echo $this->Form->control('group_district_region_school_users.0.id', [
+                            'hidden' => true
+                        ]);
                         echo $this->Form->control('group_district_region_school_users.0.region_id', [
                             'options' => $permissionRegions,
                             'class' => 'region-permissions',

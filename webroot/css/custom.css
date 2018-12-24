@@ -49,3 +49,7 @@ textarea {
     border: 1px solid #dddddd;
     padding: 10px;
 }
+
+.checkbox, .radio {
+    margin-top: 0 !important;
+}

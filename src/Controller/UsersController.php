@@ -105,12 +105,14 @@ class UsersController extends AppController
         ]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
+            $user = $this->Users->patchEntity($user, $this->request->getData(), ['associated' => ['GroupDistrictRegionSchoolUsers']]);
+
+            if ($this->Users->save($user, ['associated' => ['GroupDistrictRegionSchoolUsers']])) {
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
+
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $groups = $this->Users->Groups->find('list', ['limit' => 200]);
