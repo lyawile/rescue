@@ -71,7 +71,12 @@ class AclHelper extends Helper
 
     public function check($aro, $aco, $action = "*")
     {
-        return $this->Acl->check($aro, $aco, $action) || $this->Acl->check($aro, "controllers");
+        return $this->Acl->check($aro, $aco, $action);
+    }
+
+    public function canAccess($aco, $action = "*"){
+        $userGroupId = $this->request->getSession()->read('Auth.User.group_id');
+        return $this->Acl->check(['Groups' => ['id' => $userGroupId]], $aco, $action);
     }
 
     /**

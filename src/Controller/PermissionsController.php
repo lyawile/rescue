@@ -20,78 +20,18 @@ class PermissionsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function index()
+    public function index($userGroupId = null)
     {
-
         $this->loadModel('Groups');
-
-
         $groups = $this->Groups->find('list');
 
-        $group = $this->Groups->get(1);
-
-//       echo $this->Acl->check(['Users'=> ['id' => 1]], 'controllers');
-//       exit;
-
-//        foreach ($acos as $aco){
-//            if($aco->parent_id == 1){
-//                $headers[] = [$aco->id, $aco->alias];
-//            }else{
-//                $actions[$aco->parent_id][] = $aco->alias;
-//            }
-////            $actions[$aco->parent_id][] = [$aco->parent_id, $aco->alias];
-//        }
-
-
-
-        if ($this->request->is(['post'])) {
-
-            $data = $this->request->getData();
-            $this->Flash->error(__("Permissions could not be saved"));
+        if(isset($userGroupId) && !is_null($userGroupId)){
+            $this->viewBuilder()->enableAutoLayout(false);
+            $this->set(compact('userGroupId'));
+            return $this->render('/Permissions/list_permissions');
         }
 
-        $this->set(compact('groups', 'acos', 'headers', 'actions', 'group'));
-    }
-
-    public function save()
-    {
-
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Permission id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $permission = $this->Permissions->get($id, [
-            'contain' => []
-        ]);
-
-        $this->set('permission', $permission);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $permission = $this->Permissions->newEntity();
-        if ($this->request->is('post')) {
-            $permission = $this->Permissions->patchEntity($permission, $this->request->getData());
-            if ($this->Permissions->save($permission)) {
-                $this->Flash->success(__('The permission has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The permission could not be saved. Please, try again.'));
-        }
-        $this->set(compact('permission'));
+        $this->set(compact('groups', 'acos', 'headers', 'actions'));
     }
 
     /**
@@ -101,21 +41,16 @@ class PermissionsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit($groupId, $permission, $action)
     {
-        $permission = $this->Permissions->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $permission = $this->Permissions->patchEntity($permission, $this->request->getData());
-            if ($this->Permissions->save($permission)) {
-                $this->Flash->success(__('The permission has been saved.'));
+        $permission = str_replace('-', '/', $permission);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The permission could not be saved. Please, try again.'));
-        }
-        $this->set(compact('permission'));
+        if ($action === 'allow')
+            $this->allowPermission($groupId, $permission);
+        else
+            $this->denyPermisson($groupId, $permission);
+
+        $this->autoRender = false; //prevent template rendering
     }
 
     /**
@@ -136,5 +71,23 @@ class PermissionsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    private function allowPermission($groupId, $permission)
+    {
+        switch ($permission) {
+            default:
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], $permission);
+                break;
+        }
+    }
+
+    private function denyPermisson($groupId, $permission)
+    {
+        switch ($permission) {
+            default:
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], $permission);
+                break;
+        }
     }
 }

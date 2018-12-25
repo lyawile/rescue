@@ -21,15 +21,15 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <?php if (@$this->Acl->check(['Groups' => ['id' => 1]], 'Dashboards', 'registration')) {?>
+                <?php if (@$this->Acl->canAccess('Dashboards/registration')) {?>
                     <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'registration']); ?>"><i class="fa"></i><?= __('Registration') ?></a></li>
                     <?php
                 }
 
-                if(@@$this->Acl->check(['Groups' => ['id' => 1]], 'Dashboards', 'finance'))
+                if(@$this->Acl->canAccess('Dashboards/finance')){
                 ?>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'finance']); ?>"><i class="fa"></i><?= __('Finance') ?></a></li>
-                ?>
+                <?php } ?>
             </ul>
         </li>
         <li class="treeview">
