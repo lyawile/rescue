@@ -59,7 +59,17 @@ class GroupsController extends AppController
         if ($this->request->is('post')) {
             $group = $this->Groups->patchEntity($group, $this->request->getData());
             if ($this->Groups->save($group)) {
+
+                //All user groups need access to these locations
                 $this->Acl->allow($group, "controllers/Users/logout"); // Allow all users to logout
+                $this->Acl->allow($group, "controllers/Users/changePassword");
+                $this->Acl->allow($group, "controllers/Users/reload");
+
+                $this->Acl->allow($group, "controllers/Regions/loadRegionsByUserGroup");
+                $this->Acl->allow($group, "controllers/Districts/listDistricts");
+                $this->Acl->allow($group, "controllers/Centres/listExamTypes");
+                $this->Acl->allow($group, "controllers/Centres/listCentres");
+
                 $this->Acl->allow($group, "controllers/Notifications/inbox");
                 $this->Acl->allow($group, "controllers/Notifications/inboxView");
                 $this->Flash->success(__('The group has been saved.'));
