@@ -35,7 +35,32 @@
                 </table>
             </div>
         </div>
+
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?=__('Notifications') ?></h3>
+            </div>
+            <div class="box-body">
+                <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>Manage notifications
+                            <span class="pull-right"><?= $this->Form->control('notification', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Notifications',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Notifications')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
 
     <div class="col-md-4">
         <div class="box">
@@ -185,29 +210,18 @@
             </div>
         </div>
     </div>
-    <!---->
-    <!--    <div class="col-md-4">-->
-    <!--        <div class="box">-->
-    <!--            <div class="box-header with-border">-->
-    <!--                <h3 class="box-title">--><? //= __('Centres') ?><!--</h3>-->
-    <!--            </div>-->
-    <!--            <div class="box-body">-->
-    <!---->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
 
-    <div class="col-md-4">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= __('Candidates') ?></h3>
-            </div>
-            <div class="box-body">
-                <div class="col-sm-8">
-                    <fieldset>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--    <div class="col-md-4">-->
+<!--        <div class="box">-->
+<!--            <div class="box-header with-border">-->
+<!--                <h3 class="box-title">--><?//= __('Candidates') ?><!--</h3>-->
+<!--            </div>-->
+<!--            <div class="box-body">-->
+<!--                <div class="col-sm-8">-->
+<!--                    <fieldset>-->
+<!--                    </fieldset>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>

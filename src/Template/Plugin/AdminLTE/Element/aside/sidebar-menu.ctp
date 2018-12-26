@@ -12,6 +12,8 @@ $canAccessCentreExamTypes = @$this->Acl->canAccess('CentreExamTypes/index');
 $canAccessCandidateDetails = @$this->Acl->canAccess('Candidates/index');
 $canAccessCaDetails = @$this->Acl->canAccess('CandidateCas/index');
 
+$canAccessNotifications = @$this->Acl->canAccess('Notifications/index');
+
 $file = Configure::read('Theme.folder') . DS . 'src' . DS . 'Template' . DS . 'Element' . DS . 'aside' . DS . 'sidebar-menu.ctp';
 if (file_exists($file)) {
     ob_start();
@@ -93,14 +95,15 @@ if (file_exists($file)) {
             </ul>
         </li>
 
-        <li class="treeview">
-            <a href="<?php echo $this->Url->build(['controller' => 'notifications']); ?>">
-                <i class="fa fa-bell"></i> <span><?= __('Notifications') ?></span>
-                <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-            </a>
-        </li>
+        <?php if($canAccessNotifications){ ?>
+            <li class="treeview">
+                <a href="<?php echo $this->Url->build(['controller' => 'notifications']); ?>">
+                    <i class="fa fa-bell"></i> <span><?= __('Notifications') ?></span></span>
+                </a>
+            </li>
+        <?php } ?>
+
+
         <li class="treeview">
             <a href="#"><i class="fa fa-users"></i> <span><?= __('Users') ?></span>
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
