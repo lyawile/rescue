@@ -125,12 +125,14 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $this->loadModel('GroupDistrictRegionSchoolUsers');
             $user = $this->Auth->identify();
-            $permission = $this->GroupDistrictRegionSchoolUsers->findByUserId($user['id'])->first();
 
-            if (is_null($permission)) {
-                $this->Flash->error(__('User permissions not set'));
-                return $this->redirect(['controller' => 'users', 'action' => 'login']);
-            } else if ($user) {
+            if ($user) {
+                $permission = $this->GroupDistrictRegionSchoolUsers->findByUserId($user['id'])->first();
+                if (is_null($permission)) {
+                    $this->Flash->error(__('User permissions not set'));
+                    return $this->redirect(['controller' => 'users', 'action' => 'login']);
+                }
+
                 $user['region_id'] = $permission->region_id;
                 $user['district_id'] = $permission->district_id;
                 $user['centre_id'] = $permission->centre_id;
