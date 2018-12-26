@@ -86,9 +86,26 @@ class PermissionsController extends AppController
                 $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Practicals/view');
                 break;
 
-                case 'CentreExamTypes/viewDetails':
+            case 'CentreExamTypes/viewDetails':
                 $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CentreExamTypes/index');
                 $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CentreExamTypes/view');
+                break;
+
+            case 'Candidates/manageDetails':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Candidates');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'DisqualifiedCandidates');
+                break;
+
+            case 'Candidates/viewDetails':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Candidates/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Candidates/view');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'DisqualifiedCandidates/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'DisqualifiedCandidates/view');
+                break;
+
+            case 'CandidateCas/viewDetails':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CandidateCas/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CandidateCas/view');
                 break;
 
             default:
@@ -114,6 +131,23 @@ class PermissionsController extends AppController
             case 'CentreExamTypes/viewDetails':
                 $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CentreExamTypes/index');
                 $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CentreExamTypes/view');
+                break;
+
+            case 'Candidates/manageDetails':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Candidates');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'DisqualifiedCandidates');
+                break;
+
+            case 'Candidates/viewDetails':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Candidates/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Candidates/view');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'DisqualifiedCandidates/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'DisqualifiedCandidates/view');
+                break;
+
+            case 'CandidateCas/viewDetails':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CandidateCas/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CandidateCas/view');
                 break;
 
             default:

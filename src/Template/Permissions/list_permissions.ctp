@@ -122,6 +122,69 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-4">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= __('Candidates') ?></h3>
+            </div>
+            <div class="box-body">
+                <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>Manage candidate details
+                            <span class="pull-right"><?= $this->Form->control('candidates', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Candidates/manageDetails',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Candidates')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>View candidate details
+                            <span class="pull-right"><?= $this->Form->control('candidate_details', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Candidates/viewDetails',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Candidates/index')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Manage CA details
+                            <span class="pull-right"><?= $this->Form->control('candidate_ca', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'CandidateCas',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'CandidateCas')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>View CA details
+                            <span class="pull-right"><?= $this->Form->control('candidate_ca_details', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'CandidateCas/viewDetails',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'CandidateCas/index')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <!---->
     <!--    <div class="col-md-4">-->
     <!--        <div class="box">-->

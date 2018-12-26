@@ -47,7 +47,7 @@ function listPermissions(groupId) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
 
-            $('#permission-content').html('<span class="content-loading"><i class="fa fa-refresh fa-spin"></i></span>');
+            $('#permission-content').html('<span class="content-loading"><i class="fa fa-circle-o-notch fa-spin"></i></span>');
         },
         success: function (data, textStatus, jqXHR) {
             $('#permission-content').html(data);

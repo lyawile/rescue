@@ -4,9 +4,13 @@ use Cake\Core\Configure;
 
 $canAccessDashboardsRegistration = @$this->Acl->canAccess('Dashboards/registration');
 $canAccessDashboardsFinance = @$this->Acl->canAccess('Dashboards/finance');
+
 $canAccessCentreDetails = @$this->Acl->canAccess('Centres/index');
 $canAccessCentrePracticals = @$this->Acl->canAccess('Practicals/index');
 $canAccessCentreExamTypes = @$this->Acl->canAccess('CentreExamTypes/index');
+
+$canAccessCandidateDetails = @$this->Acl->canAccess('Candidates/index');
+$canAccessCaDetails = @$this->Acl->canAccess('CandidateCas/index');
 
 $file = Configure::read('Theme.folder') . DS . 'src' . DS . 'Template' . DS . 'Element' . DS . 'aside' . DS . 'sidebar-menu.ctp';
 if (file_exists($file)) {
@@ -38,8 +42,7 @@ if (file_exists($file)) {
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-university"></i> <span><?= __('Centres') ?></span>
-                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
-            </span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
                 <ul class="treeview-menu">
                     <?php if($canAccessCentreDetails){ ?>
@@ -55,6 +58,8 @@ if (file_exists($file)) {
             </li>
         <?php } ?>
 
+        <?php  if($canAccessCandidateDetails || $canAccessCaDetails){ ?>
+
         <li class="treeview">
             <a href="#">
                 <i class="fa fa-graduation-cap"></i> <span><?= __('Candidates') ?></span>
@@ -62,14 +67,17 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Candidates']); ?>"><i
-                            class="fa"></i><?= __('Registered') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'DisqualifiedCandidates']); ?>"><i
-                            class="fa"></i><?= __('Disqualified') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'CandidateCas']); ?>"><i
-                            class="fa"></i><?= __('CA') ?></a></li>
+                <?php if($canAccessCandidateDetails){ ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'Candidates']); ?>"><i class="fa"></i><?= __('Registered') ?></a></li>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'DisqualifiedCandidates']); ?>"><i class="fa"></i><?= __('Disqualified') ?></a></li>
+                <?php } ?>
+                <?php if($canAccessCaDetails){ ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'CandidateCas']); ?>"><i class="fa"></i><?= __('CA') ?></a></li>
+                <?php } ?>
             </ul>
         </li>
+
+        <?php } ?>
 
         <li class="treeview">
             <a href="#">
