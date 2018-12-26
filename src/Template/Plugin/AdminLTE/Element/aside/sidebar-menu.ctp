@@ -2,7 +2,11 @@
 
 use Cake\Core\Configure;
 
-$group_id = $this->request->getSession()->read('Auth.User.group_id ');
+$canAccessDashboardsRegistration = @$this->Acl->canAccess('Dashboards/registration');
+$canAccessDashboardsFinance = @$this->Acl->canAccess('Dashboards/finance');
+$canAccessCentreDetails = @$this->Acl->canAccess('Centres/index');
+$canAccessCentrePracticals = @$this->Acl->canAccess('Practicals/index');
+$canAccessCentreExamTypes = @$this->Acl->canAccess('CentreExamTypes/index');
 
 $file = Configure::read('Theme.folder') . DS . 'src' . DS . 'Template' . DS . 'Element' . DS . 'aside' . DS . 'sidebar-menu.ctp';
 if (file_exists($file)) {
@@ -21,32 +25,35 @@ if (file_exists($file)) {
             </span>
             </a>
             <ul class="treeview-menu">
-                <?php if (@$this->Acl->canAccess('Dashboards/registration')) {?>
+                <?php if ($canAccessDashboardsRegistration) { ?>
                     <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'registration']); ?>"><i class="fa"></i><?= __('Registration') ?></a></li>
-                    <?php
-                }
-
-                if(@$this->Acl->canAccess('Dashboards/finance')){
-                ?>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'finance']); ?>"><i class="fa"></i><?= __('Finance') ?></a></li>
+                <?php } ?>
+                <?php if($canAccessDashboardsFinance){ ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'dashboards', 'action' => 'finance']); ?>"><i class="fa"></i><?= __('Finance') ?></a></li>
                 <?php } ?>
             </ul>
         </li>
-        <li class="treeview">
-            <a href="#">
-                <i class="fa fa-university"></i> <span><?= __('Centres') ?></span>
-                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+        <?php if($canAccessCentreDetails || $canAccessCentrePracticals || $canAccessCentreExamTypes){ ?>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-university"></i> <span><?= __('Centres') ?></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
             </span>
-            </a>
-            <ul class="treeview-menu">
-                <!--                --><?php //if($this->Acl->check(['model' => 'Group', 'foreign_key' => $group_id], 'Practicals/add')) { ?>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Practicals']); ?>"><i
-                            class="fa"></i><?= __('Practicals') ?></a></li>
-                <!--                --><?php //} ?>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'CentreExamTypes']); ?>"><i
-                            class="fa"></i><?= __('Exam types') ?></a></li>
-            </ul>
-        </li>
+                </a>
+                <ul class="treeview-menu">
+                    <?php if($canAccessCentreDetails){ ?>
+                        <li><a href="<?= $this->Url->build(['controller' => 'Centres', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Centre details') ?></a></li>
+                    <?php } ?>
+                    <?php if($canAccessCentrePracticals){ ?>
+                        <li><a href="<?= $this->Url->build(['controller' => 'Practicals', 'action' => 'index']); ?>"><i class="fa"></i><?= __('Practicals') ?></a></li>
+                    <?php } ?>
+                    <?php if($canAccessCentreExamTypes){ ?>
+                        <li><a href="<?= $this->Url->build(['controller' => 'CentreExamTypes', 'action' => 'index']); ?>"><i class="fa"></i><?= __('Exam types') ?></a></li>
+                    <?php } ?>
+                </ul>
+            </li>
+        <?php } ?>
 
         <li class="treeview">
             <a href="#">
@@ -118,8 +125,6 @@ if (file_exists($file)) {
                             class="fa"></i> <?= __('Regions') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Districts', 'action' => 'index']); ?>"><i
                             class="fa"></i> <?= __('Districts') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Centres', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Centres') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'ExamTypes', 'action' => 'index']); ?>"><i
                             class="fa"></i> <?= __('Exam types') ?></a></li>
                 <li><a href="<?php echo $this->Url->build(['controller' => 'Subjects', 'action' => 'index']); ?>"><i

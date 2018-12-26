@@ -25,7 +25,7 @@ class PermissionsController extends AppController
         $this->loadModel('Groups');
         $groups = $this->Groups->find('list');
 
-        if(isset($userGroupId) && !is_null($userGroupId)){
+        if (isset($userGroupId) && !is_null($userGroupId)) {
             $this->viewBuilder()->enableAutoLayout(false);
             $this->set(compact('userGroupId'));
             return $this->render('/Permissions/list_permissions');
@@ -76,6 +76,21 @@ class PermissionsController extends AppController
     private function allowPermission($groupId, $permission)
     {
         switch ($permission) {
+            case 'Centres/viewDetails':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Centres/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Centres/view');
+                break;
+
+            case 'Practicals/viewDetails':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Practicals/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Practicals/view');
+                break;
+
+                case 'CentreExamTypes/viewDetails':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CentreExamTypes/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CentreExamTypes/view');
+                break;
+
             default:
                 $this->Acl->allow(['Groups' => ['id' => $groupId]], $permission);
                 break;
@@ -85,6 +100,22 @@ class PermissionsController extends AppController
     private function denyPermisson($groupId, $permission)
     {
         switch ($permission) {
+
+            case 'Centres/viewDetails':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Centres/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Centres/view');
+                break;
+
+            case 'Practicals/viewDetails':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Practicals/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Practicals/view');
+                break;
+
+            case 'CentreExamTypes/viewDetails':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CentreExamTypes/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CentreExamTypes/view');
+                break;
+
             default:
                 $this->Acl->deny(['Groups' => ['id' => $groupId]], $permission);
                 break;
