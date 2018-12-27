@@ -14,6 +14,13 @@ $canAccessCaDetails = @$this->Acl->canAccess('CandidateCas/index');
 
 $canAccessNotifications = @$this->Acl->canAccess('Notifications/index');
 
+$canAccessBills = @$this->Acl->canAccess('Bills/index');
+$canCreateBills = @$this->Acl->canAccess('Bills/add');
+
+$canManageUsers = @$this->Acl->canAccess('Users');
+$canManageUserGroups = @$this->Acl->canAccess('Groups');
+$canManageGroupPermissions = @$this->Acl->canAccess('Permissions');
+
 $file = Configure::read('Theme.folder') . DS . 'src' . DS . 'Template' . DS . 'Element' . DS . 'aside' . DS . 'sidebar-menu.ctp';
 if (file_exists($file)) {
     ob_start();
@@ -80,20 +87,22 @@ if (file_exists($file)) {
         </li>
 
         <?php } ?>
-
-        <li class="treeview">
-            <a href="#">
-                <i class="fa fa-file-text-o"></i> <span><?= __('Bills') ?></span>
-                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
-            </span>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Bills', 'action' => 'index']); ?>"><i
-                            class="fa"></i><?= __('My bills') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Bills', 'action' => 'add']); ?>"><i
-                            class="fa"></i><?= __('Create bill') ?></a></li>
-            </ul>
-        </li>
+        <?php if($canAccessBills || $canCreateBills ){ ?>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-file-text-o"></i> <span><?= __('Bills') ?></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <?php if($canAccessBills){ ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'Bills', 'action' => 'index']); ?>"><i class="fa"></i><?= __('My bills') ?></a></li>
+                    <?php } ?>
+                    <?php if($canCreateBills){ ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'Bills', 'action' => 'add']); ?>"><i class="fa"></i><?= __('Create bill') ?></a></li>
+                    <?php } ?>
+                </ul>
+            </li>
+        <?php } ?>
 
         <?php if($canAccessNotifications){ ?>
             <li class="treeview">
@@ -103,21 +112,28 @@ if (file_exists($file)) {
             </li>
         <?php } ?>
 
+        <?php if($canManageUsers || $canManageUserGroups || $canManageGroupPermissions){ ?>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-users"></i> <span><?= __('Users') ?></span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <?php if($canManageUsers){ ?>
+                    <li><a href="<?php echo $this->Url->build(['controller' => 'users', 'action' => 'index']); ?>"><i class="fa"></i><?= __('Users') ?></a></li>
+                    <?php } ?>
+                    <?php ?>
+                    <?php if($canManageUserGroups){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'groups', 'action' => 'index']); ?>"><i class="fa"></i><?= __('Groups') ?></a></li>
+                    <?php } ?>
+                    <?php if($canManageGroupPermissions){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'permissions', 'action' => 'index']); ?>"><i class="fa"></i><?= __('Permissions') ?></a></li>
+                    <?php } ?>
+                </ul>
+            </li>
+        <?php } ?>
 
-        <li class="treeview">
-            <a href="#"><i class="fa fa-users"></i> <span><?= __('Users') ?></span>
-                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
-            </span>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'users']); ?>"><i
-                            class="fa"></i><?= __('Users') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'groups']); ?>"><i
-                            class="fa"></i><?= __('Groups') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'permissions']); ?>"><i
-                            class="fa"></i><?= __('Permissions') ?></a></li>
-            </ul>
-        </li>
+
+
 
         <li class="treeview">
             <a href="#">

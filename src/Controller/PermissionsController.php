@@ -108,6 +108,11 @@ class PermissionsController extends AppController
                 $this->Acl->allow(['Groups' => ['id' => $groupId]], 'CandidateCas/view');
                 break;
 
+            case 'Bills/viewBills':
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Bills/index');
+                $this->Acl->allow(['Groups' => ['id' => $groupId]], 'Bills/view');
+                break;
+
             default:
                 $this->Acl->allow(['Groups' => ['id' => $groupId]], $permission);
                 break;
@@ -148,6 +153,11 @@ class PermissionsController extends AppController
             case 'CandidateCas/viewDetails':
                 $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CandidateCas/index');
                 $this->Acl->deny(['Groups' => ['id' => $groupId]], 'CandidateCas/view');
+                break;
+
+            case 'Bills/viewBills':
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Bills/index');
+                $this->Acl->deny(['Groups' => ['id' => $groupId]], 'Bills/view');
                 break;
 
             default:
