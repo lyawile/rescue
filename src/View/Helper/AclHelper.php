@@ -91,7 +91,16 @@ class AclHelper extends Helper
      */
     public function link($title, $url = null, array $options = [])
     {
-        if (!$this->check($url)) {
+        $mUrl = '';
+        if (!isset($url['controller'])) {
+            $params = $this->request->getAttribute('params');
+            $mUrl = $params['controller'] . '/';
+        }
+
+        $mUrl = $mUrl . implode('/', $url);
+
+
+        if (!$this->canAccess($mUrl)) {
             return '';
         }
         return $this->Html->link($title, $url, $options);
