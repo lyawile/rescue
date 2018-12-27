@@ -22,7 +22,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Centre'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Centre'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -49,16 +49,16 @@
                             <td><?= $this->Number->format($centre->district_distance) ?></td>
                             <td><?= h($centre->centre_type) ?></td>
                             <td><?= $centre->has('district') ?
-                                    $this->Html->link($centre
+                                    $this->Acl->link($centre
                                         ->district->name, ['controller' =>
                                         'Districts', 'action' => 'view', $centre
                                         ->district
                                         ->id]) : '' ?>
                             </td>
                             <td class="actions pull-right">
-                                <?= $this->Html->link('', ['action' => 'view', $centre->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                                <?= $this->Html->link('', ['action' => 'edit', $centre->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
-                                <?= $this->Form->postLink('', ['action' => 'delete', $centre->id], ['confirm' =>
+                                <?= $this->Acl->link('', ['action' => 'view', $centre->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                                <?= $this->Acl->link('', ['action' => 'edit', $centre->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                                <?= $this->Acl->postLink('', ['action' => 'delete', $centre->id], ['confirm' =>
                                     __('Are you sure you want to delete # {0}?', $centre->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                             </td>
                         </tr>

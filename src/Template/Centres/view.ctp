@@ -22,11 +22,11 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($centre->name) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Centre'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Centre'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Centre'), ['action' => 'edit', $centre->id],
+                    <?= $this->Acl->link(__('Edit Centre'), ['action' => 'edit', $centre->id],
                         ['class' => 'btn btn-default']) ?>
-                    <?= $this->Form->postLink(__('Delete Centre'), ['action' => 'delete', $centre->id
+                    <?= $this->Acl->postLink(__('Delete Centre'), ['action' => 'delete', $centre->id
                     ],
                         ['confirm' => __('Are you sure you want to delete # {0}?', $centre->id), 'class' => 'btn
                     btn-danger']) ?>
@@ -74,7 +74,7 @@
                     <tr>
                         <th scope="row"><?= __('District') ?></th>
                         <td><?= $centre->has('district') ?
-                                $this->Html->link($centre
+                                $this->Acl->link($centre
                                     ->district->name, ['controller' =>
                                     'Districts', 'action' => 'view', $centre
                                     ->district
