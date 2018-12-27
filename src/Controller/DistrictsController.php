@@ -39,7 +39,7 @@ class DistrictsController extends AppController
     public function view($id = null)
     {
         $district = $this->Districts->get($id, [
-            'contain' => ['Regions', 'Centres', 'GroupDistrictRegionSchoolUsers']
+            'contain' => ['Regions', 'Centres']
         ]);
 
         $this->set('district', $district);
