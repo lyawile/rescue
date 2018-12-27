@@ -43,11 +43,11 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h(${{ singularVar }}->{{ displayField }}) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit {{ singularHumanName }}'), ['action' => 'edit', {{ pK|raw }}],
+                    <?= $this->Acl->link(__('Edit {{ singularHumanName }}'), ['action' => 'edit', {{ pK|raw }}],
                     ['class' => 'btn btn-default']) ?>
-                    <?= $this->Form->postLink(__('Delete {{ singularHumanName }}'), ['action' => 'delete', {{ pK|raw }}
+                    <?= $this->Acl->postLink(__('Delete {{ singularHumanName }}'), ['action' => 'delete', {{ pK|raw }}
                     ],
                     ['confirm' => __('Are you sure you want to delete # {0}?', {{ pK|raw }}), 'class' => 'btn
                     btn-danger']) ?>
@@ -63,7 +63,7 @@
                                 <tr>
                                     <th scope="row"><?= __('{{ details.property|humanize }}') ?></th>
                                     <td><?= ${{ singularVar }}->has('{{ details.property }}') ?
-                                        $this->Html->link(${{ singularVar }}
+                                        $this->Acl->link(${{ singularVar }}
                                         ->{{ details.property }}->{{ details.displayField }}, ['controller' =>
                                         '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}
                                         ->{{ details.property }}
@@ -83,7 +83,7 @@
                             <tr>
                                 <th scope="row"><?= __('{{ alias|underscore|singularize|humanize }}') ?></th>
                                 <td><?= ${{ singularVar }}->has('{{ details.property }}') ?
-                                    $this->Html->link(${{ singularVar }}
+                                    $this->Acl->link(${{ singularVar }}
                                     ->{{ details.property }}->{{ details.displayField }}, ['controller' =>
                                     '{{ details.controller }}
                                     ', 'action' => 'view', ${{ singularVar }}->{{ details.property }}
@@ -147,15 +147,15 @@
                                 {% endfor %}
                                 {% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => '{{ details.controller }}',
+                                    <?= $this->Acl->link(__('View'), ['controller' => '{{ details.controller }}',
                                     'action'
                                     =>
                                     'view', {{ otherPk|raw }}]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => '{{ details.controller }}',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => '{{ details.controller }}',
                                     'action'
                                     =>
                                     'edit', {{ otherPk|raw }}]) ?>
-                                    <?= $this->Form->postLink(__('Delete'), ['controller' => '{{ details.controller }}',
+                                    <?= $this->Acl->postLink(__('Delete'), ['controller' => '{{ details.controller }}',
                                     'action' =>
                                     'delete', {{ otherPk|raw }}], ['confirm' => __('Are you sure you want to delete #
                                     {0}?', {{ otherPk|raw }})]) ?>

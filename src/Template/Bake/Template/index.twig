@@ -39,7 +39,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -61,7 +61,7 @@
                                 {% for alias, details in associations.BelongsTo if field == details.foreignKey %}
                                     {% set isKey = true %}
                                     <td><?= ${{ singularVar }}->has('{{ details.property }}') ?
-                                        $this->Html->link(${{ singularVar }}
+                                        $this->Acl->link(${{ singularVar }}
                                         ->{{ details.property }}->{{ details.displayField }}, ['controller' =>
                                         '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}
                                         ->{{ details.property }}
@@ -80,9 +80,9 @@
                         {% endfor %}
                         {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
                         <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', {{ pk|raw }}], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', {{ pk|raw }}], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
-                            <?= $this->Form->postLink('', ['action' => 'delete', {{ pk|raw }}], ['confirm' =>
+                            <?= $this->Acl->link('', ['action' => 'view', {{ pk|raw }}], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'edit', {{ pk|raw }}], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                            <?= $this->Acl->postLink('', ['action' => 'delete', {{ pk|raw }}], ['confirm' =>
                             __('Are you sure you want to delete # {0}?', {{ pk|raw }}), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>
                     </tr>
