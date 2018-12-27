@@ -23,36 +23,32 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Exam Type'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Exam Type'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
                 <table cellpadding="0" cellspacing="0" class="table table table-striped">
                     <thead>
                     <tr>
-                                                    <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('code') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('short_name') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('has_ca') ?></th>
-                                                <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('name') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('short_name') ?></th>
+                        <th scope="col"><?= $this->Paginator->sort('has_ca') ?></th>
+                        <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($examTypes as $examType): ?>
-                    <tr>
-                                                                                                                                                                                                                <td><?= $this->Number->format($examType->id) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($examType->code) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($examType->name) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= h($examType->short_name) ?></td>
-                                                                                                                                                                                                                                                                            <td><?= $this->Number->format($examType->has_ca) ?></td>
-                                                                                                                                    <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $examType->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $examType->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
-                            <?= $this->Form->postLink('', ['action' => 'delete', $examType->id], ['confirm' =>
-                            __('Are you sure you want to delete # {0}?', $examType->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><?= h($examType->name) ?></td>
+                            <td><?= h($examType->short_name) ?></td>
+                            <td><?= $this->Number->format($examType->has_ca) ?></td>
+                            <td class="actions pull-right">
+                                <?= $this->Acl->link('', ['action' => 'view', $examType->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                                <?= $this->Acl->link('', ['action' => 'edit', $examType->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                                <?= $this->Acl->postLink('', ['action' => 'delete', $examType->id], ['confirm' =>
+                                    __('Are you sure you want to delete # {0}?', $examType->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -65,7 +61,8 @@
                     <?= $this->Paginator->next(__('next') . ' >') ?>
                     <?= $this->Paginator->last(__('last') . ' >>') ?>
                 </ul>
-                <p class="pull-right" style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}},
+                <p class="pull-right"
+                   style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}},
                     showing {{current}} record(s) out of {{count}} total')]) ?></p>
             </div>
             <!-- /.box-footer-->
