@@ -9,7 +9,6 @@
     <section class="content-header">
         <h1>
             <?= __('Users') ?>
-            <small>short description</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -23,14 +22,8 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'btn btn
-                    btn-default']) ?>
-                    <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id],
-                        ['class' => 'btn btn-default']) ?>
-  <!--                  <?// $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id
-//                    ],
-//                        ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn
-//                    btn-danger']) ?>-->
+                    <?= $this->Acl->link(__('New User'), ['action' => 'add'], ['class' => 'btn btn btn-default']) ?>
+                    <?= $this->Acl->link(__('Edit User'), ['action' => 'edit', $user->id],  ['class' => 'btn btn-default']) ?>
                 </div>
             </div>
             <!-- Default box -->
@@ -42,10 +35,7 @@
                     </tr>
                     <tr>
                         <th scope="row"><?= __('Group') ?></th>
-                        <td><?= $user->has('group') ?
-                                $this->Html->link($user
-                                    ->group->name, "#") : '' ?>
-                        </td>
+                        <td><?= $user->group->name ?></td>
                     </tr>
                     <tr>
                         <th scope="row"><?= __('First Name') ?></th>
