@@ -22,7 +22,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Form->postLink(__('Delete Notification'), ['action' => 'deleteInbox', $notification->id
+                    <?= $this->Acl->postLink(__('Delete Notification'), ['action' => 'deleteInbox', $notification->id
                     ],
                         ['confirm' => __('Are you sure you want to delete # {0}?', $notification->id), 'class' => 'btn
                     btn-danger']) ?>
