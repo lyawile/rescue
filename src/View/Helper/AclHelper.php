@@ -17,7 +17,7 @@ class AclHelper extends Helper
      *
      * @var array
      */
-    public $helpers = ['Html'];
+    public $helpers = ['Html', 'Form'];
     /**
      * Acl Instance.
      *
@@ -104,5 +104,20 @@ class AclHelper extends Helper
             return '';
         }
         return $this->Html->link($title, $url, $options);
+    }
+
+    public function postLink($title, $url = null, array $options = []){
+        $mUrl = '';
+        if (!isset($url['controller'])) {
+            $params = $this->request->getAttribute('params');
+            $mUrl = $params['controller'] . '/';
+        }
+
+        $mUrl = $mUrl . $url['action'];
+
+        if (!$this->canAccess($mUrl)) {
+            return '';
+        }
+        return $this->Form->postLink($title, $url, $options);
     }
 }
