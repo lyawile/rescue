@@ -97,7 +97,7 @@ class AclHelper extends Helper
             $mUrl = $params['controller'] . '/';
         }
 
-        $mUrl = $mUrl . implode('/', $url);
+        $mUrl = $mUrl . $url['action'];
 
 
         if (!$this->canAccess($mUrl)) {
