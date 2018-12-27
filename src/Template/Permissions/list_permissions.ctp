@@ -182,6 +182,90 @@
                 </table>
             </div>
         </div>
+
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= __('Settings') ?></h3>
+            </div>
+            <div class="box-body">
+                <table cellpadding="0" cellspacing="0" class="table table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>manage income collections
+                            <span class="pull-right"><?= $this->Form->control('collections', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Collections',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Collections')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manage income collection categories
+                            <span class="pull-right"><?= $this->Form->control('colection_category', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'CollectionCategories',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'CollectionCategories')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manage region details
+                            <span class="pull-right"><?= $this->Form->control('regions', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Regions',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Regions')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manage district details
+                            <span class="pull-right"><?= $this->Form->control('district', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Districts',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Districts')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manage exam types
+                            <span class="pull-right"><?= $this->Form->control('exam_types', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'ExamTypes',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'ExamTypes')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manage subjects
+                            <span class="pull-right"><?= $this->Form->control('subjects', [
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'class' => 'permission',
+                                    'permission' => 'Subjects',
+                                    'checked' => @$this->Acl->check(['Groups' => ['id' => $userGroupId]], 'Subjects')
+                                ]) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="col-md-4">

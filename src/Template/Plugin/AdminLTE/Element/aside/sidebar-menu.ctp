@@ -21,6 +21,13 @@ $canManageUsers = @$this->Acl->canAccess('Users');
 $canManageUserGroups = @$this->Acl->canAccess('Groups');
 $canManageGroupPermissions = @$this->Acl->canAccess('Permissions');
 
+$canManageCollections = @$this->Acl->canAccess('Collections');
+$canManageCollectionCategories = @$this->Acl->canAccess('CollectionCategories');
+$canManageRegions = @$this->Acl->canAccess('Regions');
+$canManageDistricts = @$this->Acl->canAccess('Districts');
+$canManageExamTypes = @$this->Acl->canAccess('ExamTypes');
+$canManageSubjects = @$this->Acl->canAccess('Subjects');
+
 $file = Configure::read('Theme.folder') . DS . 'src' . DS . 'Template' . DS . 'Element' . DS . 'aside' . DS . 'sidebar-menu.ctp';
 if (file_exists($file)) {
     ob_start();
@@ -133,32 +140,39 @@ if (file_exists($file)) {
         <?php } ?>
 
 
+        <?php if($canManageCollections || $canManageCollectionCategories ||
+                    $canManageRegions || $canManageDistricts ||
+                    $canManageExamTypes || $canManageSubjects){ ?>
 
-
-        <li class="treeview">
-            <a href="#">
-                <i class="fa fa-gear"></i> <span><?= __('Settings') ?></span>
-                <span class="pull-right-container">
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-gear"></i> <span><?= __('Settings') ?></span>
+                    <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Collections', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Collections') ?></a></li>
-                <li>
-                    <a href="<?php echo $this->Url->build(['controller' => 'CollectionCategories', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Collection categories') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Regions', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Regions') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Districts', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Districts') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'ExamTypes', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Exam types') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Subjects', 'action' => 'index']); ?>"><i
-                            class="fa"></i> <?= __('Subjects') ?></a></li>
-                <li><a href="<?php echo $this->Url->build(['controller' => 'Settings', 'action' => 'general']); ?>"><i
-                            class="fa"></i> <?= __('General') ?></a></li>
-            </ul>
-        </li>
+                </a>
+                <ul class="treeview-menu">
+                    <?php if($canManageCollections){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'Collections', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Collections') ?></a></li>
+                    <?php } ?>
+                    <?php if($canManageCollectionCategories){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'CollectionCategories', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Collection categories') ?></a></li>
+                    <?php } ?>
+                    <?php if($canManageRegions){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'Regions', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Regions') ?></a></li>
+                    <?php } ?>
+                    <?php if($canManageDistricts){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'Districts', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Districts') ?></a></li>
+                    <?php } ?>
+                    <?php if($canManageExamTypes){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'ExamTypes', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Exam types') ?></a></li>
+                    <?php } ?>
+                    <?php if($canManageSubjects){ ?>
+                        <li><a href="<?php echo $this->Url->build(['controller' => 'Subjects', 'action' => 'index']); ?>"><i class="fa"></i> <?= __('Subjects') ?></a></li>
+                    <?php } ?>
+                </ul>
+            </li>
+
+        <?php } ?>
     </ul>
 <?php } ?>
