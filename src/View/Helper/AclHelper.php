@@ -43,7 +43,7 @@ class AclHelper extends Helper
         $collection = new ComponentRegistry();
         $this->Acl = new AclComponent($collection);
         $this->Authorize = new ActionsAuthorize($collection);
-        $this->Authorize->config($this->config());
+        $this->Authorize->getConfig($this->getConfig());
     }
 
     /**
