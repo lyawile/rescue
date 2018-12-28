@@ -23,7 +23,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Disqualified Candidate'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Disqualified Candidate'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -49,7 +49,7 @@
                                                     <th scope="col"><?= $this->Paginator->sort('reason') ?></th>
                                                    <!-- <th scope="col"><?php //$this->Paginator->sort('sifa') ?></th> -->
                                                     <th scope="col"><?= $this->Paginator->sort('exam_type_id') ?></th>
-                                                    <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th> 
+                                                    <th scope="col"><?= $this->Paginator->sort('centre_id') ?></th>
                                                 <th scope="col" class="actions pull-right"><?= __('Actions') ?></th>
                     </tr>
                     </thead>
@@ -75,22 +75,22 @@
                         <td><?= h($disqualifiedCandidate->reason) ?></td>
                         <!-- <td><?php  //h($disqualifiedCandidate->sifa) ?></td>-->
                         <td><?= $disqualifiedCandidate->has('exam_type') ?
-                                        $this->Html->link($disqualifiedCandidate
+                                        $this->Acl->link($disqualifiedCandidate
                                         ->exam_type->short_name, ['controller' =>
                                         'ExamTypes', 'action' => 'view', $disqualifiedCandidate
                                         ->exam_type
                                         ->id]) : ''  ?>
                                     </td>
 									<td><?= $disqualifiedCandidate->has('centre') ?
-                                        $this->Html->link($disqualifiedCandidate
+                                        $this->Acl->link($disqualifiedCandidate
                                         ->centre->number, ['controller' =>
                                         'Centres', 'action' => 'view', $disqualifiedCandidate
                                         ->centre
                                         ->id]) : ''  ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $disqualifiedCandidate->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $disqualifiedCandidate->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'view', $disqualifiedCandidate->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'edit', $disqualifiedCandidate->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $disqualifiedCandidate->id], ['confirm' =>
                             __('Are you sure you want to delete # {0}?', $disqualifiedCandidate->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>

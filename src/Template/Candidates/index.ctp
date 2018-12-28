@@ -24,8 +24,8 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('Upload Registration'), ['action' => 'bulk'], ['class' => 'btn btn btn-success']) ?>
-                    <?= $this->Html->link(__('New Candidate'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('Upload Registration'), ['action' => 'bulk'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Candidate'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                     
                 </div>
             </div>
@@ -73,14 +73,14 @@
                       <!-- <td><?= h($candidate->combination) ?></td> -->
                       <!-- <td><?= $this->Number->format($candidate->is_repeater) ?></td> -->
                       <td><?= $candidate->has('exam_type') ?
-                                        $this->Html->link($candidate
+                                        $this->Acl->link($candidate
                                         ->exam_type->short_name, ['controller' =>
                                         'ExamTypes', 'action' => 'view', $candidate
                                         ->exam_type
                                         ->id]) : '' ?>
                        </td>
                        <td><?= $candidate->has('centre') ?
-                                        $this->Html->link($candidate
+                                        $this->Acl->link($candidate
                                         ->centre->name, ['controller' =>
                                         'Centres', 'action' => 'view', $candidate
                                         ->centre
@@ -88,8 +88,8 @@
                         </td>
                         
                         <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $candidate->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $candidate->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'view', $candidate->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'edit', $candidate->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $candidate->id], ['confirm' =>
                             __('Are you sure you want to delete # {0}?', $candidate->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>
@@ -104,7 +104,7 @@
                 <?= $this->Form->create(null, ['url' => ['controller' => 'Epay', 'action' => 'fees']]);?>
                 <?= $this->Form->control('', array('type'=>'hidden','name'=>'put','id'=>'put','value'=>'')) ?>
 				<?= $this->Form->button(__('Selected')) ?>
-                <?= $this->Html->link(__('Whole Centre'), ['controller' => 'epay','action' => 'feesall'], ['class' => 'btn btn btn-success']) ?>
+                <?= $this->Acl->link(__('Whole Centre'), ['controller' => 'epay','action' => 'feesall'], ['class' => 'btn btn btn-success']) ?>
                 <?= $this->Form->end() ?>
                 </div>
             </div>

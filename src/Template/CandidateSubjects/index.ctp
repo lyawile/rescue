@@ -23,7 +23,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Candidate Subject'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Candidate Subject'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -41,22 +41,22 @@
                     <tr>
                                                                                                                                                                                                                                                                             <td><?= $this->Number->format($candidateSubject->id) ?></td>
                                                                                                                                                                                                                                                     <td><?= $candidateSubject->has('candidate') ?
-                                        $this->Html->link($candidateSubject
+                                        $this->Acl->link($candidateSubject
                                         ->candidate->id, ['controller' =>
                                         'Candidates', 'action' => 'view', $candidateSubject
                                         ->candidate
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                                                                                                                                 <td><?= $candidateSubject->has('subject') ?
-                                        $this->Html->link($candidateSubject
+                                        $this->Acl->link($candidateSubject
                                         ->subject->name, ['controller' =>
                                         'Subjects', 'action' => 'view', $candidateSubject
                                         ->subject
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $candidateSubject->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $candidateSubject->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'view', $candidateSubject->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'edit', $candidateSubject->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $candidateSubject->id], ['confirm' =>
                             __('Are you sure you want to delete # {0}?', $candidateSubject->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>

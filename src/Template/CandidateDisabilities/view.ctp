@@ -23,11 +23,11 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($candidateDisability->id) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Candidate Disability'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Candidate Disability'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Candidate Disability'), ['action' => 'edit', $candidateDisability->id],
+                    <?= $this->Acl->link(__('Edit Candidate Disability'), ['action' => 'edit', $candidateDisability->id],
                     ['class' => 'btn btn-default']) ?>
-                    <?= $this->Form->postLink(__('Delete Candidate Disability'), ['action' => 'delete', $candidateDisability->id
+                    <?= $this->Acl->postLink(__('Delete Candidate Disability'), ['action' => 'delete', $candidateDisability->id
                     ],
                     ['confirm' => __('Are you sure you want to delete # {0}?', $candidateDisability->id), 'class' => 'btn
                     btn-danger']) ?>
@@ -39,7 +39,7 @@
                                                                                                                                         <tr>
                                     <th scope="row"><?= __('Candidate') ?></th>
                                     <td><?= $candidateDisability->has('candidate') ?
-                                        $this->Html->link($candidateDisability
+                                        $this->Acl->link($candidateDisability
                                         ->candidate->id, ['controller' =>
                                         'Candidates', 'action' => 'view', $candidateDisability
                                         ->candidate

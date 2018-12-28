@@ -23,9 +23,9 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($centreExamType->id) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Centre Exam Type'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Centre Exam Type'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Centre Exam Type'), ['action' => 'edit', $centreExamType->id],
+                    <?= $this->Acl->link(__('Edit Centre Exam Type'), ['action' => 'edit', $centreExamType->id],
                     ['class' => 'btn btn-default']) ?>
                     <?= $this->Form->postLink(__('Delete Centre Exam Type'), ['action' => 'delete', $centreExamType->id
                     ],
@@ -39,7 +39,7 @@
                                                                                                                                         <tr>
                                     <th scope="row"><?= __('Exam Type') ?></th>
                                     <td><?= $centreExamType->has('exam_type') ?
-                                        $this->Html->link($centreExamType
+                                        $this->Acl->link($centreExamType
                                         ->exam_type->name, ['controller' =>
                                         'ExamTypes', 'action' => 'view', $centreExamType
                                         ->exam_type
@@ -49,7 +49,7 @@
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Centre') ?></th>
                                     <td><?= $centreExamType->has('centre') ?
-                                        $this->Html->link($centreExamType
+                                        $this->Acl->link($centreExamType
                                         ->centre->name, ['controller' =>
                                         'Centres', 'action' => 'view', $centreExamType
                                         ->centre
