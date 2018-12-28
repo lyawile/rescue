@@ -12,6 +12,7 @@ class DashboardsController extends AppController
         $this->loadModel('Districts');
         $this->loadModel('Centres');
         $this->loadModel('Candidates');
+        $this->loadModel('DisqualifiedCandidates');
 
         $regionId = $this->request->getSession()->read('regionId');
         $districtId = $this->request->getSession()->read('districtId');
@@ -29,16 +30,22 @@ class DashboardsController extends AppController
         //CANDIDATE STATS
         if (!empty($examTypeId)) {
             $totalCandidates = $this->Candidates->findByCentreIdAndExamTypeId($centreId, $examTypeId)->count();
-        } elseif (!empty($centreId))
+            $totalDisqualifiedCandidates = $this->DisqualifiedCandidates->findByCentreIdAndExamTypeId($centreId, $examTypeId)->count();
+        } elseif (!empty($centreId)) {
             $totalCandidates = $this->Candidates->findByCentreId($centreId)->count();
-        elseif (!empty($districtId))
+            $totalDisqualifiedCandidates = $this->DisqualifiedCandidates->findByCentreId($centreId)->count();
+        } elseif (!empty($districtId)) {
             $totalCandidates = $this->Districts->find()->matching('Centres.Candidates')->where(['Districts.id' => $districtId])->count();
-        elseif (!empty($regionId)) {
+            $totalDisqualifiedCandidates = $this->Districts->find()->matching('Centres.DisqualifiedCandidates')->where(['Districts.id' => $districtId])->count();
+        } elseif(!empty($regionId)) {
             $totalCandidates = $this->Regions->find()->matching('Districts.Centres.Candidates')->where(['Regions.id' => $regionId])->count();
-        } else
+            $totalDisqualifiedCandidates = $this->Regions->find()->matching('Districts.Centres.DisqualifiedCandidates')->where(['Regions.id' => $regionId])->count();
+        } else {
             $totalCandidates = $this->Candidates->find('all')->count();
+            $totalDisqualifiedCandidates = $this->DisqualifiedCandidates->find('all')->count();
+        }
 
-        $this->set(compact('totalCentres', 'totalCandidates'));
+        $this->set(compact('totalCentres', 'totalCandidates', 'totalDisqualifiedCandidates'));
     }
 
     public function finance()
