@@ -18,12 +18,12 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3><?= $totalCentres; ?></h3>
+              <h3><?= $this->Number->format($totalCentres); ?></h3>
 
               <p>Centres</p>
             </div>
             <div class="icon">
-              <i class="fa fa-graduation-cap"></i>
+              <i class="fa fa-university"></i>
             </div>
             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
@@ -33,12 +33,12 @@
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3><?= $totalCandidates ?></h3>
+              <h3><?= $this->Number->format($totalCandidates); ?></h3>
 
               <p>Candidates</p>
             </div>
             <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+              <i class="fa fa-graduation-cap"></i>
             </div>
             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>

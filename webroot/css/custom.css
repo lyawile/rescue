@@ -53,3 +53,8 @@ textarea {
 .checkbox, .radio {
     margin-top: 0 !important;
 }
+
+.small-box .icon {
+    font-size: 4.5em !important;
+    top: 6px !important;
+}
