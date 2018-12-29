@@ -471,7 +471,9 @@ class BillsController extends AppController {
             curl_close($curlConf);
         }
     }
-    public function pay() {
+    // TESTING ONLY
+    // grab your control number, check your bill id in the bills/index and set the amount paid the execute the function
+    public function pay($controlNumber, $billId, $amount) {
 
         // Get the submitted XML 
 //        $gepgPmtSpInfo = file_get_contents('php://input');
@@ -482,10 +484,10 @@ class BillsController extends AppController {
                                     <TrxId>45522212</TrxId>
                                     <SpCode>12333</SpCode>
                                     <PayRefId>12121211545</PayRefId>
-                                    <BillId>147</BillId>
-                                    <PayCtrNum>454545451548</PayCtrNum>
-                                    <BillAmt>50000</BillAmt>
-                                    <PaidAmt>50000</PaidAmt>
+                                    <BillId>$billId</BillId>
+                                    <PayCtrNum>$controlNumber</PayCtrNum>
+                                    <BillAmt>$amount</BillAmt>
+                                    <PaidAmt>$amount</PaidAmt>
                                     <BillPayOpt>1</BillPayOpt>
                                     <CCy>TZS</CCy>
                                     <TrxDtTm>2018-08-25T08:00:45</TrxDtTm>
@@ -581,7 +583,7 @@ class BillsController extends AppController {
         foreach ($queryDetails as $billsData) {
             
         }
-
+        
 
         $pdf = new pdfBill();
         $pdf->AddPage();
