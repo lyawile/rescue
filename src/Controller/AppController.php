@@ -92,6 +92,7 @@ class AppController extends Controller
         $this->loadModel('Notifications');
         $this->loadModel('ExamTypes');
 
+        $userGroupId = $this->request->getSession()->read('Auth.User.group_id');
         $userId = $this->request->getSession()->read('Auth.User.id');
         $unreadNotifications = $this->Notifications->userUnReadNotifications($userId);
         $totalUnreadNotifications = $unreadNotifications->count();
@@ -124,7 +125,7 @@ class AppController extends Controller
         $centreExamTypes = $this->ExamTypes->findExamTypesByCentre($sessionCentreId);
         $examinationTypes = $centreExamTypes->find('list', ['keyField' => 'id', 'valueField' => 'short_name']);
 
-        $this->set(compact('navRegions', 'navDistricts', 'navCentres', 'totalUnreadNotifications', 'unreadNotifications', 'examinationTypes'));
+        $this->set(compact('navRegions', 'navDistricts', 'navCentres', 'totalUnreadNotifications', 'unreadNotifications', 'examinationTypes', 'userGroupId'));
     }
 
     public function beforeRender(Event $event)

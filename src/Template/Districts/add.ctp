@@ -19,26 +19,27 @@
 
     <section class="content">
         <div class="box">
-    <div class="box-header with-border">
-        <h3 class="box-title"><?= __('Add District') ?></h3>
-    </div>
-    <div class="box-body">
-        <?= $this->Form->create($district) ?>
-        <div class="col-sm-8">
-            <fieldset>
-                <?php
-                                    echo $this->Form->control('number');
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= __('Add District') ?></h3>
+            </div>
+            <div class="box-body">
+                <?= $this->Form->create($district) ?>
+                <div class="col-sm-8">
+                    <fieldset>
+                        <?php
+                        echo $this->Form->control('number');
                         echo $this->Form->control('name');
                         echo $this->Form->control('detail');
-                    echo $this->Form->control('region_id', ['options' => $regions]);
-                ?>
-            </fieldset>
-        </div>
-    </div>
-    <div class="box-footer">
-        <?= $this->Form->button(__('Submit')) ?>
-    </div>
+                        echo $this->Form->control('region_id', ['options' => $regions]);
+                        ?>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="box-footer">
+                <?= $this->Form->button(__('Submit')) ?>
+            </div>
 
-    <?= $this->Form->end() ?>
-</div>    </section>
+            <?= $this->Form->end() ?>
+        </div>
+    </section>
 </div>

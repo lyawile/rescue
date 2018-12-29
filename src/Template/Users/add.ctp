@@ -40,14 +40,14 @@
                             'class' => 'district-permissions',
                             'data-placeholder' => 'Choose a district...',
                             'empty' => true
-//                            'default' => $this->request->getSession()->read('centreId')
                         ]);
+
                         echo $this->Form->control('group_district_region_school_users.0.centre_id', [
                             'class' => 'centre-permissions',
                             'data-placeholder' => 'Choose a centre...',
                             'empty' => true
-//                            'default' => $this->request->getSession()->read('centreId')
                         ]);
+
                         echo $this->Form->control('first_name');
                         echo $this->Form->control('other_name');
                         echo $this->Form->control('surname');

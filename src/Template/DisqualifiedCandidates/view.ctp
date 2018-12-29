@@ -23,9 +23,9 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($disqualifiedCandidate->id) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Disqualified Candidate'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Disqualified Candidate'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Disqualified Candidate'), ['action' => 'edit', $disqualifiedCandidate->id],
+                    <?= $this->Acl->link(__('Edit Disqualified Candidate'), ['action' => 'edit', $disqualifiedCandidate->id],
                     ['class' => 'btn btn-default']) ?>
                     <?= $this->Form->postLink(__('Delete Disqualified Candidate'), ['action' => 'delete', $disqualifiedCandidate->id
                     ],
@@ -87,7 +87,7 @@
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Exam Type') ?></th>
                                     <td><?= $disqualifiedCandidate->has('exam_type') ?
-                                        $this->Html->link($disqualifiedCandidate
+                                        $this->Acl->link($disqualifiedCandidate
                                         ->exam_type->name, ['controller' =>
                                         'ExamTypes', 'action' => 'view', $disqualifiedCandidate
                                         ->exam_type
@@ -97,7 +97,7 @@
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Centre') ?></th>
                                     <td><?= $disqualifiedCandidate->has('centre') ?
-                                        $this->Html->link($disqualifiedCandidate
+                                        $this->Acl->link($disqualifiedCandidate
                                         ->centre->name, ['controller' =>
                                         'Centres', 'action' => 'view', $disqualifiedCandidate
                                         ->centre
@@ -145,11 +145,11 @@
                                                                     <td><?= h($disabilityDisqualifiedCandidates->disabilitie_id) ?></td>
                                                                     <td><?= h($disabilityDisqualifiedCandidates->disqualified_candidate_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'DisabilityDisqualifiedCandidates',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'DisabilityDisqualifiedCandidates',
                                     'action'
                                     =>
                                     'view', $disabilityDisqualifiedCandidates->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'DisabilityDisqualifiedCandidates',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'DisabilityDisqualifiedCandidates',
                                     'action'
                                     =>
                                     'edit', $disabilityDisqualifiedCandidates->id]) ?>
@@ -185,11 +185,11 @@
                                                                     <td><?= h($disqualifiedCandidateQualifications->experience) ?></td>
                                                                     <td><?= h($disqualifiedCandidateQualifications->disqualified_candidate_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'DisqualifiedCandidateQualifications',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'DisqualifiedCandidateQualifications',
                                     'action'
                                     =>
                                     'view', $disqualifiedCandidateQualifications->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'DisqualifiedCandidateQualifications',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'DisqualifiedCandidateQualifications',
                                     'action'
                                     =>
                                     'edit', $disqualifiedCandidateQualifications->id]) ?>
@@ -219,11 +219,11 @@
                                                                     <td><?= h($disqualifiedCandidateSubjects->subject_id) ?></td>
                                                                     <td><?= h($disqualifiedCandidateSubjects->disqualified_candidate_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'DisqualifiedCandidateSubjects',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'DisqualifiedCandidateSubjects',
                                     'action'
                                     =>
                                     'view', $disqualifiedCandidateSubjects->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'DisqualifiedCandidateSubjects',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'DisqualifiedCandidateSubjects',
                                     'action'
                                     =>
                                     'edit', $disqualifiedCandidateSubjects->id]) ?>

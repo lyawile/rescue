@@ -23,9 +23,9 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($candidate->id) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Candidate'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Candidate'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Candidate'), ['action' => 'edit', $candidate->id],
+                    <?= $this->Acl->link(__('Edit Candidate'), ['action' => 'edit', $candidate->id],
                     ['class' => 'btn btn-default']) ?>
                     <?= $this->Form->postLink(__('Delete Candidate'), ['action' => 'delete', $candidate->id
                     ],
@@ -71,7 +71,7 @@
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Exam Type') ?></th>
                                     <td><?= $candidate->has('exam_type') ?
-                                        $this->Html->link($candidate
+                                        $this->Acl->link($candidate
                                         ->exam_type->name, ['controller' =>
                                         'ExamTypes', 'action' => 'view', $candidate
                                         ->exam_type
@@ -81,7 +81,7 @@
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Centre') ?></th>
                                     <td><?= $candidate->has('centre') ?
-                                        $this->Html->link($candidate
+                                        $this->Acl->link($candidate
                                         ->centre->name, ['controller' =>
                                         'Centres', 'action' => 'view', $candidate
                                         ->centre
@@ -129,11 +129,11 @@
                                                                     <td><?= h($billItemCandidates->candidate_id) ?></td>
                                                                     <td><?= h($billItemCandidates->bill_item_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'BillItemCandidates',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'BillItemCandidates',
                                     'action'
                                     =>
                                     'view', $billItemCandidates->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'BillItemCandidates',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'BillItemCandidates',
                                     'action'
                                     =>
                                     'edit', $billItemCandidates->id]) ?>
@@ -163,11 +163,11 @@
                                                                     <td><?= h($candidateDisabilities->candidate_id) ?></td>
                                                                     <td><?= h($candidateDisabilities->disability_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'CandidateDisabilities',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'CandidateDisabilities',
                                     'action'
                                     =>
                                     'view', $candidateDisabilities->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CandidateDisabilities',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'CandidateDisabilities',
                                     'action'
                                     =>
                                     'edit', $candidateDisabilities->id]) ?>
@@ -203,11 +203,11 @@
                                                                     <td><?= h($candidateQualifications->experience) ?></td>
                                                                     <td><?= h($candidateQualifications->candidate_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'CandidateQualifications',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'CandidateQualifications',
                                     'action'
                                     =>
                                     'view', $candidateQualifications->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CandidateQualifications',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'CandidateQualifications',
                                     'action'
                                     =>
                                     'edit', $candidateQualifications->id]) ?>
@@ -237,11 +237,11 @@
                                                                     <td><?= h($candidateSubjects->candidate_id) ?></td>
                                                                     <td><?= h($candidateSubjects->subject_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'CandidateSubjects',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'CandidateSubjects',
                                     'action'
                                     =>
                                     'view', $candidateSubjects->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'CandidateSubjects',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'CandidateSubjects',
                                     'action'
                                     =>
                                     'edit', $candidateSubjects->id]) ?>

@@ -23,9 +23,9 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($candidateSubject->id) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Candidate Subject'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Candidate Subject'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Candidate Subject'), ['action' => 'edit', $candidateSubject->id],
+                    <?= $this->Acl->link(__('Edit Candidate Subject'), ['action' => 'edit', $candidateSubject->id],
                     ['class' => 'btn btn-default']) ?>
                     <?= $this->Form->postLink(__('Delete Candidate Subject'), ['action' => 'delete', $candidateSubject->id
                     ],
@@ -39,7 +39,7 @@
                                                                                                                                         <tr>
                                     <th scope="row"><?= __('Candidate') ?></th>
                                     <td><?= $candidateSubject->has('candidate') ?
-                                        $this->Html->link($candidateSubject
+                                        $this->Acl->link($candidateSubject
                                         ->candidate->id, ['controller' =>
                                         'Candidates', 'action' => 'view', $candidateSubject
                                         ->candidate
@@ -49,7 +49,7 @@
                                                                                                                                                 <tr>
                                     <th scope="row"><?= __('Subject') ?></th>
                                     <td><?= $candidateSubject->has('subject') ?
-                                        $this->Html->link($candidateSubject
+                                        $this->Acl->link($candidateSubject
                                         ->subject->name, ['controller' =>
                                         'Subjects', 'action' => 'view', $candidateSubject
                                         ->subject

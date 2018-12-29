@@ -28,21 +28,6 @@ class SubjectsController extends AppController
         $this->set(compact('subjects'));
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Subject id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $subject = $this->Subjects->get($id, [
-            'contain' => ['ExamTypes', 'CandidateSubjects', 'DisqualifiedCandidateSubjects', 'Practicals']
-        ]);
-
-        $this->set('subject', $subject);
-    }
 
     /**
      * Add method

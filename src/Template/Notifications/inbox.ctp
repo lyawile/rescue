@@ -36,8 +36,8 @@
                             <td><?= h($notification->title) ?></td>
                             <td><?= h($notification->created) ?></td>
                             <td class="actions pull-right">
-                                <?= $this->Html->link('', ['action' => 'inboxView', $notification->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                                <?= $this->Form->postLink('', ['action' => 'deleteInbox', $notification->id], ['confirm' =>
+                                <?= $this->Acl->link('', ['action' => 'inboxView', $notification->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                                <?= $this->Acl->postLink('', ['action' => 'deleteInbox', $notification->id], ['confirm' =>
                                     __('Are you sure you want to delete # {0}?', $notification->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                             </td>
                         </tr>

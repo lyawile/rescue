@@ -33,22 +33,6 @@ class GroupsController extends AppController
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id Group id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $group = $this->Groups->get($id, [
-            'contain' => ['GroupDistrictRegionSchoolUsers', 'Users']
-        ]);
-
-        $this->set('group', $group);
-    }
-
-    /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
@@ -59,7 +43,17 @@ class GroupsController extends AppController
         if ($this->request->is('post')) {
             $group = $this->Groups->patchEntity($group, $this->request->getData());
             if ($this->Groups->save($group)) {
+
+                //All user groups need access to these locations
                 $this->Acl->allow($group, "controllers/Users/logout"); // Allow all users to logout
+                $this->Acl->allow($group, "controllers/Users/changePassword");
+                $this->Acl->allow($group, "controllers/Users/reload");
+
+                $this->Acl->allow($group, "controllers/Regions/loadRegionsByUserGroup");
+                $this->Acl->allow($group, "controllers/Districts/listDistricts");
+                $this->Acl->allow($group, "controllers/Centres/listExamTypes");
+                $this->Acl->allow($group, "controllers/Centres/listCentres");
+
                 $this->Acl->allow($group, "controllers/Notifications/inbox");
                 $this->Acl->allow($group, "controllers/Notifications/inboxView");
                 $this->Flash->success(__('The group has been saved.'));

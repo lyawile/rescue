@@ -1,0 +1,21 @@
+.content-inner {
+    min-height: 520px !important;
+}
+
+.content-inner {
+    background-color: #F9F9F9 !important;
+}
+
+.content-loading {
+    width: 40px;
+    font-size: 2em !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    color: #00a65a;
+    display: block;
+}
+
+.group-permissions-wrapper {
+    padding-left: 32px !important;
+}

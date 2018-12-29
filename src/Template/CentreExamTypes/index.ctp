@@ -23,7 +23,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Centre Exam Type'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Centre Exam Type'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -41,22 +41,22 @@
                     <tr>
                                                                                                                                                                                                                                                                             <td><?= $this->Number->format($centreExamType->id) ?></td>
                                                                                                                                                                                                                                                     <td><?= $centreExamType->has('exam_type') ?
-                                        $this->Html->link($centreExamType
+                                        $this->Acl->link($centreExamType
                                         ->exam_type->name, ['controller' =>
                                         'ExamTypes', 'action' => 'view', $centreExamType
                                         ->exam_type
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                                                                                                                                 <td><?= $centreExamType->has('centre') ?
-                                        $this->Html->link($centreExamType
+                                        $this->Acl->link($centreExamType
                                         ->centre->name, ['controller' =>
                                         'Centres', 'action' => 'view', $centreExamType
                                         ->centre
                                         ->id]) : '' ?>
                                     </td>
                                                                                                                                                                 <td class="actions pull-right">
-                            <?= $this->Html->link('', ['action' => 'view', $centreExamType->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                            <?= $this->Html->link('', ['action' => 'edit', $centreExamType->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'view', $centreExamType->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                            <?= $this->Acl->link('', ['action' => 'edit', $centreExamType->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                             <?= $this->Form->postLink('', ['action' => 'delete', $centreExamType->id], ['confirm' =>
                             __('Are you sure you want to delete # {0}?', $centreExamType->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>
                         </td>

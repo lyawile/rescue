@@ -23,9 +23,9 @@
             <div class="box-header with-border">
                 <h4 class="pull-left"><?= h($bill->id) ?></h4>
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Bill'), ['action' => 'add'], ['class' => 'btn btn
+                    <?= $this->Acl->link(__('New Bill'), ['action' => 'add'], ['class' => 'btn btn
                     btn-default']) ?>
-                    <?= $this->Html->link(__('Edit Bill'), ['action' => 'edit', $bill->id],
+                    <?= $this->Acl->link(__('Edit Bill'), ['action' => 'edit', $bill->id],
                     ['class' => 'btn btn-default']) ?>
                     <?= $this->Form->postLink(__('Delete Bill'), ['action' => 'delete', $bill->id
                     ],
@@ -117,11 +117,11 @@
                                                                     <td><?= h($billItems->collection_id) ?></td>
                                                                     <td><?= h($billItems->bill_id) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'BillItems',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'BillItems',
                                     'action'
                                     =>
                                     'view', $billItems->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'BillItems',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'BillItems',
                                     'action'
                                     =>
                                     'edit', $billItems->id]) ?>
@@ -183,11 +183,11 @@
                                                                     <td><?= h($payments->bill_id) ?></td>
                                                                     <td><?= h($payments->is_consumed) ?></td>
                                                                                                 <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['controller' => 'Payments',
+                                    <?= $this->Acl->link(__('View'), ['controller' => 'Payments',
                                     'action'
                                     =>
                                     'view', $payments->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['controller' => 'Payments',
+                                    <?= $this->Acl->link(__('Edit'), ['controller' => 'Payments',
                                     'action'
                                     =>
                                     'edit', $payments->id]) ?>

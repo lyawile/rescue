@@ -24,7 +24,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New Bill'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New Bill'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -58,8 +58,8 @@
                             <td><?= h($bill->payer_email) ?></td>
                             <td><?= h($bill->control_number) ?></td>
                             <td class="actions pull-right">
-                                    <?= $this->Html->link('', ['action' => 'get-pdf-bill', $bill->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','target'=>'_blank', 'title' => __('View')]) ?>
-                                    <?= $this->Html->link('', ['action' => 'edit', $bill->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                                    <?= $this->Acl->link('', ['action' => 'getPdfBill', $bill->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom','target'=>'_blank', 'title' => __('View')]) ?>
+                                    <?= $this->Acl->link('', ['action' => 'edit', $bill->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
                                     <?= $this->Form->postLink('', ['action' => 'delete', $bill->id], ['confirm' =>
                                         __('Are you sure you want to delete # {0}?', $bill->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')])
                                     ?>

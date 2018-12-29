@@ -8,7 +8,6 @@
     <section class="content-header">
         <h1>
             <?= __('Users') ?>
-            <small>short description</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -23,7 +22,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <div class="btn-group pull-right">
-                    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
+                    <?= $this->Acl->link(__('New User'), ['action' => 'add'], ['class' => 'btn btn btn-success']) ?>
                 </div>
             </div>
             <div class="box-body">
@@ -49,18 +48,11 @@
                             <td><?= h($user->surname) ?></td>
                             <td><?= h($user->email) ?></td>
                             <td><?= h($user->mobile) ?></td>
-                            <td><?= $user->has('group') ?
-                                    $this->Html->link($user
-                                        ->group->name, ['controller' =>
-                                        'Groups', 'action' => 'view', $user
-                                        ->group
-                                        ->id]) : '' ?>
-                            </td>
+                            <td><?= $user->group->name ?></td>
                             <td class="actions pull-right">
-                                <?= $this->Html->link('', ['action' => 'view', $user->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
-                                <?= $this->Html->link('', ['action' => 'edit', $user->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
-                                <?= $this->Html->link('', ['action' => 'changeUserPassword', $user->id], ['class' => 'btn btn-xs fa fa-key', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Change password')]) ?>
-      <!--                          <?// $this->Form->postLink('', ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-xs fa fa-trash', 'style' => 'color: red', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Delete')]) ?>-->
+                                <?= $this->Acl->link('', ['action' => 'view', $user->id], ['class' => 'btn btn-xs fa fa-eye', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('View')]) ?>
+                                <?= $this->Acl->link('', ['action' => 'edit', $user->id], ['class' => 'btn btn-xs fa fa-pencil-square-o', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Edit')]) ?>
+                                <?= $this->Acl->link('', ['action' => 'changeUserPassword', $user->id], ['class' => 'btn btn-xs fa fa-key', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => __('Change password')]) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -75,9 +67,7 @@
                     <?= $this->Paginator->next(__('next') . ' >') ?>
                     <?= $this->Paginator->last(__('last') . ' >>') ?>
                 </ul>
-                <p class="pull-right"
-                   style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}},
-                    showing {{current}} record(s) out of {{count}} total')]) ?></p>
+                <p class="pull-right" style="margin-top: 5px; margin-right: 16px;"><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
             </div>
             <!-- /.box-footer-->
         </div>
